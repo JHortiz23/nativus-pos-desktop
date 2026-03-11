@@ -1,0 +1,11 @@
+{
+  "@@locale": "en",
+  "appTitle": "Good For Your Brain Admin",
+  "@appTitle": {
+    "description": "Application title displayed in window titles and SEO metadata."
+  },
+}
+
+
+
+
