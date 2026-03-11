@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 extension AppColorScheme on ColorScheme {
   Color get hint => const Color(0xFF777777);
