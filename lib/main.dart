@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nativus_pos_desktop/application/localization/app_localizations_setup.dart';
@@ -14,26 +15,27 @@ import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Load environment variables
+  const appMode = String.fromEnvironment('MODE', defaultValue: 'DEV');
+  final normalizedEnv = appMode.toLowerCase();
+  final envFileName = normalizedEnv == 'prod' ? '.env.prod' : '.env.dev';
+
+  await dotenv.load(fileName: envFileName);
+
   // Initialize DI
   await initInjector();
 
   final router = GoRouter(
     routes: [
-      GoRoute(
-        path: '/',
-        builder: (context, state) => const LoginPage(),
-      ),
+      GoRoute(path: '/', builder: (context, state) => const LoginPage()),
       ShellRoute(
-        builder: (context, state, child) => AppShellPage(
-          location: state.uri.toString(),
-          child: child,
-        ),
+        builder: (context, state, child) =>
+            AppShellPage(location: state.uri.toString(), child: child),
         routes: [
           GoRoute(
             path: '/app/dashboard',
-            builder: (context, state) => const MenuPlaceholderPage(
-              section: MenuSection.dashboard,
-            ),
+            builder: (context, state) =>
+                const MenuPlaceholderPage(section: MenuSection.dashboard),
           ),
           GoRoute(
             path: '/app/point-of-sale',
@@ -41,27 +43,23 @@ Future<void> main() async {
           ),
           GoRoute(
             path: '/app/table-management',
-            builder: (context, state) => const MenuPlaceholderPage(
-              section: MenuSection.tableManagement,
-            ),
+            builder: (context, state) =>
+                const MenuPlaceholderPage(section: MenuSection.tableManagement),
           ),
           GoRoute(
             path: '/app/products',
-            builder: (context, state) => const MenuPlaceholderPage(
-              section: MenuSection.products,
-            ),
+            builder: (context, state) =>
+                const MenuPlaceholderPage(section: MenuSection.products),
           ),
           GoRoute(
             path: '/app/reports',
-            builder: (context, state) => const MenuPlaceholderPage(
-              section: MenuSection.reports,
-            ),
+            builder: (context, state) =>
+                const MenuPlaceholderPage(section: MenuSection.reports),
           ),
           GoRoute(
             path: '/app/settings',
-            builder: (context, state) => const MenuPlaceholderPage(
-              section: MenuSection.settings,
-            ),
+            builder: (context, state) =>
+                const MenuPlaceholderPage(section: MenuSection.settings),
           ),
         ],
       ),
