@@ -4,11 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:nativus_pos_desktop/application/localization/app_localizations_setup.dart';
 import 'package:nativus_pos_desktop/application/injector.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
+import 'package:nativus_pos_desktop/core/enums/sidebar_options_enum.dart';
 import 'package:nativus_pos_desktop/features/auth/presentation/pages/login_page.dart';
-import 'package:nativus_pos_desktop/features/navigation/presentation/models/menu_section.dart';
-import 'package:nativus_pos_desktop/features/navigation/presentation/pages/app_shell_page.dart';
-import 'package:nativus_pos_desktop/features/navigation/presentation/pages/menu_placeholder_page.dart';
-import 'package:nativus_pos_desktop/features/navigation/presentation/pages/point_of_sale_page.dart';
+import 'package:nativus_pos_desktop/features/app_shell/presentation/pages/app_shell_page.dart';
+import 'package:nativus_pos_desktop/features/app_shell/presentation/pages/menu_placeholder_page.dart';
+import 'package:nativus_pos_desktop/features/app_shell/presentation/pages/point_of_sale_page.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
 
 Future<void> main() async {
