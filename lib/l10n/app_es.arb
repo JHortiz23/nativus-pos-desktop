@@ -1,4 +1,15 @@
 {
   "@@locale": "es",
-  "appTitle": "Good For Your Brain Admin"
+  "appTitle": "Nativus POS",
+  "@appTitle": {
+    "description": "Nombre principal de la aplicación."
+  },
+  "loginBrandSubtitle": "Sistema de Punto de Venta",
+  "loginTitle": "Iniciar Sesión",
+  "loginSubtitle": "Ingresa tus credenciales para continuar",
+  "loginUsernameLabel": "Usuario",
+  "loginUsernameHint": "Ingresa tu usuario",
+  "loginPasswordLabel": "Contraseña",
+  "loginPasswordHint": "Ingresa tu contraseña",
+  "loginSubmitButton": "Iniciar Sesión"
 }

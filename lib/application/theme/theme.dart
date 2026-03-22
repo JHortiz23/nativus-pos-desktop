@@ -18,6 +18,16 @@ extension AppColorScheme on ColorScheme {
   Color get transparent => const Color(0x00000000);
   Color get luxuryWhite => const Color(0xFFFAFAFA);
   Color get lightGreen => const Color(0xFF90EE90);
+  Color get darkBackground => const Color(0xFF090D14);
+  Color get darkSurface => const Color(0xFF101722);
+  Color get darkSurfaceAlt => const Color(0xFF171E2A);
+  Color get softBorder => const Color(0xFF283042);
+  Color get decorativeGrid => const Color(0x142C3445);
+  Color get accentGlow => const Color(0x59FFB11A);
+  Color get accentPrimary => const Color(0xFFFFB11A);
+  Color get accentPrimaryDark => const Color(0xFFF28C18);
+  Color get textMuted => const Color(0xFF7E8AA8);
+  Color get textSoft => const Color(0xFFA8B6D7);
 }
 
 class AppTheme {
@@ -37,6 +47,16 @@ class AppTheme {
   static const Color transparent = Color(0x00000000);
   static const Color luxuryWhite = Color(0xFFFAFAFA);
   static const Color lightGreen = Color(0xFF90EE90);
+  static const Color darkBackground = Color(0xFF090D14);
+  static const Color darkSurface = Color(0xFF101722);
+  static const Color darkSurfaceAlt = Color(0xFF171E2A);
+  static const Color softBorder = Color(0xFF283042);
+  static const Color decorativeGrid = Color(0x142C3445);
+  static const Color accentGlow = Color(0x59FFB11A);
+  static const Color accentPrimary = Color(0xFFFFB11A);
+  static const Color accentPrimaryDark = Color(0xFFF28C18);
+  static const Color textMuted = Color(0xFF7E8AA8);
+  static const Color textSoft = Color(0xFFA8B6D7);
   static TextTheme get textTheme => TextTheme(
         headlineSmall: GoogleFonts.raleway(
           fontSize: 20,

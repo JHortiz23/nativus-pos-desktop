@@ -100,8 +100,56 @@ abstract class AppLocalizations {
   /// Application title displayed in window titles and SEO metadata.
   ///
   /// In en, this message translates to:
-  /// **'Good For Your Brain Admin'**
+  /// **'Nativus POS'**
   String get appTitle;
+
+  /// No description provided for @loginBrandSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Point of Sale System'**
+  String get loginBrandSubtitle;
+
+  /// No description provided for @loginTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign In'**
+  String get loginTitle;
+
+  /// No description provided for @loginSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your credentials to continue'**
+  String get loginSubtitle;
+
+  /// No description provided for @loginUsernameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Username'**
+  String get loginUsernameLabel;
+
+  /// No description provided for @loginUsernameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your username'**
+  String get loginUsernameHint;
+
+  /// No description provided for @loginPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get loginPasswordLabel;
+
+  /// No description provided for @loginPasswordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password'**
+  String get loginPasswordHint;
+
+  /// No description provided for @loginSubmitButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign In'**
+  String get loginSubmitButton;
 
   /// No description provided for @edit_product_text.
   ///

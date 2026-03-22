@@ -8,7 +8,31 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'Good For Your Brain Admin';
+  String get appTitle => 'Nativus POS';
+
+  @override
+  String get loginBrandSubtitle => 'Point of Sale System';
+
+  @override
+  String get loginTitle => 'Sign In';
+
+  @override
+  String get loginSubtitle => 'Enter your credentials to continue';
+
+  @override
+  String get loginUsernameLabel => 'Username';
+
+  @override
+  String get loginUsernameHint => 'Enter your username';
+
+  @override
+  String get loginPasswordLabel => 'Password';
+
+  @override
+  String get loginPasswordHint => 'Enter your password';
+
+  @override
+  String get loginSubmitButton => 'Sign In';
 
   @override
   String get edit_product_text => 'Edit Product';
