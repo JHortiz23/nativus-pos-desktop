@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nativus_pos_desktop/application/theme/context_extensions.dart';
+import 'package:go_router/go_router.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
 
@@ -15,37 +15,37 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final cs = context.cs;
+    final colorScheme = Theme.of(context).colorScheme;
+    final localizations = AppLocalizations.of(context)!;
     final isCompact = MediaQuery.sizeOf(context).width < 600;
 
     return Scaffold(
-      backgroundColor: cs.darkBackground,
+      backgroundColor: colorScheme.darkBackground,
       body: Stack(
         children: [
           Positioned.fill(
             child: DecoratedBox(
-              decoration: BoxDecoration(color: cs.darkBackground),
+              decoration: BoxDecoration(color: colorScheme.darkBackground),
             ),
           ),
           Positioned.fill(
             child: IgnorePointer(
               child: CustomPaint(
-                painter: _LoginGridPainter(color: cs.decorativeGrid),
+                painter: _LoginGridPainter(color: colorScheme.decorativeGrid),
               ),
             ),
           ),
           Positioned(
             top: -120,
             left: -80,
-            child: _GlowOrb(color: cs.accentGlow, diameter: 280),
+            child: _GlowOrb(color: colorScheme.accentGlow, diameter: 280),
           ),
           Positioned(
             top: 60,
             right: 120,
             child: _GlowOrb(
-              color: cs.accentGlow.withValues(alpha: 0.28),
+              color: colorScheme.accentGlow.withValues(alpha: 0.28),
               diameter: 180,
             ),
           ),
@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
             bottom: -160,
             right: -40,
             child: _GlowOrb(
-              color: cs.accentGlow.withValues(alpha: 0.18),
+              color: colorScheme.accentGlow.withValues(alpha: 0.18),
               diameter: 320,
             ),
           ),
@@ -66,8 +66,8 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     children: [
                       _BrandSection(
-                        title: l10n.appTitle.toUpperCase(),
-                        subtitle: l10n.loginBrandSubtitle,
+                        title: localizations.appTitle.toUpperCase(),
+                        subtitle: localizations.loginBrandSubtitle,
                         compact: isCompact,
                       ),
                       const SizedBox(height: 36),
@@ -78,9 +78,9 @@ class _LoginPageState extends State<LoginPage> {
                           vertical: isCompact ? 28 : 36,
                         ),
                         decoration: BoxDecoration(
-                          color: cs.darkSurface,
+                          color: colorScheme.darkSurface,
                           borderRadius: BorderRadius.circular(30),
-                          border: Border.all(color: cs.softBorder),
+                          border: Border.all(color: colorScheme.softBorder),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withValues(alpha: 0.35),
@@ -93,9 +93,9 @@ class _LoginPageState extends State<LoginPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              l10n.loginTitle,
+                              localizations.loginTitle,
                               style: theme.textTheme.headlineMedium?.copyWith(
-                                color: cs.baseWhite,
+                                color: colorScheme.baseWhite,
                                 fontSize: isCompact ? 32 : 38,
                                 height: 1.05,
                                 fontWeight: FontWeight.w800,
@@ -103,23 +103,23 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             const SizedBox(height: 10),
                             Text(
-                              l10n.loginSubtitle,
+                              localizations.loginSubtitle,
                               style: theme.textTheme.bodyMedium?.copyWith(
-                                color: cs.textMuted,
+                                color: colorScheme.textMuted,
                                 fontSize: 18,
                                 height: 1.5,
                               ),
                             ),
                             const SizedBox(height: 30),
                             _LoginField(
-                              label: l10n.loginUsernameLabel,
-                              hintText: l10n.loginUsernameHint,
+                              label: localizations.loginUsernameLabel,
+                              hintText: localizations.loginUsernameHint,
                               prefixIcon: Icons.person_outline_rounded,
                             ),
                             const SizedBox(height: 20),
                             _LoginField(
-                              label: l10n.loginPasswordLabel,
-                              hintText: l10n.loginPasswordHint,
+                              label: localizations.loginPasswordLabel,
+                              hintText: localizations.loginPasswordHint,
                               prefixIcon: Icons.lock_outline_rounded,
                               obscureText: _obscurePassword,
                               suffixIcon: IconButton(
@@ -134,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                                       ? Icons.visibility_outlined
                                       : Icons.visibility_off_outlined,
                                 ),
-                                color: cs.textMuted,
+                                color: colorScheme.textMuted,
                               ),
                             ),
                             const SizedBox(height: 30),
@@ -142,10 +142,10 @@ class _LoginPageState extends State<LoginPage> {
                               width: double.infinity,
                               height: 60,
                               child: FilledButton(
-                                onPressed: () {},
+                                onPressed: () => context.go('/app/point-of-sale'),
                                 style: FilledButton.styleFrom(
-                                  backgroundColor: cs.accentPrimary,
-                                  foregroundColor: cs.black,
+                                  backgroundColor: colorScheme.accentPrimary,
+                                  foregroundColor: colorScheme.black,
                                   elevation: 0,
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: 24,
@@ -155,12 +155,12 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                   textStyle: theme.textTheme.headlineSmall
                                       ?.copyWith(
-                                        color: cs.black,
+                                        color: colorScheme.black,
                                         fontSize: 17,
                                         fontWeight: FontWeight.w800,
                                       ),
                                 ),
-                                child: Text(l10n.loginSubmitButton),
+                                child: Text(localizations.loginSubmitButton),
                               ),
                             ),
                           ],

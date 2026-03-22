@@ -151,6 +151,192 @@ abstract class AppLocalizations {
   /// **'Sign In'**
   String get loginSubmitButton;
 
+  /// No description provided for @sidebarBrandSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Point of Sale System'**
+  String get sidebarBrandSubtitle;
+
+  /// No description provided for @sidebarDashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboard'**
+  String get sidebarDashboard;
+
+  /// No description provided for @sidebarPointOfSale.
+  ///
+  /// In en, this message translates to:
+  /// **'Point of Sale'**
+  String get sidebarPointOfSale;
+
+  /// No description provided for @sidebarTableManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Table Management'**
+  String get sidebarTableManagement;
+
+  /// No description provided for @sidebarProducts.
+  ///
+  /// In en, this message translates to:
+  /// **'Products'**
+  String get sidebarProducts;
+
+  /// No description provided for @sidebarReports.
+  ///
+  /// In en, this message translates to:
+  /// **'Reports'**
+  String get sidebarReports;
+
+  /// No description provided for @sidebarSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get sidebarSettings;
+
+  /// No description provided for @sidebarLogout.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Out'**
+  String get sidebarLogout;
+
+  /// No description provided for @sidebarAdminName.
+  ///
+  /// In en, this message translates to:
+  /// **'Admin'**
+  String get sidebarAdminName;
+
+  /// No description provided for @sidebarAdminRole.
+  ///
+  /// In en, this message translates to:
+  /// **'Administrator'**
+  String get sidebarAdminRole;
+
+  /// No description provided for @sidebarCollapse.
+  ///
+  /// In en, this message translates to:
+  /// **'Collapse menu'**
+  String get sidebarCollapse;
+
+  /// No description provided for @sidebarExpand.
+  ///
+  /// In en, this message translates to:
+  /// **'Expand menu'**
+  String get sidebarExpand;
+
+  /// No description provided for @exampleEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Example view'**
+  String get exampleEyebrow;
+
+  /// No description provided for @modulePlaceholderDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'This module is still under construction. The sidebar already navigates and renders content in this area.'**
+  String get modulePlaceholderDescription;
+
+  /// No description provided for @modulePlaceholderCardText.
+  ///
+  /// In en, this message translates to:
+  /// **'The final screen for this module will be displayed here once it is implemented.'**
+  String get modulePlaceholderCardText;
+
+  /// No description provided for @pointOfSaleExampleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Point of Sale'**
+  String get pointOfSaleExampleTitle;
+
+  /// No description provided for @pointOfSaleExampleDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Example base screen to demonstrate how the main content area renders when a sidebar option is selected.'**
+  String get pointOfSaleExampleDescription;
+
+  /// No description provided for @pointOfSaleMetricSales.
+  ///
+  /// In en, this message translates to:
+  /// **'Sales today'**
+  String get pointOfSaleMetricSales;
+
+  /// No description provided for @pointOfSaleMetricRevenue.
+  ///
+  /// In en, this message translates to:
+  /// **'Revenue'**
+  String get pointOfSaleMetricRevenue;
+
+  /// No description provided for @pointOfSaleMetricTables.
+  ///
+  /// In en, this message translates to:
+  /// **'Active tables'**
+  String get pointOfSaleMetricTables;
+
+  /// No description provided for @pointOfSaleRecentOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent orders'**
+  String get pointOfSaleRecentOrders;
+
+  /// No description provided for @pointOfSaleQuickActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick actions'**
+  String get pointOfSaleQuickActions;
+
+  /// No description provided for @pointOfSaleNewSale.
+  ///
+  /// In en, this message translates to:
+  /// **'Create new sale'**
+  String get pointOfSaleNewSale;
+
+  /// No description provided for @pointOfSaleViewTickets.
+  ///
+  /// In en, this message translates to:
+  /// **'View tickets'**
+  String get pointOfSaleViewTickets;
+
+  /// No description provided for @pointOfSaleAssignTable.
+  ///
+  /// In en, this message translates to:
+  /// **'Assign table'**
+  String get pointOfSaleAssignTable;
+
+  /// No description provided for @pointOfSaleOrderTable4.
+  ///
+  /// In en, this message translates to:
+  /// **'Table 4'**
+  String get pointOfSaleOrderTable4;
+
+  /// No description provided for @pointOfSaleOrderCounter.
+  ///
+  /// In en, this message translates to:
+  /// **'Counter'**
+  String get pointOfSaleOrderCounter;
+
+  /// No description provided for @pointOfSaleOrderTable2.
+  ///
+  /// In en, this message translates to:
+  /// **'Table 2'**
+  String get pointOfSaleOrderTable2;
+
+  /// No description provided for @orderStatusPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid'**
+  String get orderStatusPaid;
+
+  /// No description provided for @orderStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get orderStatusPending;
+
+  /// No description provided for @orderStatusPreparing.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing'**
+  String get orderStatusPreparing;
+
   /// No description provided for @edit_product_text.
   ///
   /// In en, this message translates to:

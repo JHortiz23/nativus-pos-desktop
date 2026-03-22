@@ -35,6 +35,102 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginSubmitButton => 'Sign In';
 
   @override
+  String get sidebarBrandSubtitle => 'Point of Sale System';
+
+  @override
+  String get sidebarDashboard => 'Dashboard';
+
+  @override
+  String get sidebarPointOfSale => 'Point of Sale';
+
+  @override
+  String get sidebarTableManagement => 'Table Management';
+
+  @override
+  String get sidebarProducts => 'Products';
+
+  @override
+  String get sidebarReports => 'Reports';
+
+  @override
+  String get sidebarSettings => 'Settings';
+
+  @override
+  String get sidebarLogout => 'Log Out';
+
+  @override
+  String get sidebarAdminName => 'Admin';
+
+  @override
+  String get sidebarAdminRole => 'Administrator';
+
+  @override
+  String get sidebarCollapse => 'Collapse menu';
+
+  @override
+  String get sidebarExpand => 'Expand menu';
+
+  @override
+  String get exampleEyebrow => 'Example view';
+
+  @override
+  String get modulePlaceholderDescription =>
+      'This module is still under construction. The sidebar already navigates and renders content in this area.';
+
+  @override
+  String get modulePlaceholderCardText =>
+      'The final screen for this module will be displayed here once it is implemented.';
+
+  @override
+  String get pointOfSaleExampleTitle => 'Point of Sale';
+
+  @override
+  String get pointOfSaleExampleDescription =>
+      'Example base screen to demonstrate how the main content area renders when a sidebar option is selected.';
+
+  @override
+  String get pointOfSaleMetricSales => 'Sales today';
+
+  @override
+  String get pointOfSaleMetricRevenue => 'Revenue';
+
+  @override
+  String get pointOfSaleMetricTables => 'Active tables';
+
+  @override
+  String get pointOfSaleRecentOrders => 'Recent orders';
+
+  @override
+  String get pointOfSaleQuickActions => 'Quick actions';
+
+  @override
+  String get pointOfSaleNewSale => 'Create new sale';
+
+  @override
+  String get pointOfSaleViewTickets => 'View tickets';
+
+  @override
+  String get pointOfSaleAssignTable => 'Assign table';
+
+  @override
+  String get pointOfSaleOrderTable4 => 'Table 4';
+
+  @override
+  String get pointOfSaleOrderCounter => 'Counter';
+
+  @override
+  String get pointOfSaleOrderTable2 => 'Table 2';
+
+  @override
+  String get orderStatusPaid => 'Paid';
+
+  @override
+  String get orderStatusPending => 'Pending';
+
+  @override
+  String get orderStatusPreparing => 'Preparing';
+
+  @override
   String get edit_product_text => 'Edit Product';
 
   @override

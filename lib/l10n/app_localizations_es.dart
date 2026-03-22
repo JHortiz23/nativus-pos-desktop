@@ -35,6 +35,102 @@ class AppLocalizationsEs extends AppLocalizations {
   String get loginSubmitButton => 'Iniciar Sesión';
 
   @override
+  String get sidebarBrandSubtitle => 'Sistema de Punto de Venta';
+
+  @override
+  String get sidebarDashboard => 'Dashboard';
+
+  @override
+  String get sidebarPointOfSale => 'Punto de Venta';
+
+  @override
+  String get sidebarTableManagement => 'Gestión de Mesas';
+
+  @override
+  String get sidebarProducts => 'Productos';
+
+  @override
+  String get sidebarReports => 'Reportes';
+
+  @override
+  String get sidebarSettings => 'Configuración';
+
+  @override
+  String get sidebarLogout => 'Cerrar Sesión';
+
+  @override
+  String get sidebarAdminName => 'Admin';
+
+  @override
+  String get sidebarAdminRole => 'Administrador';
+
+  @override
+  String get sidebarCollapse => 'Contraer menú';
+
+  @override
+  String get sidebarExpand => 'Expandir menú';
+
+  @override
+  String get exampleEyebrow => 'Vista de ejemplo';
+
+  @override
+  String get modulePlaceholderDescription =>
+      'Este módulo todavía está en construcción. El sidebar ya navega y renderiza el contenido en esta área.';
+
+  @override
+  String get modulePlaceholderCardText =>
+      'Aquí se mostrará la pantalla final cuando se implemente este módulo.';
+
+  @override
+  String get pointOfSaleExampleTitle => 'Punto de Venta';
+
+  @override
+  String get pointOfSaleExampleDescription =>
+      'Pantalla base de ejemplo para demostrar cómo se renderiza el contenido principal al seleccionar una opción del menú lateral.';
+
+  @override
+  String get pointOfSaleMetricSales => 'Ventas del día';
+
+  @override
+  String get pointOfSaleMetricRevenue => 'Ingresos';
+
+  @override
+  String get pointOfSaleMetricTables => 'Mesas activas';
+
+  @override
+  String get pointOfSaleRecentOrders => 'Órdenes recientes';
+
+  @override
+  String get pointOfSaleQuickActions => 'Acciones rápidas';
+
+  @override
+  String get pointOfSaleNewSale => 'Crear nueva venta';
+
+  @override
+  String get pointOfSaleViewTickets => 'Ver tickets';
+
+  @override
+  String get pointOfSaleAssignTable => 'Asignar mesa';
+
+  @override
+  String get pointOfSaleOrderTable4 => 'Mesa 4';
+
+  @override
+  String get pointOfSaleOrderCounter => 'Mostrador';
+
+  @override
+  String get pointOfSaleOrderTable2 => 'Mesa 2';
+
+  @override
+  String get orderStatusPaid => 'Pagado';
+
+  @override
+  String get orderStatusPending => 'Pendiente';
+
+  @override
+  String get orderStatusPreparing => 'Preparando';
+
+  @override
   String get edit_product_text => 'Edit Product';
 
   @override
