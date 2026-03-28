@@ -1,21 +1,25 @@
-class Routes {
-  const Routes._();
+class RouteNames {
+  const RouteNames._();
 
-  // ** Dashboard Route ** //
-  static const String dashboard = '/dashboard';
+  static const login = 'login';
+  static const appShell = 'app-shell';
+  static const dashboard = 'dashboard';
+  static const pointOfSale = 'point-of-sale';
+  static const tableManagement = 'table-management';
+  static const products = 'products';
+  static const reports = 'reports';
+  static const settings = 'settings';
+}
 
-  // ** point of sale ** //
-  static const String submissions = '/pos';
+class RoutePaths {
+  const RoutePaths._();
 
-  // ** products ** //
-  static const String products = '/products';
-
-  // ** tables ** //
-  static const String activities = '/tables';
-
-  // ** reports ** //
-  static const String userReviews = '/reports';
-
-  // ** settings ** //
-  static const String settings = '/settings';
+  static const login = '/';
+  static const app = '/app';
+  static const dashboard = '$app/dashboard';
+  static const pointOfSale = '$app/point-of-sale';
+  static const tableManagement = '$app/table-management';
+  static const products = '$app/products';
+  static const reports = '$app/reports';
+  static const settings = '$app/settings';
 }

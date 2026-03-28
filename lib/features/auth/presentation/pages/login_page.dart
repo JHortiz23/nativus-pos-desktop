@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:nativus_pos_desktop/application/application.dart';
 import 'package:nativus_pos_desktop/application/injector.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
 import 'package:nativus_pos_desktop/features/auth/presentation/cubit/login_cubit.dart';
@@ -46,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
       child: BlocListener<LoginCubit, LoginState>(
         listener: (context, state) {
           if (state is LoginSuccess) {
-            context.go('/app/point-of-sale');
+            context.go(RoutePaths.pointOfSale);
           }
 
           if (state is LoginFailure) {

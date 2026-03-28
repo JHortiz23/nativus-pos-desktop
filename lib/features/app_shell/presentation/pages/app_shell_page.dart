@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:nativus_pos_desktop/application/application.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
-import 'package:nativus_pos_desktop/core/enums/sidebar_options_enum.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
 
 class AppShellPage extends StatefulWidget {
@@ -140,15 +140,18 @@ class _AppShellPageState extends State<AppShellPage> {
                           ),
                           child: Column(
                             children: [
-                              for (final item in _buildMenu(localizations))
+                              for (final item in AppRouter.shellDestinations)
                                 Padding(
                                   padding: const EdgeInsets.only(bottom: 8),
                                   child: _SidebarMenuItem(
                                     icon: item.icon,
-                                    label: item.label,
+                                    label: item.label(localizations),
                                     expanded: expanded,
-                                    selected: widget.location == item.route,
-                                    onTap: () => context.go(item.route),
+                                    selected: AppRouter.isRouteSelected(
+                                      currentLocation: widget.location,
+                                      targetLocation: item.path,
+                                    ),
+                                    onTap: () => context.go(item.path),
                                   ),
                                 ),
                               const Spacer(),
@@ -164,7 +167,7 @@ class _AppShellPageState extends State<AppShellPage> {
                                 label: localizations.sidebarLogout,
                                 expanded: expanded,
                                 selected: false,
-                                onTap: () => context.go('/'),
+                                onTap: () => context.go(RoutePaths.login),
                               ),
                             ],
                           ),
@@ -200,47 +203,6 @@ class _AppShellPageState extends State<AppShellPage> {
         );
       },
     );
-  }
-
-  List<_ShellMenuDestination> _buildMenu(AppLocalizations localizations) {
-    return [
-      _ShellMenuDestination(
-        section: MenuSection.dashboard,
-        icon: Icons.home_outlined,
-        label: localizations.sidebarDashboard,
-        route: '/app/dashboard',
-      ),
-      _ShellMenuDestination(
-        section: MenuSection.pointOfSale,
-        icon: Icons.attach_money_rounded,
-        label: localizations.sidebarPointOfSale,
-        route: '/app/point-of-sale',
-      ),
-      _ShellMenuDestination(
-        section: MenuSection.tableManagement,
-        icon: Icons.table_restaurant_outlined,
-        label: localizations.sidebarTableManagement,
-        route: '/app/table-management',
-      ),
-      _ShellMenuDestination(
-        section: MenuSection.products,
-        icon: Icons.inventory_2_outlined,
-        label: localizations.sidebarProducts,
-        route: '/app/products',
-      ),
-      _ShellMenuDestination(
-        section: MenuSection.reports,
-        icon: Icons.bar_chart_rounded,
-        label: localizations.sidebarReports,
-        route: '/app/reports',
-      ),
-      _ShellMenuDestination(
-        section: MenuSection.settings,
-        icon: Icons.settings_outlined,
-        label: localizations.sidebarSettings,
-        route: '/app/settings',
-      ),
-    ];
   }
 }
 
@@ -417,18 +379,4 @@ class _UserCard extends StatelessWidget {
       ],
     );
   }
-}
-
-class _ShellMenuDestination {
-  const _ShellMenuDestination({
-    required this.section,
-    required this.icon,
-    required this.label,
-    required this.route,
-  });
-
-  final MenuSection section;
-  final IconData icon;
-  final String label;
-  final String route;
 }
