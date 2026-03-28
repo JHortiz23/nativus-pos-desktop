@@ -206,9 +206,9 @@ class _AppShellPageState extends State<AppShellPage> {
                     curve: Curves.easeOutCubic,
                     margin: EdgeInsets.fromLTRB(0, 12, 0, 12),
                     padding: EdgeInsets.fromLTRB(
-                      isCompact ? 18 : 24,
+                      isCompact ? 6 : 8,
                       0,
-                      isCompact ? 8 : 12,
+                      isCompact ? 6 : 8,
                       0,
                     ),
                     decoration: BoxDecoration(

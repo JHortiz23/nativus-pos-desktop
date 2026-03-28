@@ -224,7 +224,7 @@ class _ProductsPageState extends State<ProductsPage> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(28, 22, 16, 18),
+            padding: const EdgeInsets.fromLTRB(12, 22, 12, 18),
             child: LayoutBuilder(
               builder: (context, constraints) {
                 final isCompactHeader = constraints.maxWidth < 760;
@@ -334,7 +334,7 @@ class _ProductsPageState extends State<ProductsPage> {
                   controller: _scrollController,
                   child: SingleChildScrollView(
                     controller: _scrollController,
-                    padding: const EdgeInsets.fromLTRB(24, 24, 12, 24),
+                    padding: const EdgeInsets.fromLTRB(8, 24, 8, 24),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
