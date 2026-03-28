@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
-import 'package:nativus_pos_desktop/features/products/presentation/widgets/product_card.dart';
+import 'package:nativus_pos_desktop/features/products/presentation/widgets/cards/product_card.dart';
+import 'package:nativus_pos_desktop/features/products/presentation/widgets/empty_products_state.dart';
+import 'package:nativus_pos_desktop/features/products/presentation/widgets/filters/category_chip.dart';
+import 'package:nativus_pos_desktop/features/products/presentation/widgets/filters/search_field.dart';
+import 'package:nativus_pos_desktop/features/products/presentation/widgets/toggles/view_toggle.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({super.key});
@@ -322,7 +326,7 @@ class _ProductsPageState extends State<ProductsPage> {
             child: LayoutBuilder(
               builder: (context, constraints) {
                 final isCompactControls = constraints.maxWidth < 880;
-                final searchField = _SearchField(
+                final searchField = ProductSearchField(
                   onChanged: (value) {
                     setState(() {
                       _searchQuery = value.trim().toLowerCase();
@@ -341,7 +345,7 @@ class _ProductsPageState extends State<ProductsPage> {
                         if (isCompactControls) ...[
                           searchField,
                           const SizedBox(height: 14),
-                          _ViewToggle(
+                          ProductViewToggle(
                             layout: _layout,
                             onChanged: (layout) {
                               setState(() {
@@ -355,7 +359,7 @@ class _ProductsPageState extends State<ProductsPage> {
                             children: [
                               Expanded(child: searchField),
                               const SizedBox(width: 14),
-                              _ViewToggle(
+                              ProductViewToggle(
                                 layout: _layout,
                                 onChanged: (layout) {
                                   setState(() {
@@ -371,8 +375,9 @@ class _ProductsPageState extends State<ProductsPage> {
                           runSpacing: 12,
                           children: [
                             for (final category in _categories)
-                              _CategoryChip(
-                                category: category,
+                              ProductCategoryChip(
+                                label: category.label,
+                                icon: category.icon,
                                 selected: category.id == _selectedCategoryId,
                                 onTap: () {
                                   setState(() {
@@ -386,7 +391,7 @@ class _ProductsPageState extends State<ProductsPage> {
                         AnimatedSwitcher(
                           duration: const Duration(milliseconds: 180),
                           child: visibleProducts.isEmpty
-                              ? _EmptyProductsState(
+                              ? EmptyProductsState(
                                   key: const ValueKey('empty-products-state'),
                                   query: _searchQuery,
                                 )
@@ -512,225 +517,6 @@ class _ProductsList extends StatelessWidget {
           if (index != products.length - 1) const SizedBox(height: 12),
         ],
       ],
-    );
-  }
-}
-
-class _SearchField extends StatelessWidget {
-  const _SearchField({required this.onChanged});
-
-  final ValueChanged<String> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return TextField(
-      onChanged: onChanged,
-      cursorColor: colorScheme.accentPrimary,
-      style: theme.textTheme.bodyLarge?.copyWith(
-        color: colorScheme.baseWhite,
-        fontSize: 16,
-      ),
-      decoration: InputDecoration(
-        hintText: 'Buscar producto...',
-        hintStyle: theme.textTheme.bodyMedium?.copyWith(
-          color: colorScheme.textMuted,
-          fontSize: 15,
-        ),
-        filled: true,
-        fillColor: colorScheme.darkSurfaceAlt,
-        prefixIcon: Icon(Icons.search_rounded, color: colorScheme.textMuted),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(18),
-          borderSide: BorderSide(color: colorScheme.softBorder),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(18),
-          borderSide: BorderSide(color: colorScheme.accentPrimary),
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(18),
-          borderSide: BorderSide(color: colorScheme.softBorder),
-        ),
-      ),
-    );
-  }
-}
-
-class _CategoryChip extends StatelessWidget {
-  const _CategoryChip({
-    required this.category,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final _ProductCategory category;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
-    final background = selected
-        ? colorScheme.accentPrimary.withValues(alpha: 0.18)
-        : colorScheme.darkSurfaceAlt;
-    final foreground = selected
-        ? colorScheme.accentPrimary
-        : colorScheme.textSoft;
-
-    return Material(
-      color: background,
-      borderRadius: BorderRadius.circular(999),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(999),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(category.icon, size: 16, color: foreground),
-              const SizedBox(width: 8),
-              Text(
-                category.label,
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  color: foreground,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _ViewToggle extends StatelessWidget {
-  const _ViewToggle({required this.layout, required this.onChanged});
-
-  final ProductCardLayout layout;
-  final ValueChanged<ProductCardLayout> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Container(
-      padding: const EdgeInsets.all(6),
-      decoration: BoxDecoration(
-        color: colorScheme.darkSurfaceAlt,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: colorScheme.softBorder),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _ViewToggleButton(
-            icon: Icons.grid_view_rounded,
-            selected: layout == ProductCardLayout.grid,
-            onTap: () => onChanged(ProductCardLayout.grid),
-          ),
-          const SizedBox(width: 6),
-          _ViewToggleButton(
-            icon: Icons.view_agenda_outlined,
-            selected: layout == ProductCardLayout.list,
-            onTap: () => onChanged(ProductCardLayout.list),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ViewToggleButton extends StatelessWidget {
-  const _ViewToggleButton({
-    required this.icon,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Material(
-      color: selected
-          ? colorScheme.accentPrimary.withValues(alpha: 0.2)
-          : Colors.transparent,
-      borderRadius: BorderRadius.circular(14),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(14),
-        child: SizedBox(
-          width: 48,
-          height: 48,
-          child: Icon(
-            icon,
-            color: selected ? colorScheme.baseWhite : colorScheme.textMuted,
-            size: 20,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _EmptyProductsState extends StatelessWidget {
-  const _EmptyProductsState({super.key, required this.query});
-
-  final String query;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
-      decoration: BoxDecoration(
-        color: colorScheme.darkSurfaceAlt,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: colorScheme.softBorder),
-      ),
-      child: Column(
-        children: [
-          Icon(
-            Icons.search_off_rounded,
-            size: 42,
-            color: colorScheme.accentPrimary,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'No hay productos para mostrar',
-            style: theme.textTheme.headlineSmall?.copyWith(
-              color: colorScheme.baseWhite,
-              fontSize: 22,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            query.isEmpty
-                ? 'Prueba con otra categoria para ver los elementos mock disponibles.'
-                : 'No encontramos coincidencias para tu busqueda actual.',
-            textAlign: TextAlign.center,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: colorScheme.textMuted,
-              fontSize: 15,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
