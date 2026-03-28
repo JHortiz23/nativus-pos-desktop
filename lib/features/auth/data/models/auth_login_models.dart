@@ -1,4 +1,4 @@
-import 'package:nativus_pos_desktop/features/auth/domain/entities/example_entity.dart';
+import 'package:nativus_pos_desktop/features/auth/domain/entities/auth_entity.dart';
 
 class AuthLoginRequestModel {
   final String email;

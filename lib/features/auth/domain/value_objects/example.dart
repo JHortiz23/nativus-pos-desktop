@@ -1,5 +1,3 @@
-// This is an example value object class --- IGNORE ---
-
 class ExampleValidation {
   final String value;
 
@@ -25,7 +23,9 @@ class ExampleValidation {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ExampleValidation && runtimeType == other.runtimeType && value == other.value;
+      other is ExampleValidation &&
+          runtimeType == other.runtimeType &&
+          value == other.value;
 
   @override
   int get hashCode => value.hashCode;

@@ -6,7 +6,7 @@ import 'package:nativus_pos_desktop/application/constants/auth_api_endpoints.dar
 import 'package:nativus_pos_desktop/core/network/api_error_payload.dart';
 import 'package:nativus_pos_desktop/core/utils/helpers/http_helper.dart';
 import 'package:nativus_pos_desktop/features/auth/data/models/auth_login_models.dart';
-import 'package:nativus_pos_desktop/features/auth/domain/errors/example_failure.dart';
+import 'package:nativus_pos_desktop/features/auth/domain/errors/auth_failure.dart';
 
 abstract class AuthRemoteDataSource {
   Future<AuthLoginResponseModel> login({
@@ -53,12 +53,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       final decoded = jsonDecode(response.body);
       if (decoded is! Map<String, dynamic>) {
-        throw const AuthApiFailure('Respuesta de login invalida.');
+        throw const AuthApiFailure('Response is not a valid JSON object.');
       }
 
       final authResponse = AuthLoginResponseModel.fromJson(decoded);
       if (authResponse.accessToken.isEmpty) {
-        throw const AuthApiFailure('El servidor no devolvio access token.');
+        throw const AuthApiFailure('The server did not return an access token.');
       }
 
       return authResponse;
@@ -85,6 +85,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       return payload.detail!;
     }
 
-    return 'Error de autenticacion (HTTP ${payload.statusCode}).';
+    return 'Authentication error (HTTP ${payload.statusCode}).';
   }
 }

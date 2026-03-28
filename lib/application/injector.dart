@@ -4,8 +4,8 @@ import 'package:nativus_pos_desktop/core/utils/helpers/auth_token_storage.dart';
 import 'package:nativus_pos_desktop/features/auth/data/datasources/local/auth_local_datasource.dart';
 import 'package:nativus_pos_desktop/features/auth/data/datasources/remote/auth_remote_datasource.dart';
 import 'package:nativus_pos_desktop/features/auth/data/repositories/auth_repository_impl.dart';
-import 'package:nativus_pos_desktop/features/auth/domain/repositories/template_repository.dart';
-import 'package:nativus_pos_desktop/features/auth/domain/use_cases/template_use_case.dart';
+import 'package:nativus_pos_desktop/features/auth/domain/repositories/auth_repository.dart';
+import 'package:nativus_pos_desktop/features/auth/domain/use_cases/login_use_case.dart';
 import 'package:nativus_pos_desktop/features/auth/presentation/cubit/login_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,7 +19,7 @@ Future<void> initInjector() async {
   sl.registerLazySingleton<AuthTokenStorage>(
     () => AuthTokenStorage(preferences: sl<SharedPreferences>()),
   );
-
+  // ** Data Sources **
   sl.registerLazySingleton<AuthLocalDataSource>(
     () => AuthLocalDataSourceImpl(tokenStorage: sl<AuthTokenStorage>()),
   );
@@ -28,6 +28,7 @@ Future<void> initInjector() async {
     () => AuthRemoteDataSourceImpl(client: sl<http.Client>()),
   );
 
+  // ** Repositories **
   sl.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(
       remoteDataSource: sl<AuthRemoteDataSource>(),
@@ -35,48 +36,16 @@ Future<void> initInjector() async {
     ),
   );
 
+  // ** Use Cases **
   sl.registerLazySingleton<LoginUseCase>(
     () => LoginUseCase(repository: sl<AuthRepository>()),
   );
 
+  // ** Cubits **
   sl.registerFactory<LoginCubit>(
     () => LoginCubit(loginUseCase: sl<LoginUseCase>()),
   );
 
-  // ** Data Sources **
-
-  //example
-  // sl.registerLazySingleton<SubmissionsRemoteDataSource>(
-  //   () => SubmissionsRemoteDataSourceImpl(
-  //     client: sl<http.Client>(),
-  //     firebaseAuth: di<fb.FirebaseAuth>(),
-  //   ),
-  // );
-
-  // ** Repositories **
-
-  // Example
-  // sl.registerLazySingleton<ActivitiesRepository>(
-  //   () => ActivitiesRepositoryImpl(remote: sl()),
-  // );
-
-  // ** Use Cases **
-
-  // Example
-  // sl.registerLazySingleton<GetUserReviewsUseCase>(
-  //   () => GetUserReviewsUseCase(userReviewRepository: sl()),
-  // );
-
   // ** BLoCs **
 
-  // Example
-  // sl.registerLazySingleton<ActivitiesBloc>(
-  //   () => ActivitiesBloc(
-  //     getPaginatedActivities: sl(),
-  //     addActivity: sl(),
-  //     getActivityDetails: sl(),
-  //     checkActivityDuplicate: sl(),
-  //     updateActivityUseCase: sl(),
-  //   ),
-  // );
 }

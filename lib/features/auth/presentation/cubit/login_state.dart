@@ -1,4 +1,4 @@
-import 'package:nativus_pos_desktop/features/auth/domain/entities/example_entity.dart';
+import 'package:nativus_pos_desktop/features/auth/domain/entities/auth_entity.dart';
 
 sealed class LoginState {
   const LoginState();

@@ -1,7 +1,7 @@
 import 'package:nativus_pos_desktop/features/auth/data/datasources/local/auth_local_datasource.dart';
 import 'package:nativus_pos_desktop/features/auth/data/datasources/remote/auth_remote_datasource.dart';
-import 'package:nativus_pos_desktop/features/auth/domain/entities/example_entity.dart';
-import 'package:nativus_pos_desktop/features/auth/domain/repositories/template_repository.dart';
+import 'package:nativus_pos_desktop/features/auth/domain/entities/auth_entity.dart';
+import 'package:nativus_pos_desktop/features/auth/domain/repositories/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource _remoteDataSource;
