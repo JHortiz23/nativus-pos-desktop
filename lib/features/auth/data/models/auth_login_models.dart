@@ -1,0 +1,214 @@
+import 'package:nativus_pos_desktop/features/auth/domain/entities/example_entity.dart';
+
+class AuthLoginRequestModel {
+  final String email;
+  final String pin;
+  final String expiresIn;
+
+  const AuthLoginRequestModel({
+    required this.email,
+    required this.pin,
+    this.expiresIn = '12h',
+  });
+
+  Map<String, dynamic> toJson() {
+    return {'email': email, 'pin': pin, 'expiresIn': expiresIn};
+  }
+}
+
+class AuthLoginResponseModel {
+  final String accessToken;
+  final AuthUserModel user;
+  final AuthRestaurantModel restaurant;
+  final AuthCompanyModel company;
+
+  const AuthLoginResponseModel({
+    required this.accessToken,
+    required this.user,
+    required this.restaurant,
+    required this.company,
+  });
+
+  factory AuthLoginResponseModel.fromJson(Map<String, dynamic> json) {
+    return AuthLoginResponseModel(
+      accessToken: _asString(json['accessToken']),
+      user: AuthUserModel.fromJson(_asMap(json['user'])),
+      restaurant: AuthRestaurantModel.fromJson(_asMap(json['restaurant'])),
+      company: AuthCompanyModel.fromJson(_asMap(json['company'])),
+    );
+  }
+
+  AuthSessionEntity toEntity() {
+    return AuthSessionEntity(
+      accessToken: accessToken,
+      user: user.toEntity(),
+      restaurant: restaurant.toEntity(),
+      company: company.toEntity(),
+    );
+  }
+}
+
+class AuthUserModel {
+  final int id;
+  final int restaurantId;
+  final String name;
+  final String email;
+  final String role;
+  final bool isActive;
+  final DateTime createdAt;
+
+  const AuthUserModel({
+    required this.id,
+    required this.restaurantId,
+    required this.name,
+    required this.email,
+    required this.role,
+    required this.isActive,
+    required this.createdAt,
+  });
+
+  factory AuthUserModel.fromJson(Map<String, dynamic> json) {
+    return AuthUserModel(
+      id: _asInt(json['id']),
+      restaurantId: _asInt(json['restaurantId']),
+      name: _asString(json['name']),
+      email: _asString(json['email']),
+      role: _asString(json['role']),
+      isActive: _asBool(json['isActive']),
+      createdAt: DateTime.parse(_asString(json['createdAt'])),
+    );
+  }
+
+  AuthUserEntity toEntity() {
+    return AuthUserEntity(
+      id: id,
+      restaurantId: restaurantId,
+      name: name,
+      email: email,
+      role: role,
+      isActive: isActive,
+      createdAt: createdAt,
+    );
+  }
+}
+
+class AuthRestaurantModel {
+  final int id;
+  final int clientId;
+  final String name;
+  final String address;
+  final String phone;
+  final String email;
+  final DateTime createdAt;
+  final bool isActive;
+
+  const AuthRestaurantModel({
+    required this.id,
+    required this.clientId,
+    required this.name,
+    required this.address,
+    required this.phone,
+    required this.email,
+    required this.createdAt,
+    required this.isActive,
+  });
+
+  factory AuthRestaurantModel.fromJson(Map<String, dynamic> json) {
+    return AuthRestaurantModel(
+      id: _asInt(json['id']),
+      clientId: _asInt(json['clientId']),
+      name: _asString(json['name']),
+      address: _asString(json['address']),
+      phone: _asString(json['phone']),
+      email: _asString(json['email']),
+      createdAt: DateTime.parse(_asString(json['createdAt'])),
+      isActive: _asBool(json['isActive']),
+    );
+  }
+
+  AuthRestaurantEntity toEntity() {
+    return AuthRestaurantEntity(
+      id: id,
+      clientId: clientId,
+      name: name,
+      address: address,
+      phone: phone,
+      email: email,
+      createdAt: createdAt,
+      isActive: isActive,
+    );
+  }
+}
+
+class AuthCompanyModel {
+  final int id;
+  final String name;
+  final String email;
+  final String phone;
+  final DateTime createdAt;
+
+  const AuthCompanyModel({
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.phone,
+    required this.createdAt,
+  });
+
+  factory AuthCompanyModel.fromJson(Map<String, dynamic> json) {
+    return AuthCompanyModel(
+      id: _asInt(json['id']),
+      name: _asString(json['name']),
+      email: _asString(json['email']),
+      phone: _asString(json['phone']),
+      createdAt: DateTime.parse(_asString(json['createdAt'])),
+    );
+  }
+
+  AuthCompanyEntity toEntity() {
+    return AuthCompanyEntity(
+      id: id,
+      name: name,
+      email: email,
+      phone: phone,
+      createdAt: createdAt,
+    );
+  }
+}
+
+int _asInt(dynamic value) {
+  if (value is int) {
+    return value;
+  }
+  if (value is String) {
+    return int.tryParse(value) ?? 0;
+  }
+  return 0;
+}
+
+String _asString(dynamic value) {
+  if (value == null) {
+    return '';
+  }
+  return value.toString();
+}
+
+bool _asBool(dynamic value) {
+  if (value is bool) {
+    return value;
+  }
+  if (value is String) {
+    return value.toLowerCase() == 'true';
+  }
+  if (value is num) {
+    return value != 0;
+  }
+  return false;
+}
+
+Map<String, dynamic> _asMap(dynamic value) {
+  if (value is Map<String, dynamic>) {
+    return value;
+  }
+  return {};
+}

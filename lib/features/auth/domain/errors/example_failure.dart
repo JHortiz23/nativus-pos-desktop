@@ -1,13 +1,31 @@
-// This is an example failure class for validation errors structure.
-
-sealed class ExampleFailure implements Exception {
+sealed class AuthFailure implements Exception {
   final String message;
-  const ExampleFailure(this.message);
+  final int? statusCode;
+
+  const AuthFailure(this.message, {this.statusCode});
 
   @override
   String toString() => '$runtimeType: $message';
 }
 
-class ExampleValidationFailure extends ExampleFailure {
-  const ExampleValidationFailure([super.message = 'this is an example validation failure']);
+class AuthValidationFailure extends AuthFailure {
+  const AuthValidationFailure([super.message = 'Datos de acceso invalidos.']);
+}
+
+class AuthNetworkFailure extends AuthFailure {
+  const AuthNetworkFailure([super.message = 'No se pudo conectar al servidor.']);
+}
+
+class AuthUnauthorizedFailure extends AuthFailure {
+  const AuthUnauthorizedFailure([
+    super.message = 'Credenciales invalidas o sesion expirada.',
+  ]) : super(statusCode: 401);
+}
+
+class AuthApiFailure extends AuthFailure {
+  const AuthApiFailure(super.message, {super.statusCode});
+}
+
+class AuthUnknownFailure extends AuthFailure {
+  const AuthUnknownFailure([super.message = 'Ocurrio un error inesperado.']);
 }

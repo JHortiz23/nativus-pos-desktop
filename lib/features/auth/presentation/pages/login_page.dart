@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:nativus_pos_desktop/application/injector.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
+import 'package:nativus_pos_desktop/features/auth/presentation/cubit/login_cubit.dart';
+import 'package:nativus_pos_desktop/features/auth/presentation/cubit/login_state.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
 
 class LoginPage extends StatefulWidget {
@@ -12,6 +16,22 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool _obscurePassword = true;
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _submitLogin(BuildContext context) {
+    context.read<LoginCubit>().login(
+      email: _usernameController.text,
+      pin: _passwordController.text,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,159 +40,195 @@ class _LoginPageState extends State<LoginPage> {
     final localizations = AppLocalizations.of(context)!;
     final isCompact = MediaQuery.sizeOf(context).width < 600;
 
-    return Scaffold(
-      backgroundColor: colorScheme.darkBackground,
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(color: colorScheme.darkBackground),
-            ),
-          ),
-          Positioned.fill(
-            child: IgnorePointer(
-              child: CustomPaint(
-                painter: _LoginGridPainter(color: colorScheme.decorativeGrid),
+    return BlocProvider<LoginCubit>(
+      create: (_) => sl<LoginCubit>(),
+      child: BlocListener<LoginCubit, LoginState>(
+        listener: (context, state) {
+          if (state is LoginSuccess) {
+            context.go('/app/point-of-sale');
+          }
+
+          if (state is LoginFailure) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(SnackBar(content: Text(state.message)));
+          }
+        },
+        child: Scaffold(
+          backgroundColor: colorScheme.darkBackground,
+          body: Stack(
+            children: [
+              Positioned.fill(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(color: colorScheme.darkBackground),
+                ),
               ),
-            ),
-          ),
-          Positioned(
-            top: -120,
-            left: -80,
-            child: _GlowOrb(color: colorScheme.accentGlow, diameter: 280),
-          ),
-          Positioned(
-            top: 60,
-            right: 120,
-            child: _GlowOrb(
-              color: colorScheme.accentGlow.withValues(alpha: 0.28),
-              diameter: 180,
-            ),
-          ),
-          Positioned(
-            bottom: -160,
-            right: -40,
-            child: _GlowOrb(
-              color: colorScheme.accentGlow.withValues(alpha: 0.18),
-              diameter: 320,
-            ),
-          ),
-          SafeArea(
-            child: Center(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(24),
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 560),
-                  child: Column(
-                    children: [
-                      _BrandSection(
-                        title: localizations.appTitle.toUpperCase(),
-                        subtitle: localizations.loginBrandSubtitle,
-                        compact: isCompact,
-                      ),
-                      const SizedBox(height: 36),
-                      Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: isCompact ? 24 : 40,
-                          vertical: isCompact ? 28 : 36,
-                        ),
-                        decoration: BoxDecoration(
-                          color: colorScheme.darkSurface,
-                          borderRadius: BorderRadius.circular(30),
-                          border: Border.all(color: colorScheme.softBorder),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.35),
-                              blurRadius: 36,
-                              offset: const Offset(0, 20),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              localizations.loginTitle,
-                              style: theme.textTheme.headlineMedium?.copyWith(
-                                color: colorScheme.baseWhite,
-                                fontSize: isCompact ? 32 : 38,
-                                height: 1.05,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              localizations.loginSubtitle,
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                color: colorScheme.textMuted,
-                                fontSize: 18,
-                                height: 1.5,
-                              ),
-                            ),
-                            const SizedBox(height: 30),
-                            _LoginField(
-                              label: localizations.loginUsernameLabel,
-                              hintText: localizations.loginUsernameHint,
-                              prefixIcon: Icons.person_outline_rounded,
-                            ),
-                            const SizedBox(height: 20),
-                            _LoginField(
-                              label: localizations.loginPasswordLabel,
-                              hintText: localizations.loginPasswordHint,
-                              prefixIcon: Icons.lock_outline_rounded,
-                              obscureText: _obscurePassword,
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _obscurePassword = !_obscurePassword;
-                                  });
-                                },
-                                splashRadius: 20,
-                                icon: Icon(
-                                  _obscurePassword
-                                      ? Icons.visibility_outlined
-                                      : Icons.visibility_off_outlined,
-                                ),
-                                color: colorScheme.textMuted,
-                              ),
-                            ),
-                            const SizedBox(height: 30),
-                            SizedBox(
-                              width: double.infinity,
-                              height: 60,
-                              child: FilledButton(
-                                onPressed: () => context.go('/app/point-of-sale'),
-                                style: FilledButton.styleFrom(
-                                  backgroundColor: colorScheme.accentPrimary,
-                                  foregroundColor: colorScheme.black,
-                                  elevation: 0,
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 24,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18),
-                                  ),
-                                  textStyle: theme.textTheme.headlineSmall
-                                      ?.copyWith(
-                                        color: colorScheme.black,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w800,
-                                      ),
-                                ),
-                                child: Text(localizations.loginSubmitButton),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: CustomPaint(
+                    painter: _LoginGridPainter(color: colorScheme.decorativeGrid),
                   ),
                 ),
               ),
-            ),
+              Positioned(
+                top: -120,
+                left: -80,
+                child: _GlowOrb(color: colorScheme.accentGlow, diameter: 280),
+              ),
+              Positioned(
+                top: 60,
+                right: 120,
+                child: _GlowOrb(
+                  color: colorScheme.accentGlow.withValues(alpha: 0.28),
+                  diameter: 180,
+                ),
+              ),
+              Positioned(
+                bottom: -160,
+                right: -40,
+                child: _GlowOrb(
+                  color: colorScheme.accentGlow.withValues(alpha: 0.18),
+                  diameter: 320,
+                ),
+              ),
+              SafeArea(
+                child: Center(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(24),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 560),
+                      child: Column(
+                        children: [
+                          _BrandSection(
+                            title: localizations.appTitle.toUpperCase(),
+                            subtitle: localizations.loginBrandSubtitle,
+                            compact: isCompact,
+                          ),
+                          const SizedBox(height: 36),
+                          Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: isCompact ? 24 : 40,
+                              vertical: isCompact ? 28 : 36,
+                            ),
+                            decoration: BoxDecoration(
+                              color: colorScheme.darkSurface,
+                              borderRadius: BorderRadius.circular(30),
+                              border: Border.all(color: colorScheme.softBorder),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.35),
+                                  blurRadius: 36,
+                                  offset: const Offset(0, 20),
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  localizations.loginTitle,
+                                  style: theme.textTheme.headlineMedium?.copyWith(
+                                    color: colorScheme.baseWhite,
+                                    fontSize: isCompact ? 32 : 38,
+                                    height: 1.05,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Text(
+                                  localizations.loginSubtitle,
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                    color: colorScheme.textMuted,
+                                    fontSize: 18,
+                                    height: 1.5,
+                                  ),
+                                ),
+                                const SizedBox(height: 30),
+                                _LoginField(
+                                  label: localizations.loginUsernameLabel,
+                                  hintText: localizations.loginUsernameHint,
+                                  prefixIcon: Icons.person_outline_rounded,
+                                  controller: _usernameController,
+                                ),
+                                const SizedBox(height: 20),
+                                _LoginField(
+                                  label: localizations.loginPasswordLabel,
+                                  hintText: localizations.loginPasswordHint,
+                                  prefixIcon: Icons.lock_outline_rounded,
+                                  obscureText: _obscurePassword,
+                                  controller: _passwordController,
+                                  onFieldSubmitted: (_) => _submitLogin(context),
+                                  suffixIcon: IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        _obscurePassword = !_obscurePassword;
+                                      });
+                                    },
+                                    splashRadius: 20,
+                                    icon: Icon(
+                                      _obscurePassword
+                                          ? Icons.visibility_outlined
+                                          : Icons.visibility_off_outlined,
+                                    ),
+                                    color: colorScheme.textMuted,
+                                  ),
+                                ),
+                                const SizedBox(height: 30),
+                                BlocBuilder<LoginCubit, LoginState>(
+                                  builder: (context, state) {
+                                    final isLoading = state is LoginLoading;
+
+                                    return SizedBox(
+                                      width: double.infinity,
+                                      height: 60,
+                                      child: FilledButton(
+                                        onPressed: isLoading
+                                            ? null
+                                            : () => _submitLogin(context),
+                                        style: FilledButton.styleFrom(
+                                          backgroundColor:
+                                              colorScheme.accentPrimary,
+                                          foregroundColor: colorScheme.black,
+                                          elevation: 0,
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 24,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(18),
+                                          ),
+                                          textStyle: theme.textTheme.headlineSmall
+                                              ?.copyWith(
+                                                color: colorScheme.black,
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w800,
+                                              ),
+                                        ),
+                                        child: isLoading
+                                            ? const SizedBox(
+                                                width: 20,
+                                                height: 20,
+                                                child: CircularProgressIndicator(
+                                                  strokeWidth: 2,
+                                                ),
+                                              )
+                                            : Text(localizations.loginSubmitButton),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -254,14 +310,18 @@ class _LoginField extends StatelessWidget {
     required this.label,
     required this.hintText,
     required this.prefixIcon,
+    required this.controller,
     this.obscureText = false,
+    this.onFieldSubmitted,
     this.suffixIcon,
   });
 
   final String label;
   final String hintText;
   final IconData prefixIcon;
+  final TextEditingController controller;
   final bool obscureText;
+  final ValueChanged<String>? onFieldSubmitted;
   final Widget? suffixIcon;
 
   @override
@@ -283,7 +343,9 @@ class _LoginField extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         TextFormField(
+          controller: controller,
           obscureText: obscureText,
+          onFieldSubmitted: onFieldSubmitted,
           cursorColor: colorScheme.accentPrimary,
           style: theme.textTheme.bodyLarge?.copyWith(
             color: colorScheme.baseWhite,
