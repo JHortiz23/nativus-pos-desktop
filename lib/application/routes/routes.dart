@@ -5,15 +5,14 @@ import 'package:nativus_pos_desktop/features/app_shell/presentation/pages/app_sh
 import 'package:nativus_pos_desktop/features/app_shell/presentation/pages/menu_placeholder_page.dart';
 import 'package:nativus_pos_desktop/features/app_shell/presentation/pages/point_of_sale_page.dart';
 import 'package:nativus_pos_desktop/features/auth/presentation/pages/login_page.dart';
+import 'package:nativus_pos_desktop/features/products/presentation/pages/products_page.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
 
 import 'route_names.dart';
 
 typedef RouteLabelBuilder = String Function(AppLocalizations localizations);
-typedef AppRouteBuilder = Widget Function(
-  BuildContext context,
-  GoRouterState state,
-);
+typedef AppRouteBuilder =
+    Widget Function(BuildContext context, GoRouterState state);
 
 class AppRouter {
   AppRouter._();
@@ -30,9 +29,8 @@ class AppRouter {
       path: RoutePaths.dashboard,
       icon: Icons.home_outlined,
       label: (localizations) => localizations.sidebarDashboard,
-      builder: (_, _) => const MenuPlaceholderPage(
-        section: MenuSection.dashboard,
-      ),
+      builder: (_, _) =>
+          const MenuPlaceholderPage(section: MenuSection.dashboard),
     ),
     ShellNavigationItem(
       section: MenuSection.pointOfSale,
@@ -48,9 +46,8 @@ class AppRouter {
       path: RoutePaths.tableManagement,
       icon: Icons.table_restaurant_outlined,
       label: (localizations) => localizations.sidebarTableManagement,
-      builder: (_, _) => const MenuPlaceholderPage(
-        section: MenuSection.tableManagement,
-      ),
+      builder: (_, _) =>
+          const MenuPlaceholderPage(section: MenuSection.tableManagement),
     ),
     ShellNavigationItem(
       section: MenuSection.products,
@@ -58,9 +55,7 @@ class AppRouter {
       path: RoutePaths.products,
       icon: Icons.inventory_2_outlined,
       label: (localizations) => localizations.sidebarProducts,
-      builder: (_, _) => const MenuPlaceholderPage(
-        section: MenuSection.products,
-      ),
+      builder: (_, _) => const ProductsPage(),
     ),
     ShellNavigationItem(
       section: MenuSection.reports,
@@ -68,9 +63,8 @@ class AppRouter {
       path: RoutePaths.reports,
       icon: Icons.bar_chart_rounded,
       label: (localizations) => localizations.sidebarReports,
-      builder: (_, _) => const MenuPlaceholderPage(
-        section: MenuSection.reports,
-      ),
+      builder: (_, _) =>
+          const MenuPlaceholderPage(section: MenuSection.reports),
     ),
     ShellNavigationItem(
       section: MenuSection.settings,
@@ -78,9 +72,8 @@ class AppRouter {
       path: RoutePaths.settings,
       icon: Icons.settings_outlined,
       label: (localizations) => localizations.sidebarSettings,
-      builder: (_, _) => const MenuPlaceholderPage(
-        section: MenuSection.settings,
-      ),
+      builder: (_, _) =>
+          const MenuPlaceholderPage(section: MenuSection.settings),
     ),
   ];
 
@@ -96,10 +89,8 @@ class AppRouter {
         ),
         ShellRoute(
           navigatorKey: shellNavigatorKey,
-          builder: (context, state, child) => AppShellPage(
-            location: state.uri.path,
-            child: child,
-          ),
+          builder: (context, state, child) =>
+              AppShellPage(location: state.uri.path, child: child),
           routes: shellDestinations.map(_buildShellRoute).toList(),
         ),
       ],

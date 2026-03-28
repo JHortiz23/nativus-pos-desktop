@@ -5,11 +5,7 @@ import 'package:nativus_pos_desktop/application/theme/theme.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
 
 class AppShellPage extends StatefulWidget {
-  const AppShellPage({
-    super.key,
-    required this.location,
-    required this.child,
-  });
+  const AppShellPage({super.key, required this.location, required this.child});
 
   final String location;
   final Widget child;
@@ -47,149 +43,174 @@ class _AppShellPageState extends State<AppShellPage> {
                     borderRadius: BorderRadius.circular(28),
                     border: Border.all(color: colorScheme.softBorder),
                   ),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(
-                          expanded ? 18 : 12,
-                          18,
-                          expanded ? 18 : 12,
-                          18,
-                        ),
-                        child: expanded
-                            ? Row(
+                  child: LayoutBuilder(
+                    builder: (context, sidebarConstraints) {
+                      final showExpandedContent =
+                          expanded && sidebarConstraints.maxWidth >= 230;
+
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(
+                              showExpandedContent ? 18 : 12,
+                              18,
+                              showExpandedContent ? 18 : 12,
+                              18,
+                            ),
+                            child: showExpandedContent
+                                ? Row(
+                                    children: [
+                                      const _SidebarLogo(compact: false),
+                                      const SizedBox(width: 14),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              localizations.appTitle
+                                                  .toUpperCase(),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headlineSmall
+                                                  ?.copyWith(
+                                                    color:
+                                                        colorScheme.baseWhite,
+                                                    fontSize: 17,
+                                                    fontWeight: FontWeight.w900,
+                                                  ),
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              localizations
+                                                  .sidebarBrandSubtitle,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium
+                                                  ?.copyWith(
+                                                    color:
+                                                        colorScheme.textMuted,
+                                                    fontSize: 13,
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            _isExpanded = false;
+                                          });
+                                        },
+                                        tooltip: localizations.sidebarCollapse,
+                                        icon: Icon(
+                                          Icons
+                                              .keyboard_double_arrow_left_rounded,
+                                          color: colorScheme.textMuted,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : Column(
+                                    children: [
+                                      const _SidebarLogo(compact: true),
+                                      const SizedBox(height: 12),
+                                      IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            _isExpanded = true;
+                                          });
+                                        },
+                                        tooltip: localizations.sidebarExpand,
+                                        icon: Icon(
+                                          Icons
+                                              .keyboard_double_arrow_right_rounded,
+                                          color: colorScheme.textMuted,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                          ),
+                          Divider(
+                            height: 1,
+                            color: colorScheme.softBorder.withValues(
+                              alpha: 0.7,
+                            ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: showExpandedContent ? 10 : 8,
+                                vertical: 14,
+                              ),
+                              child: Column(
                                 children: [
-                                  const _SidebarLogo(compact: false),
-                                  const SizedBox(width: 14),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          localizations.appTitle.toUpperCase(),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headlineSmall
-                                              ?.copyWith(
-                                                color: colorScheme.baseWhite,
-                                                fontSize: 17,
-                                                fontWeight: FontWeight.w900,
-                                              ),
+                                  for (final item
+                                      in AppRouter.shellDestinations)
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 8),
+                                      child: _SidebarMenuItem(
+                                        icon: item.icon,
+                                        label: item.label(localizations),
+                                        expanded: showExpandedContent,
+                                        selected: AppRouter.isRouteSelected(
+                                          currentLocation: widget.location,
+                                          targetLocation: item.path,
                                         ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          localizations.sidebarBrandSubtitle,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium
-                                              ?.copyWith(
-                                                color: colorScheme.textMuted,
-                                                fontSize: 13,
-                                              ),
-                                        ),
-                                      ],
+                                        onTap: () => context.go(item.path),
+                                      ),
+                                    ),
+                                  const Spacer(),
+                                  Divider(
+                                    height: 1,
+                                    color: colorScheme.softBorder.withValues(
+                                      alpha: 0.7,
                                     ),
                                   ),
-                                  IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        _isExpanded = false;
-                                      });
-                                    },
-                                    tooltip: localizations.sidebarCollapse,
-                                    icon: Icon(
-                                      Icons.keyboard_double_arrow_left_rounded,
-                                      color: colorScheme.textMuted,
-                                    ),
+                                  const SizedBox(height: 14),
+                                  _SidebarMenuItem(
+                                    icon: Icons.logout_rounded,
+                                    label: localizations.sidebarLogout,
+                                    expanded: showExpandedContent,
+                                    selected: false,
+                                    onTap: () => context.go(RoutePaths.login),
                                   ),
                                 ],
-                              )
-                            : Column(
-                                children: [
-                                  const _SidebarLogo(compact: true),
-                                  const SizedBox(height: 12),
-                                  IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        _isExpanded = true;
-                                      });
-                                    },
-                                    tooltip: localizations.sidebarExpand,
-                                    icon: Icon(
-                                      Icons.keyboard_double_arrow_right_rounded,
-                                      color: colorScheme.textMuted,
-                                    ),
-                                  ),
-                                ],
                               ),
-                      ),
-                      Divider(
-                        height: 1,
-                        color: colorScheme.softBorder.withValues(alpha: 0.7),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: expanded ? 10 : 8,
-                            vertical: 14,
+                            ),
                           ),
-                          child: Column(
-                            children: [
-                              for (final item in AppRouter.shellDestinations)
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 8),
-                                  child: _SidebarMenuItem(
-                                    icon: item.icon,
-                                    label: item.label(localizations),
-                                    expanded: expanded,
-                                    selected: AppRouter.isRouteSelected(
-                                      currentLocation: widget.location,
-                                      targetLocation: item.path,
-                                    ),
-                                    onTap: () => context.go(item.path),
-                                  ),
-                                ),
-                              const Spacer(),
-                              Divider(
-                                height: 1,
-                                color: colorScheme.softBorder.withValues(
-                                  alpha: 0.7,
-                                ),
-                              ),
-                              const SizedBox(height: 14),
-                              _SidebarMenuItem(
-                                icon: Icons.logout_rounded,
-                                label: localizations.sidebarLogout,
-                                expanded: expanded,
-                                selected: false,
-                                onTap: () => context.go(RoutePaths.login),
-                              ),
-                            ],
+                          Divider(
+                            height: 1,
+                            color: colorScheme.softBorder.withValues(
+                              alpha: 0.7,
+                            ),
                           ),
-                        ),
-                      ),
-                      Divider(
-                        height: 1,
-                        color: colorScheme.softBorder.withValues(alpha: 0.7),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(expanded ? 18 : 12),
-                        child: _UserCard(expanded: expanded),
-                      ),
-                    ],
+                          Padding(
+                            padding: EdgeInsets.all(
+                              showExpandedContent ? 18 : 12,
+                            ),
+                            child: _UserCard(expanded: showExpandedContent),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ),
                 Expanded(
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 220),
                     curve: Curves.easeOutCubic,
-                    margin: EdgeInsets.fromLTRB(0, 12, 12, 12),
-                    padding: EdgeInsets.all(isCompact ? 18 : 24),
+                    margin: EdgeInsets.fromLTRB(0, 12, 0, 12),
+                    padding: EdgeInsets.fromLTRB(
+                      isCompact ? 18 : 24,
+                      0,
+                      isCompact ? 8 : 12,
+                      0,
+                    ),
                     decoration: BoxDecoration(
                       color: colorScheme.darkBackground,
                       borderRadius: BorderRadius.circular(30),
@@ -223,10 +244,7 @@ class _SidebarLogo extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            colorScheme.accentPrimary,
-            colorScheme.accentPrimaryDark,
-          ],
+          colors: [colorScheme.accentPrimary, colorScheme.accentPrimaryDark],
         ),
       ),
       child: Icon(
