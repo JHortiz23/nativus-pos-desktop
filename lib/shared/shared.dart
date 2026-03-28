@@ -2,4 +2,5 @@
 
 //Pages
 //Widgets
+export 'widgets/toasts/app_toast.dart';
 //Dialogs

@@ -6,6 +6,7 @@ import 'package:nativus_pos_desktop/application/theme/theme.dart';
 import 'package:nativus_pos_desktop/features/auth/presentation/cubit/login_cubit.dart';
 import 'package:nativus_pos_desktop/features/auth/presentation/cubit/login_state.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
+import 'package:nativus_pos_desktop/shared/shared.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -49,9 +50,11 @@ class _LoginPageState extends State<LoginPage> {
           }
 
           if (state is LoginFailure) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(SnackBar(content: Text(state.message)));
+            AppToast.show(
+              context,
+              message: state.message,
+              borderColor: colorScheme.error,
+            );
           }
         },
         child: Scaffold(
