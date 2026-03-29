@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:nativus_pos_desktop/application/injector.dart';
 import 'package:nativus_pos_desktop/core/enums/sidebar_options_enum.dart';
 import 'package:nativus_pos_desktop/features/app_shell/presentation/pages/app_shell_page.dart';
 import 'package:nativus_pos_desktop/features/app_shell/presentation/pages/menu_placeholder_page.dart';
 import 'package:nativus_pos_desktop/features/app_shell/presentation/pages/point_of_sale_page.dart';
 import 'package:nativus_pos_desktop/features/auth/presentation/pages/login_page.dart';
-import 'package:nativus_pos_desktop/features/products/presentation/blocs/products_bloc.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/pages/products_page.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
 
@@ -58,10 +55,7 @@ class AppRouter {
       path: RoutePaths.products,
       icon: Icons.inventory_2_outlined,
       label: (localizations) => localizations.sidebarProducts,
-      builder: (_, _) => BlocProvider(
-        create: (_) => sl<ProductsBloc>()..add(const GetProductsEvent()),
-        child: const ProductsPage(),
-      ),
+      builder: (_, _) => const ProductsPage(),
     ),
     ShellNavigationItem(
       section: MenuSection.reports,

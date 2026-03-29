@@ -36,7 +36,7 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
 
       final uri = ProductsApiEndpoints.getProducts(
         page: page,
-        pageSize: pageSize,
+        items: pageSize,
       );
 
       final headers = HttpHelper.jsonHeaders(accessToken: accessToken);

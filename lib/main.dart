@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nativus_pos_desktop/application/application.dart';
 import 'package:nativus_pos_desktop/application/injector.dart';
+import 'package:nativus_pos_desktop/application/providers/app_bloc_providers.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
 
@@ -39,19 +40,21 @@ class _AppRootState extends State<AppRoot> {
       GlobalKey<ScaffoldMessengerState>();
 
   @override
-  Widget build(BuildContext context) => MaterialApp.router(
-    onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
-    debugShowCheckedModeBanner: false,
-    scaffoldMessengerKey: _scaffoldMessengerKey,
-    localizationsDelegates: AppLocalizationsSetup.localizationsDelegates,
-    supportedLocales: AppLocalizationsSetup.supportedLocales,
-    theme: AppTheme.build(),
-    routerConfig: widget.router,
-    themeAnimationStyle: AnimationStyle(
-      curve: Curves.easeInOut,
-      duration: const Duration(milliseconds: 300),
-      reverseCurve: Curves.easeInOut,
-      reverseDuration: const Duration(milliseconds: 300),
+  Widget build(BuildContext context) => AppBlocProviders(
+    child: MaterialApp.router(
+      onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
+      debugShowCheckedModeBanner: false,
+      scaffoldMessengerKey: _scaffoldMessengerKey,
+      localizationsDelegates: AppLocalizationsSetup.localizationsDelegates,
+      supportedLocales: AppLocalizationsSetup.supportedLocales,
+      theme: AppTheme.build(),
+      routerConfig: widget.router,
+      themeAnimationStyle: AnimationStyle(
+        curve: Curves.easeInOut,
+        duration: const Duration(milliseconds: 300),
+        reverseCurve: Curves.easeInOut,
+        reverseDuration: const Duration(milliseconds: 300),
+      ),
     ),
   );
 }
