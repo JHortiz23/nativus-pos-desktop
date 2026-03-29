@@ -1,4 +1,4 @@
-
+import 'package:nativus_pos_desktop/core/shared/data/models/paginated_response.dart';
 import 'package:nativus_pos_desktop/features/products/domain/entities/products_entity.dart';
 import 'package:nativus_pos_desktop/features/products/domain/repositories/products_repository.dart';
 
@@ -7,13 +7,10 @@ class GetProductsUseCase {
 
   GetProductsUseCase({required this.productsRepository});
 
-  Future<ProductsEntity> call({
+  Future<PaginatedResponse<ProductsEntity>> call({
     int page = 1,
-    int pageSize = 100
+    int pageSize = 100,
   }) {
-    return productsRepository.getProducts(
-      page: page,
-      pageSize: pageSize
-    );
+    return productsRepository.getProducts(page: page, pageSize: pageSize);
   }
 }
