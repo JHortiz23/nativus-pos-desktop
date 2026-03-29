@@ -42,5 +42,12 @@
   "pointOfSaleOrderTable2": "Mesa 2",
   "orderStatusPaid": "Pagado",
   "orderStatusPending": "Pendiente",
-  "orderStatusPreparing": "Preparando"
+  "orderStatusPreparing": "Preparando",
+  "search_product": "Buscar Producto...",
+  "no_products_found": "No hay productos para mostrar",
+  "empty_products_try_other_category": "Prueba con otra categoria para ver los elementos mock disponibles.",
+  "empty_products_no_matches": "No encontramos coincidencias para tu busqueda actual.",
+  "product_card_inactive_caps": "INACTIVO",
+  "product_card_status_active": "Activo",
+  "product_card_status_inactive": "Inactivo"
 }

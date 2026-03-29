@@ -42,6 +42,13 @@
   "pointOfSaleOrderTable2": "Table 2",
   "orderStatusPaid": "Paid",
   "orderStatusPending": "Pending",
-  "orderStatusPreparing": "Preparing"
+  "orderStatusPreparing": "Preparing",
+  "search_product": "Search Product...",
+  "no_products_found": "There are not products to show",
+  "empty_products_try_other_category": "Try another category to see available mock items.",
+  "empty_products_no_matches": "We did not find matches for your current search.",
+  "product_card_inactive_caps": "INACTIVE",
+  "product_card_status_active": "Active",
+  "product_card_status_inactive": "Inactive"
 }
 

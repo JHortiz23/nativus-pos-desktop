@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
+import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
 
 class ProductSearchField extends StatelessWidget {
   const ProductSearchField({super.key, required this.onChanged});
@@ -10,6 +11,7 @@ class ProductSearchField extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final localizations = AppLocalizations.of(context)!;  
 
     return TextField(
       onChanged: onChanged,
@@ -19,7 +21,7 @@ class ProductSearchField extends StatelessWidget {
         fontSize: 16,
       ),
       decoration: InputDecoration(
-        hintText: 'Buscar producto...',
+        hintText: localizations.search_product,
         hintStyle: theme.textTheme.bodyMedium?.copyWith(
           color: colorScheme.textMuted,
           fontSize: 15,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
+import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
 
 enum ProductCardLayout { grid, list }
 
@@ -67,6 +68,7 @@ class _GridProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final localizations = AppLocalizations.of(context)!;
 
     return Container(
       decoration: BoxDecoration(
@@ -152,7 +154,7 @@ class _GridProductCard extends StatelessWidget {
                   border: Border.all(color: colorScheme.softBorder),
                 ),
                 child: Text(
-                  'INACTIVO',
+                  localizations.product_card_inactive_caps,
                   style: theme.textTheme.bodyLarge?.copyWith(
                     color: colorScheme.textMuted,
                     fontSize: 11,
@@ -389,6 +391,7 @@ class _StatusBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final localizations = AppLocalizations.of(context)!;
     final foreground = isActive ? colorScheme.baseGreen : colorScheme.textMuted;
     final background = isActive
         ? colorScheme.baseGreen.withValues(alpha: 0.12)
@@ -402,7 +405,9 @@ class _StatusBadge extends StatelessWidget {
         border: Border.all(color: colorScheme.softBorder),
       ),
       child: Text(
-        isActive ? 'Activo' : 'Inactivo',
+        isActive
+            ? localizations.product_card_status_active
+            : localizations.product_card_status_inactive,
         style: theme.textTheme.bodyLarge?.copyWith(
           color: foreground,
           fontSize: 13,

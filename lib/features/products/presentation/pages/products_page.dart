@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
+import 'package:nativus_pos_desktop/features/products/presentation/models/product_category.dart';
+import 'package:nativus_pos_desktop/features/products/presentation/widgets/cards/products_grid.dart';
+import 'package:nativus_pos_desktop/features/products/presentation/widgets/cards/products_list.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/cards/product_card.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/empty_products_state.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/filters/category_chip.dart';
@@ -23,38 +26,34 @@ class _ProductsPageState extends State<ProductsPage> {
   String _searchQuery = '';
   ProductCardLayout _layout = ProductCardLayout.grid;
 
-  final List<_ProductCategory> _categories = const [
-    _ProductCategory(
+  final List<ProductCategory> _categories = const [
+    ProductCategory(
       id: _allCategoryId,
       label: 'Todo',
       icon: Icons.dashboard_customize_rounded,
     ),
-    _ProductCategory(
+    ProductCategory(
       id: 'bebidas',
       label: 'Bebidas',
       icon: Icons.local_bar_rounded,
     ),
-    _ProductCategory(
+    ProductCategory(
       id: 'mariscos',
       label: 'Mariscos',
       icon: Icons.set_meal_rounded,
     ),
-    _ProductCategory(
+    ProductCategory(
       id: 'comida-rapida',
       label: 'Comida Rapida',
       icon: Icons.lunch_dining_rounded,
     ),
-    _ProductCategory(
-      id: 'postres',
-      label: 'Postres',
-      icon: Icons.cake_outlined,
-    ),
-    _ProductCategory(
+    ProductCategory(id: 'postres', label: 'Postres', icon: Icons.cake_outlined),
+    ProductCategory(
       id: 'entradas',
       label: 'Entradas',
       icon: Icons.ramen_dining_rounded,
     ),
-    _ProductCategory(
+    ProductCategory(
       id: 'carnes',
       label: 'Carnes',
       icon: Icons.kebab_dining_rounded,
@@ -396,15 +395,19 @@ class _ProductsPageState extends State<ProductsPage> {
                                   query: _searchQuery,
                                 )
                               : _layout == ProductCardLayout.grid
-                              ? _ProductsGrid(
+                              ? ProductsGrid(
                                   key: const ValueKey('products-grid'),
-                                  products: visibleProducts,
-                                  formatPrice: _formatPrice,
+                                  children: _buildProductCards(
+                                    visibleProducts,
+                                    ProductCardLayout.grid,
+                                  ),
                                 )
-                              : _ProductsList(
+                              : ProductsList(
                                   key: const ValueKey('products-list'),
-                                  products: visibleProducts,
-                                  formatPrice: _formatPrice,
+                                  children: _buildProductCards(
+                                    visibleProducts,
+                                    ProductCardLayout.list,
+                                  ),
                                 ),
                         ),
                       ],
@@ -437,100 +440,24 @@ class _ProductsPageState extends State<ProductsPage> {
   String _formatPrice(int value) {
     return 'CRC ${_currencyFormat.format(value).replaceAll('.', ' ')}';
   }
-}
 
-class _ProductsGrid extends StatelessWidget {
-  const _ProductsGrid({
-    super.key,
-    required this.products,
-    required this.formatPrice,
-  });
-
-  final List<_MockProduct> products;
-  final String Function(int value) formatPrice;
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final width = constraints.maxWidth;
-        final crossAxisCount = switch (width) {
-          < 760 => 1,
-          < 1080 => 2,
-          < 1380 => 3,
-          _ => 4,
-        };
-
-        return GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: products.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: crossAxisCount,
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
-            mainAxisExtent: 224,
-          ),
-          itemBuilder: (context, index) {
-            final product = products[index];
-
-            return ProductCard(
-              layout: ProductCardLayout.grid,
-              name: product.name,
-              description: product.description,
-              price: formatPrice(product.price),
-              category: product.categoryLabel,
-              productIcon: product.icon,
-              isActive: product.isActive,
-            );
-          },
-        );
-      },
-    );
+  List<Widget> _buildProductCards(
+    List<_MockProduct> products,
+    ProductCardLayout layout,
+  ) {
+    return [
+      for (final product in products)
+        ProductCard(
+          layout: layout,
+          name: product.name,
+          description: product.description,
+          price: _formatPrice(product.price),
+          category: product.categoryLabel,
+          productIcon: product.icon,
+          isActive: product.isActive,
+        ),
+    ];
   }
-}
-
-class _ProductsList extends StatelessWidget {
-  const _ProductsList({
-    super.key,
-    required this.products,
-    required this.formatPrice,
-  });
-
-  final List<_MockProduct> products;
-  final String Function(int value) formatPrice;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        for (var index = 0; index < products.length; index++) ...[
-          ProductCard(
-            layout: ProductCardLayout.list,
-            name: products[index].name,
-            description: products[index].description,
-            price: formatPrice(products[index].price),
-            category: products[index].categoryLabel,
-            productIcon: products[index].icon,
-            isActive: products[index].isActive,
-          ),
-          if (index != products.length - 1) const SizedBox(height: 12),
-        ],
-      ],
-    );
-  }
-}
-
-class _ProductCategory {
-  const _ProductCategory({
-    required this.id,
-    required this.label,
-    required this.icon,
-  });
-
-  final String id;
-  final String label;
-  final IconData icon;
 }
 
 class _MockProduct {
