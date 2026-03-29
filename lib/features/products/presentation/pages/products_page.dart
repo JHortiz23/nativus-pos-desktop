@@ -25,6 +25,8 @@ class _ProductsPageState extends State<ProductsPage> {
 
   late final NumberFormat _currencyFormat;
   late final ScrollController _scrollController;
+  // Products Bloc
+  late final ProductsBloc _productsBloc;
   ProductCardLayout _layout = ProductCardLayout.grid;
 
   final List<ProductCategory> _categories = const [
@@ -66,6 +68,9 @@ class _ProductsPageState extends State<ProductsPage> {
     super.initState();
     _currencyFormat = NumberFormat.decimalPattern('es_CR');
     _scrollController = ScrollController();
+    _productsBloc = context.read<ProductsBloc>();
+    // Load initial products
+    _productsBloc.add(const GetProductsEvent());
   }
 
   @override
@@ -303,7 +308,7 @@ class _ProductsPageState extends State<ProductsPage> {
   }
 
   String _formatPrice(num value) {
-    return 'CRC ${_currencyFormat.format(value).replaceAll('.', ' ')}';
+    return '₡ ${_currencyFormat.format(value).replaceAll('.', ' ')}';
   }
 
   List<Widget> _buildProductCards(

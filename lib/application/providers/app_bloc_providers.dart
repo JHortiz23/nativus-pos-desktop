@@ -11,11 +11,7 @@ class AppBlocProviders extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => sl<ProductsBloc>()..add(const GetProductsEvent()),
-        ),
-      ],
+      providers: [BlocProvider(create: (_) => sl<ProductsBloc>())],
       child: child,
     );
   }
