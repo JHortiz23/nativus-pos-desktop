@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nativus_pos_desktop/application/application.dart';
 import 'package:nativus_pos_desktop/application/injector.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
+import 'package:nativus_pos_desktop/core/utils/helpers/auth_token_storage.dart';
 import 'package:nativus_pos_desktop/features/auth/presentation/cubit/login_cubit.dart';
 import 'package:nativus_pos_desktop/features/auth/presentation/cubit/login_state.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
@@ -20,6 +22,14 @@ class _LoginPageState extends State<LoginPage> {
   bool _obscurePassword = true;
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  late final AuthTokenStorage _authTokenStorage;
+
+  @override
+  void initState() {
+    super.initState();
+    _authTokenStorage = sl<AuthTokenStorage>();
+    _usernameController.text = _authTokenStorage.getLastEmail() ?? '';
+  }
 
   @override
   void dispose() {
@@ -35,6 +45,16 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  Future<void> _rememberEmail(String email) async {
+    final trimmedEmail = email.trim();
+
+    if (trimmedEmail.isEmpty) {
+      return;
+    }
+
+    await _authTokenStorage.saveLastEmail(trimmedEmail);
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -47,6 +67,8 @@ class _LoginPageState extends State<LoginPage> {
       child: BlocListener<LoginCubit, LoginState>(
         listener: (context, state) {
           if (state is LoginSuccess) {
+            _rememberEmail(state.session.user.email);
+            TextInput.finishAutofillContext();
             context.go(RoutePaths.pointOfSale);
           }
 
@@ -70,7 +92,9 @@ class _LoginPageState extends State<LoginPage> {
               Positioned.fill(
                 child: IgnorePointer(
                   child: CustomPaint(
-                    painter: _LoginGridPainter(color: colorScheme.decorativeGrid),
+                    painter: _LoginGridPainter(
+                      color: colorScheme.decorativeGrid,
+                    ),
                   ),
                 ),
               ),
@@ -127,101 +151,114 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ],
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  localizations.loginTitle,
-                                  style: theme.textTheme.headlineMedium?.copyWith(
-                                    color: colorScheme.baseWhite,
-                                    fontSize: isCompact ? 32 : 38,
-                                    height: 1.05,
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                                ),
-                                const SizedBox(height: 10),
-                                Text(
-                                  localizations.loginSubtitle,
-                                  style: theme.textTheme.bodyMedium?.copyWith(
-                                    color: colorScheme.textMuted,
-                                    fontSize: 18,
-                                    height: 1.5,
-                                  ),
-                                ),
-                                const SizedBox(height: 30),
-                                _LoginField(
-                                  label: localizations.loginUsernameLabel,
-                                  hintText: localizations.loginUsernameHint,
-                                  prefixIcon: Icons.person_outline_rounded,
-                                  controller: _usernameController,
-                                ),
-                                const SizedBox(height: 20),
-                                _LoginField(
-                                  label: localizations.loginPasswordLabel,
-                                  hintText: localizations.loginPasswordHint,
-                                  prefixIcon: Icons.lock_outline_rounded,
-                                  obscureText: _obscurePassword,
-                                  controller: _passwordController,
-                                  onFieldSubmitted: (_) => _submitLogin(context),
-                                  suffixIcon: IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        _obscurePassword = !_obscurePassword;
-                                      });
-                                    },
-                                    splashRadius: 20,
-                                    icon: Icon(
-                                      _obscurePassword
-                                          ? Icons.visibility_outlined
-                                          : Icons.visibility_off_outlined,
-                                    ),
-                                    color: colorScheme.textMuted,
-                                  ),
-                                ),
-                                const SizedBox(height: 30),
-                                BlocBuilder<LoginCubit, LoginState>(
-                                  builder: (context, state) {
-                                    final isLoading = state is LoginLoading;
-
-                                    return SizedBox(
-                                      width: double.infinity,
-                                      height: 60,
-                                      child: FilledButton(
-                                        onPressed: isLoading
-                                            ? null
-                                            : () => _submitLogin(context),
-                                        style: FilledButton.styleFrom(
-                                          backgroundColor:
-                                              colorScheme.accentPrimary,
-                                          foregroundColor: colorScheme.black,
-                                          elevation: 0,
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 24,
-                                          ),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(18),
-                                          ),
-                                          textStyle: theme.textTheme.headlineSmall
-                                              ?.copyWith(
-                                                color: colorScheme.black,
-                                                fontSize: 17,
-                                                fontWeight: FontWeight.w800,
-                                              ),
+                            child: AutofillGroup(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    localizations.loginTitle,
+                                    style: theme.textTheme.headlineMedium
+                                        ?.copyWith(
+                                          color: colorScheme.baseWhite,
+                                          fontSize: isCompact ? 32 : 38,
+                                          height: 1.05,
+                                          fontWeight: FontWeight.w800,
                                         ),
-                                        child: isLoading
-                                            ? const SizedBox(
-                                                width: 20,
-                                                height: 20,
-                                                child: CircularProgressIndicator(
-                                                  strokeWidth: 2,
-                                                ),
-                                              )
-                                            : Text(localizations.loginSubmitButton),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    localizations.loginSubtitle,
+                                    style: theme.textTheme.bodyMedium?.copyWith(
+                                      color: colorScheme.textMuted,
+                                      fontSize: 18,
+                                      height: 1.5,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 30),
+                                  _LoginField(
+                                    label: localizations.loginUsernameLabel,
+                                    hintText: localizations.loginUsernameHint,
+                                    prefixIcon: Icons.person_outline_rounded,
+                                    controller: _usernameController,
+                                    keyboardType: TextInputType.emailAddress,
+                                    autofillHints: const [AutofillHints.email],
+                                  ),
+                                  const SizedBox(height: 20),
+                                  _LoginField(
+                                    label: localizations.loginPasswordLabel,
+                                    hintText: localizations.loginPasswordHint,
+                                    prefixIcon: Icons.lock_outline_rounded,
+                                    obscureText: _obscurePassword,
+                                    controller: _passwordController,
+                                    onFieldSubmitted: (_) =>
+                                        _submitLogin(context),
+                                    suffixIcon: IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          _obscurePassword = !_obscurePassword;
+                                        });
+                                      },
+                                      splashRadius: 20,
+                                      icon: Icon(
+                                        _obscurePassword
+                                            ? Icons.visibility_outlined
+                                            : Icons.visibility_off_outlined,
                                       ),
-                                    );
-                                  },
-                                ),
-                              ],
+                                      color: colorScheme.textMuted,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 30),
+                                  BlocBuilder<LoginCubit, LoginState>(
+                                    builder: (context, state) {
+                                      final isLoading = state is LoginLoading;
+
+                                      return SizedBox(
+                                        width: double.infinity,
+                                        height: 60,
+                                        child: FilledButton(
+                                          onPressed: isLoading
+                                              ? null
+                                              : () => _submitLogin(context),
+                                          style: FilledButton.styleFrom(
+                                            backgroundColor:
+                                                colorScheme.accentPrimary,
+                                            foregroundColor: colorScheme.black,
+                                            elevation: 0,
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 24,
+                                            ),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(18),
+                                            ),
+                                            textStyle: theme
+                                                .textTheme
+                                                .headlineSmall
+                                                ?.copyWith(
+                                                  color: colorScheme.black,
+                                                  fontSize: 17,
+                                                  fontWeight: FontWeight.w800,
+                                                ),
+                                          ),
+                                          child: isLoading
+                                              ? const SizedBox(
+                                                  width: 20,
+                                                  height: 20,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                        strokeWidth: 2,
+                                                      ),
+                                                )
+                                              : Text(
+                                                  localizations
+                                                      .loginSubmitButton,
+                                                ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],
@@ -318,6 +355,8 @@ class _LoginField extends StatelessWidget {
     this.obscureText = false,
     this.onFieldSubmitted,
     this.suffixIcon,
+    this.keyboardType,
+    this.autofillHints,
   });
 
   final String label;
@@ -327,6 +366,8 @@ class _LoginField extends StatelessWidget {
   final bool obscureText;
   final ValueChanged<String>? onFieldSubmitted;
   final Widget? suffixIcon;
+  final TextInputType? keyboardType;
+  final Iterable<String>? autofillHints;
 
   @override
   Widget build(BuildContext context) {
@@ -350,6 +391,8 @@ class _LoginField extends StatelessWidget {
           controller: controller,
           obscureText: obscureText,
           onFieldSubmitted: onFieldSubmitted,
+          keyboardType: keyboardType,
+          autofillHints: autofillHints,
           cursorColor: colorScheme.accentPrimary,
           style: theme.textTheme.bodyLarge?.copyWith(
             color: colorScheme.baseWhite,
