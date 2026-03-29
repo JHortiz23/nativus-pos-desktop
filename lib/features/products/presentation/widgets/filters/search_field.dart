@@ -3,9 +3,14 @@ import 'package:nativus_pos_desktop/application/theme/theme.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
 
 class ProductSearchField extends StatelessWidget {
-  const ProductSearchField({super.key, required this.onChanged});
+  const ProductSearchField({
+    super.key,
+    required this.onChanged,
+    this.enabled = true,
+  });
 
   final ValueChanged<String> onChanged;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +19,7 @@ class ProductSearchField extends StatelessWidget {
     final localizations = AppLocalizations.of(context)!;  
 
     return TextField(
+      enabled: enabled,
       onChanged: onChanged,
       cursorColor: colorScheme.accentPrimary,
       style: theme.textTheme.bodyLarge?.copyWith(

@@ -8,21 +8,27 @@ class ProductCategoryChip extends StatelessWidget {
     required this.icon,
     required this.selected,
     required this.onTap,
+    this.enabled = true,
   });
 
   final String label;
   final IconData icon;
   final bool selected;
   final VoidCallback onTap;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final background = selected
+    final background = !enabled
+        ? colorScheme.darkSurfaceAlt.withValues(alpha: 0.6)
+        : selected
         ? colorScheme.accentPrimary.withValues(alpha: 0.18)
         : colorScheme.darkSurfaceAlt;
-    final foreground = selected
+    final foreground = !enabled
+        ? colorScheme.textMuted
+        : selected
         ? colorScheme.accentPrimary
         : colorScheme.textSoft;
 
@@ -30,7 +36,7 @@ class ProductCategoryChip extends StatelessWidget {
       color: background,
       borderRadius: BorderRadius.circular(999),
       child: InkWell(
-        onTap: onTap,
+        onTap: enabled ? onTap : null,
         borderRadius: BorderRadius.circular(999),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

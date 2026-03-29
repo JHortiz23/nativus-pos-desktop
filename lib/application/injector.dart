@@ -8,6 +8,7 @@ import 'package:nativus_pos_desktop/features/auth/domain/repositories/auth_repos
 import 'package:nativus_pos_desktop/features/auth/domain/use_cases/login_use_case.dart';
 import 'package:nativus_pos_desktop/features/auth/presentation/cubit/login_cubit.dart';
 import 'package:nativus_pos_desktop/features/products/data/datasources/remote/products_remote_datasource.dart';
+import 'package:nativus_pos_desktop/features/products/data/repositories/products_repository_impl.dart';
 import 'package:nativus_pos_desktop/features/products/domain/repositories/products_repository.dart';
 import 'package:nativus_pos_desktop/features/products/domain/use_cases/get_products_use_case.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/blocs/products_bloc.dart';
@@ -50,6 +51,13 @@ Future<void> initInjector() async {
     ),
   );
 
+  /// PRODUCTS
+  sl.registerLazySingleton<ProductsRepository>(
+    () => ProductsRepositoryImpl(
+      remoteDataSource: sl<ProductsRemoteDataSource>(),
+    ),
+  );
+
   // ** Use Cases **
   /// AUTHENTICATION
   sl.registerLazySingleton<LoginUseCase>(
@@ -70,7 +78,7 @@ Future<void> initInjector() async {
 
   // ** BLoCs **
   /// PRODUCTS
-  sl.registerLazySingleton<ProductsBloc>(
+  sl.registerFactory<ProductsBloc>(
     () => ProductsBloc(getProductsUseCase: sl()),
   );
 }
