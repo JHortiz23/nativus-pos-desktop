@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
+import 'package:nativus_pos_desktop/features/products/domain/entities/products_entity.dart';
+import 'package:nativus_pos_desktop/features/products/presentation/blocs/products_bloc.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/models/product_category.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/cards/products_grid.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/cards/products_list.dart';
@@ -19,12 +22,15 @@ class ProductsPage extends StatefulWidget {
 
 class _ProductsPageState extends State<ProductsPage> {
   static const String _allCategoryId = 'all';
-
   late final NumberFormat _currencyFormat;
   late final ScrollController _scrollController;
   String _selectedCategoryId = _allCategoryId;
   String _searchQuery = '';
   ProductCardLayout _layout = ProductCardLayout.grid;
+  // Products Bloc
+  late final ProductsBloc _ProductsBloc;
+  // products list
+  List<ProductsEntity> _products = <ProductsEntity>[];
 
   final List<ProductCategory> _categories = const [
     ProductCategory(
@@ -60,147 +66,150 @@ class _ProductsPageState extends State<ProductsPage> {
     ),
   ];
 
-  final List<_MockProduct> _products = const [
-    _MockProduct(
-      name: 'Agua Mineral',
-      description: '500 ml',
-      price: 1800,
-      categoryId: 'bebidas',
-      categoryLabel: 'Bebidas',
-      icon: Icons.water_drop_rounded,
-      isActive: true,
-    ),
-    _MockProduct(
-      name: 'Coca-Cola',
-      description: '350 ml',
-      price: 2200,
-      categoryId: 'bebidas',
-      categoryLabel: 'Bebidas',
-      icon: Icons.local_cafe_outlined,
-      isActive: false,
-    ),
-    _MockProduct(
-      name: 'Jugo Natural',
-      description: 'Vaso 16 oz',
-      price: 3500,
-      categoryId: 'bebidas',
-      categoryLabel: 'Bebidas',
-      icon: Icons.emoji_food_beverage_rounded,
-      isActive: false,
-    ),
-    _MockProduct(
-      name: 'Cerveza Nacional',
-      description: '330 ml',
-      price: 4500,
-      categoryId: 'bebidas',
-      categoryLabel: 'Bebidas',
-      icon: Icons.sports_bar_rounded,
-      isActive: true,
-    ),
-    _MockProduct(
-      name: 'Limonada Natural',
-      description: 'Con o sin azucar',
-      price: 3000,
-      categoryId: 'bebidas',
-      categoryLabel: 'Bebidas',
-      icon: Icons.emoji_food_beverage_outlined,
-      isActive: true,
-    ),
-    _MockProduct(
-      name: 'Ceviche Camaron',
-      description: 'Porcion completa',
-      price: 12500,
-      categoryId: 'mariscos',
-      categoryLabel: 'Mariscos',
-      icon: Icons.set_meal_rounded,
-      isActive: true,
-    ),
-    _MockProduct(
-      name: 'Corvina al Vapor',
-      description: 'Con vegetales',
-      price: 18000,
-      categoryId: 'mariscos',
-      categoryLabel: 'Mariscos',
-      icon: Icons.phishing_rounded,
-      isActive: true,
-    ),
-    _MockProduct(
-      name: 'Pulpo a la Brasa',
-      description: 'Con papas',
-      price: 22000,
-      categoryId: 'mariscos',
-      categoryLabel: 'Mariscos',
-      icon: Icons.restaurant_menu_rounded,
-      isActive: true,
-    ),
-    _MockProduct(
-      name: 'Hamburguesa Clasica',
-      description: 'Con papas fritas',
-      price: 9500,
-      categoryId: 'comida-rapida',
-      categoryLabel: 'Comida Rapida',
-      icon: Icons.lunch_dining_rounded,
-      isActive: true,
-    ),
-    _MockProduct(
-      name: 'Hot Dog Especial',
-      description: 'Mostaza y ketchup',
-      price: 6500,
-      categoryId: 'comida-rapida',
-      categoryLabel: 'Comida Rapida',
-      icon: Icons.lunch_dining_outlined,
-      isActive: true,
-    ),
-    _MockProduct(
-      name: 'Casado de Pollo',
-      description: 'Arroz y frijoles',
-      price: 10500,
-      categoryId: 'entradas',
-      categoryLabel: 'Entradas',
-      icon: Icons.rice_bowl_rounded,
-      isActive: true,
-    ),
-    _MockProduct(
-      name: 'Tiramisu',
-      description: 'Porcion individual',
-      price: 5500,
-      categoryId: 'postres',
-      categoryLabel: 'Postres',
-      icon: Icons.cake_rounded,
-      isActive: true,
-    ),
-    _MockProduct(
-      name: 'Ribeye a la Parrilla',
-      description: '300 g con mantequilla',
-      price: 26500,
-      categoryId: 'carnes',
-      categoryLabel: 'Carnes',
-      icon: Icons.outdoor_grill_rounded,
-      isActive: true,
-    ),
-    _MockProduct(
-      name: 'Costilla BBQ',
-      description: 'Glaseado de la casa',
-      price: 19800,
-      categoryId: 'carnes',
-      categoryLabel: 'Carnes',
-      icon: Icons.local_dining_rounded,
-      isActive: false,
-    ),
-    _MockProduct(
-      name: 'Crema de Ayote',
-      description: 'Entrada caliente',
-      price: 4200,
-      categoryId: 'entradas',
-      categoryLabel: 'Entradas',
-      icon: Icons.soup_kitchen_rounded,
-      isActive: true,
-    ),
-  ];
+  // final List<_MockProduct> _products = const [
+  //   _MockProduct(
+  //     name: 'Agua Mineral',
+  //     description: '500 ml',
+  //     price: 1800,
+  //     categoryId: 'bebidas',
+  //     categoryLabel: 'Bebidas',
+  //     icon: Icons.water_drop_rounded,
+  //     isActive: true,
+  //   ),
+  //   _MockProduct(
+  //     name: 'Coca-Cola',
+  //     description: '350 ml',
+  //     price: 2200,
+  //     categoryId: 'bebidas',
+  //     categoryLabel: 'Bebidas',
+  //     icon: Icons.local_cafe_outlined,
+  //     isActive: false,
+  //   ),
+  //   _MockProduct(
+  //     name: 'Jugo Natural',
+  //     description: 'Vaso 16 oz',
+  //     price: 3500,
+  //     categoryId: 'bebidas',
+  //     categoryLabel: 'Bebidas',
+  //     icon: Icons.emoji_food_beverage_rounded,
+  //     isActive: false,
+  //   ),
+  //   _MockProduct(
+  //     name: 'Cerveza Nacional',
+  //     description: '330 ml',
+  //     price: 4500,
+  //     categoryId: 'bebidas',
+  //     categoryLabel: 'Bebidas',
+  //     icon: Icons.sports_bar_rounded,
+  //     isActive: true,
+  //   ),
+  //   _MockProduct(
+  //     name: 'Limonada Natural',
+  //     description: 'Con o sin azucar',
+  //     price: 3000,
+  //     categoryId: 'bebidas',
+  //     categoryLabel: 'Bebidas',
+  //     icon: Icons.emoji_food_beverage_outlined,
+  //     isActive: true,
+  //   ),
+  //   _MockProduct(
+  //     name: 'Ceviche Camaron',
+  //     description: 'Porcion completa',
+  //     price: 12500,
+  //     categoryId: 'mariscos',
+  //     categoryLabel: 'Mariscos',
+  //     icon: Icons.set_meal_rounded,
+  //     isActive: true,
+  //   ),
+  //   _MockProduct(
+  //     name: 'Corvina al Vapor',
+  //     description: 'Con vegetales',
+  //     price: 18000,
+  //     categoryId: 'mariscos',
+  //     categoryLabel: 'Mariscos',
+  //     icon: Icons.phishing_rounded,
+  //     isActive: true,
+  //   ),
+  //   _MockProduct(
+  //     name: 'Pulpo a la Brasa',
+  //     description: 'Con papas',
+  //     price: 22000,
+  //     categoryId: 'mariscos',
+  //     categoryLabel: 'Mariscos',
+  //     icon: Icons.restaurant_menu_rounded,
+  //     isActive: true,
+  //   ),
+  //   _MockProduct(
+  //     name: 'Hamburguesa Clasica',
+  //     description: 'Con papas fritas',
+  //     price: 9500,
+  //     categoryId: 'comida-rapida',
+  //     categoryLabel: 'Comida Rapida',
+  //     icon: Icons.lunch_dining_rounded,
+  //     isActive: true,
+  //   ),
+  //   _MockProduct(
+  //     name: 'Hot Dog Especial',
+  //     description: 'Mostaza y ketchup',
+  //     price: 6500,
+  //     categoryId: 'comida-rapida',
+  //     categoryLabel: 'Comida Rapida',
+  //     icon: Icons.lunch_dining_outlined,
+  //     isActive: true,
+  //   ),
+  //   _MockProduct(
+  //     name: 'Casado de Pollo',
+  //     description: 'Arroz y frijoles',
+  //     price: 10500,
+  //     categoryId: 'entradas',
+  //     categoryLabel: 'Entradas',
+  //     icon: Icons.rice_bowl_rounded,
+  //     isActive: true,
+  //   ),
+  //   _MockProduct(
+  //     name: 'Tiramisu',
+  //     description: 'Porcion individual',
+  //     price: 5500,
+  //     categoryId: 'postres',
+  //     categoryLabel: 'Postres',
+  //     icon: Icons.cake_rounded,
+  //     isActive: true,
+  //   ),
+  //   _MockProduct(
+  //     name: 'Ribeye a la Parrilla',
+  //     description: '300 g con mantequilla',
+  //     price: 26500,
+  //     categoryId: 'carnes',
+  //     categoryLabel: 'Carnes',
+  //     icon: Icons.outdoor_grill_rounded,
+  //     isActive: true,
+  //   ),
+  //   _MockProduct(
+  //     name: 'Costilla BBQ',
+  //     description: 'Glaseado de la casa',
+  //     price: 19800,
+  //     categoryId: 'carnes',
+  //     categoryLabel: 'Carnes',
+  //     icon: Icons.local_dining_rounded,
+  //     isActive: false,
+  //   ),
+  //   _MockProduct(
+  //     name: 'Crema de Ayote',
+  //     description: 'Entrada caliente',
+  //     price: 4200,
+  //     categoryId: 'entradas',
+  //     categoryLabel: 'Entradas',
+  //     icon: Icons.soup_kitchen_rounded,
+  //     isActive: true,
+  //   ),
+  // ];
 
   @override
   void initState() {
     super.initState();
+    _ProductsBloc = context.read<ProductsBloc>();
+    // Fetch initial products
+    _ProductsBloc.add(const GetProductsEvent());
     _currencyFormat = NumberFormat.decimalPattern('es_CR');
     _scrollController = ScrollController();
   }
@@ -215,7 +224,7 @@ class _ProductsPageState extends State<ProductsPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final visibleProducts = _filteredProducts;
+    //final visibleProducts = _filteredProducts;
 
     return Container(
       decoration: BoxDecoration(
@@ -422,20 +431,20 @@ class _ProductsPageState extends State<ProductsPage> {
     );
   }
 
-  List<_MockProduct> get _filteredProducts {
-    return _products.where((product) {
-      final matchesCategory =
-          _selectedCategoryId == _allCategoryId ||
-          product.categoryId == _selectedCategoryId;
-      final matchesSearch =
-          _searchQuery.isEmpty ||
-          product.name.toLowerCase().contains(_searchQuery) ||
-          product.description.toLowerCase().contains(_searchQuery) ||
-          product.categoryLabel.toLowerCase().contains(_searchQuery);
+  // List<_MockProduct> get _filteredProducts {
+  //   return _products.where((product) {
+  //     final matchesCategory =
+  //         _selectedCategoryId == _allCategoryId ||
+  //         product.categoryId == _selectedCategoryId;
+  //     final matchesSearch =
+  //         _searchQuery.isEmpty ||
+  //         product.name.toLowerCase().contains(_searchQuery) ||
+  //         product.description.toLowerCase().contains(_searchQuery) ||
+  //         product.categoryLabel.toLowerCase().contains(_searchQuery);
 
-      return matchesCategory && matchesSearch;
-    }).toList();
-  }
+  //     return matchesCategory && matchesSearch;
+  //   }).toList();
+  // }
 
   String _formatPrice(int value) {
     return 'CRC ${_currencyFormat.format(value).replaceAll('.', ' ')}';
