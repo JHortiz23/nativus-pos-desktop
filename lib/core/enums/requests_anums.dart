@@ -1,0 +1,1 @@
+enum RequestsEnum { initial, loading, success, failure }
