@@ -1,23 +1,19 @@
-// import 'package:gfyb_admin_web/core/shared/data/models/paginated_response.dart';
-// import 'package:gfyb_admin_web/features/user_reviews/domain/entities/user_review_entity.dart';
-// import 'package:gfyb_admin_web/features/user_reviews/domain/repositories/user_review_repository.dart';
 
-// class GetUserReviewsUseCase {
-//   final UserReviewRepository userReviewRepository;
+import 'package:nativus_pos_desktop/features/products/domain/entities/products_entity.dart';
+import 'package:nativus_pos_desktop/features/products/domain/repositories/products_repository.dart';
 
-//   GetUserReviewsUseCase({required this.userReviewRepository});
+class GetProductsUseCase {
+  final ProductsRepository productsRepository;
 
-//   Future<PaginatedResponse<UserReviewEntity>> call({
-//     int page = 1,
-//     int pageSize = 100,
-//     String? search,
-//     Map<String, dynamic>? filters,
-//   }) {
-//     return userReviewRepository.getUserReviews(
-//       page: page,
-//       pageSize: pageSize,
-//       search: search,
-//       filters: filters,
-//     );
-//   }
-// }
+  GetProductsUseCase({required this.productsRepository});
+
+  Future<ProductsEntity> call({
+    int page = 1,
+    int pageSize = 100
+  }) {
+    return productsRepository.getProducts(
+      page: page,
+      pageSize: pageSize
+    );
+  }
+}

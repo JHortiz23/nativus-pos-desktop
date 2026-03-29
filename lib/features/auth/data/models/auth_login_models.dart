@@ -1,3 +1,4 @@
+import 'package:nativus_pos_desktop/core/utils/helpers/json_parsing_helper.dart';
 import 'package:nativus_pos_desktop/features/auth/domain/entities/auth_entity.dart';
 
 class AuthLoginRequestModel {
@@ -31,10 +32,14 @@ class AuthLoginResponseModel {
 
   factory AuthLoginResponseModel.fromJson(Map<String, dynamic> json) {
     return AuthLoginResponseModel(
-      accessToken: _asString(json['accessToken']),
-      user: AuthUserModel.fromJson(_asMap(json['user'])),
-      restaurant: AuthRestaurantModel.fromJson(_asMap(json['restaurant'])),
-      company: AuthCompanyModel.fromJson(_asMap(json['company'])),
+      accessToken: JsonParsingHelper.asString(json['accessToken']),
+      user: AuthUserModel.fromJson(JsonParsingHelper.asMap(json['user'])),
+      restaurant: AuthRestaurantModel.fromJson(
+        JsonParsingHelper.asMap(json['restaurant']),
+      ),
+      company: AuthCompanyModel.fromJson(
+        JsonParsingHelper.asMap(json['company']),
+      ),
     );
   }
 
@@ -69,13 +74,13 @@ class AuthUserModel {
 
   factory AuthUserModel.fromJson(Map<String, dynamic> json) {
     return AuthUserModel(
-      id: _asInt(json['id']),
-      restaurantId: _asInt(json['restaurantId']),
-      name: _asString(json['name']),
-      email: _asString(json['email']),
-      role: _asString(json['role']),
-      isActive: _asBool(json['isActive']),
-      createdAt: DateTime.parse(_asString(json['createdAt'])),
+      id: JsonParsingHelper.asInt(json['id']),
+      restaurantId: JsonParsingHelper.asInt(json['restaurantId']),
+      name: JsonParsingHelper.asString(json['name']),
+      email: JsonParsingHelper.asString(json['email']),
+      role: JsonParsingHelper.asString(json['role']),
+      isActive: JsonParsingHelper.asBool(json['isActive']),
+      createdAt: DateTime.parse(JsonParsingHelper.asString(json['createdAt'])),
     );
   }
 
@@ -115,14 +120,14 @@ class AuthRestaurantModel {
 
   factory AuthRestaurantModel.fromJson(Map<String, dynamic> json) {
     return AuthRestaurantModel(
-      id: _asInt(json['id']),
-      clientId: _asInt(json['clientId']),
-      name: _asString(json['name']),
-      address: _asString(json['address']),
-      phone: _asString(json['phone']),
-      email: _asString(json['email']),
-      createdAt: DateTime.parse(_asString(json['createdAt'])),
-      isActive: _asBool(json['isActive']),
+      id: JsonParsingHelper.asInt(json['id']),
+      clientId: JsonParsingHelper.asInt(json['clientId']),
+      name: JsonParsingHelper.asString(json['name']),
+      address: JsonParsingHelper.asString(json['address']),
+      phone: JsonParsingHelper.asString(json['phone']),
+      email: JsonParsingHelper.asString(json['email']),
+      createdAt: DateTime.parse(JsonParsingHelper.asString(json['createdAt'])),
+      isActive: JsonParsingHelper.asBool(json['isActive']),
     );
   }
 
@@ -157,11 +162,11 @@ class AuthCompanyModel {
 
   factory AuthCompanyModel.fromJson(Map<String, dynamic> json) {
     return AuthCompanyModel(
-      id: _asInt(json['id']),
-      name: _asString(json['name']),
-      email: _asString(json['email']),
-      phone: _asString(json['phone']),
-      createdAt: DateTime.parse(_asString(json['createdAt'])),
+      id: JsonParsingHelper.asInt(json['id']),
+      name: JsonParsingHelper.asString(json['name']),
+      email: JsonParsingHelper.asString(json['email']),
+      phone: JsonParsingHelper.asString(json['phone']),
+      createdAt: DateTime.parse(JsonParsingHelper.asString(json['createdAt'])),
     );
   }
 
@@ -174,41 +179,4 @@ class AuthCompanyModel {
       createdAt: createdAt,
     );
   }
-}
-
-int _asInt(dynamic value) {
-  if (value is int) {
-    return value;
-  }
-  if (value is String) {
-    return int.tryParse(value) ?? 0;
-  }
-  return 0;
-}
-
-String _asString(dynamic value) {
-  if (value == null) {
-    return '';
-  }
-  return value.toString();
-}
-
-bool _asBool(dynamic value) {
-  if (value is bool) {
-    return value;
-  }
-  if (value is String) {
-    return value.toLowerCase() == 'true';
-  }
-  if (value is num) {
-    return value != 0;
-  }
-  return false;
-}
-
-Map<String, dynamic> _asMap(dynamic value) {
-  if (value is Map<String, dynamic>) {
-    return value;
-  }
-  return {};
 }

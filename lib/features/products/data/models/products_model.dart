@@ -1,94 +1,65 @@
+import 'package:nativus_pos_desktop/core/utils/helpers/json_parsing_helper.dart';
+import 'package:nativus_pos_desktop/features/products/data/mappers/products_mapper.dart';
+import 'package:nativus_pos_desktop/features/products/domain/entities/products_entity.dart';
 
+class ProductsModel {
+  final int id;
+  final String name;
+  final String description;
+  final bool isActive;
+  final String createdAt;
+  final double price;
 
-// class UserReviewModel {
-//   final int id;
-//   final String reviewType;
-//   final int productOrActivityId;
-//   final String productOrActivityName;
-//   final String brand;
-//   final String userRating;
-//   final String comment;
-//   final String userName;
-//   final String submittedOn;
-//   final String reviewStatus;
-//   final String lastUpdated;
+  ProductsModel({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.isActive,
+    required this.createdAt,
+    required this.price,
+  });
 
-//   UserReviewModel({
-//     required this.id,
-//     required this.reviewType,
-//     required this.productOrActivityId,
-//     required this.productOrActivityName,
-//     required this.brand,
-//     required this.userRating,
-//     required this.comment,
-//     required this.userName,
-//     required this.submittedOn,
-//     required this.reviewStatus,
-//     required this.lastUpdated,
-//   });
+  factory ProductsModel.fromJson(Map<String, dynamic> json) {
+    return ProductsModel(
+      id: JsonParsingHelper.asInt(json['id']),
+      name: JsonParsingHelper.asString(json['name']),
+      description: JsonParsingHelper.asString(json['description']),
+      isActive: JsonParsingHelper.asBool(json['isActive']),
+      createdAt: JsonParsingHelper.asString(json['createdAt']),
+      price: JsonParsingHelper.asDouble(json['price']),
+    );
+  }
 
-//   factory UserReviewModel.fromJson(Map<String, dynamic> json) {
-//     return UserReviewModel(
-//       id: json['review_id'] ,
-//       reviewType: json['review_type'] ?? '',
-//       productOrActivityId: json['poa_id'] ?? '',
-//       productOrActivityName: json['poa_name'] ?? '',
-//       brand: json['brand'] ?? '',
-//       userRating: json['user_rating'] ?? '',
-//       comment: json['comment'] ?? '',
-//       userName: json['username'] ?? '',
-//       submittedOn: json['submitted_on'] ?? '',
-//       reviewStatus: json['review_status'] ?? '',
-//       lastUpdated: json['history_log'] ?? '',
-//     );
-//   }
+  ProductsModel copyWith({
+    int? id,
+    String? name,
+    String? description,
+    bool? isActive,
+    String? createdAt,
+    double? price,
+  }) {
+    return ProductsModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      isActive: isActive ?? this.isActive,
+      createdAt: createdAt ?? this.createdAt,
+      price: price ?? this.price,
+    );
+  }
 
-//   UserReviewModel copyWith({
-//     int? id,
-//     String? reviewType,
-//     int? productOrActivityId,
-//     String? productOrActivityName,
-//     String? brand,
-//     String? userRating,
-//     String? comment,
-//     String? userName,
-//     String? submittedOn,
-//     String? reviewStatus,
-//     String? lastUpdated,
-//   }) {
-//     return UserReviewModel(
-//       id: id ?? this.id,
-//       reviewType: reviewType ?? this.reviewType,
-//       productOrActivityId: productOrActivityId ?? this.productOrActivityId,
-//       productOrActivityName:
-//           productOrActivityName ?? this.productOrActivityName,
-//       brand: brand ?? this.brand,
-//       userRating: userRating ?? this.userRating,
-//       comment: comment ?? this.comment,
-//       userName: userName ?? this.userName,
-//       submittedOn: submittedOn ?? this.submittedOn,
-//       reviewStatus: reviewStatus ?? this.reviewStatus,
-//       lastUpdated: lastUpdated ?? this.lastUpdated,
-//     );
-//   }
+  factory ProductsModel.fromEntity(ProductsEntity entity) {
+    return ProductsMapper.fromEntity(entity);
+  }
 
-//   factory UserReviewModel.fromEntity(UserReviewEntity entity) {
-//     return UserReviewMapper.fromEntity(entity);
-//   }
-
-//   Map<String, dynamic> toJson() {
-//     return {
-//       'review_id': id,
-//       'review_type': reviewType,
-//       'poa_id': productOrActivityId,
-//       'poa_name': productOrActivityName,
-//       'brand': brand,
-//       'user_rating': userRating,
-//       'comment': comment,
-//       'username': userName,
-//       'submitted_on': submittedOn,
-//       'review_status': reviewStatus,
-//       'history_log': lastUpdated,
-//     };
-//   }
-// }
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'description': description,
+      'isActive': isActive,
+      'createdAt': createdAt,
+      'price': price,
+    };
+  }
+}

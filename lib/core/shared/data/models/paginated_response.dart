@@ -46,7 +46,6 @@ class PaginatedResponse<T> {
       'records',
       'list',
       'products',
-      'submissions',
     ],
     String filtersKey = 'applied_filters',
   }) {

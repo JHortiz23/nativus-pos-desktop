@@ -1,12 +1,9 @@
+import 'package:nativus_pos_desktop/core/shared/data/models/paginated_response.dart';
+import 'package:nativus_pos_desktop/features/products/domain/entities/products_entity.dart';
 
-
-// abstract class UserReviewRepository {
-//   Future<PaginatedResponse<UserReviewEntity>> getUserReviews({
-//     int page = 1,
-//     int pageSize = 100,
-//     String? search,
-//     Map<String, dynamic>? filters,
-//   });
-//   Future<bool> approveUserReview({required int reviewId, required String reviewType});
-//   Future<bool> rejectUserReview({required int reviewId, required String reviewType});
-// }
+abstract class ProductsRepository {
+  Future<PaginatedResponse<ProductsEntity>> getProducts({
+    int page = 1,
+    int pageSize = 100,
+  });
+}

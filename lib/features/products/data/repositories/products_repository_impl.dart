@@ -1,55 +1,35 @@
 
 
-// class UserReviewRepositoryImpl implements UserReviewRepository {
-//   final UserReviewRemoteDataSource remoteDataSource;
+import 'package:nativus_pos_desktop/core/shared/data/models/paginated_response.dart';
+import 'package:nativus_pos_desktop/features/products/data/datasources/remote/products_remote_datasource.dart';
+import 'package:nativus_pos_desktop/features/products/data/mappers/products_mapper.dart';
+import 'package:nativus_pos_desktop/features/products/domain/entities/products_entity.dart';
+import 'package:nativus_pos_desktop/features/products/domain/repositories/products_repository.dart';
 
-//   UserReviewRepositoryImpl({required this.remoteDataSource});
+class ProductsRepositoryImpl implements ProductsRepository {
+  final ProductsRemoteDataSource remoteDataSource;
 
-//   @override
-//   Future<PaginatedResponse<UserReviewEntity>> getUserReviews({
-//     int page = 1,
-//     int pageSize = 100,
-//     String? search,
-//     Map<String, dynamic>? filters,
-//   }) async {
-//     final userReviewModels = await remoteDataSource.getUserReviews(
-//       page: page,
-//       pageSize: pageSize,
-//       search: search,
-//       filters: filters,
-//     );
+  ProductsRepositoryImpl({required this.remoteDataSource});
 
-//     final mappedItems = userReviewModels.items
-//         .map((model) => UserReviewMapper.toEntity(model))
-//         .toList(growable: false);
+  @override
+  Future<PaginatedResponse<ProductsEntity>> getProducts({
+    int page = 1,
+    int pageSize = 100
+  }) async {
+    final userReviewModels = await remoteDataSource.getProducts(
+      page: page,
+      pageSize: pageSize
+    );
 
-//     return PaginatedResponse<UserReviewEntity>(
-//       items: mappedItems,
-//       pageInfo: userReviewModels.pageInfo,
-//       filters: userReviewModels.filters,
-//       detectedItemsKey: userReviewModels.detectedItemsKey,
-//     );
-//   }
+    final mappedItems = userReviewModels.items
+        .map((model) => ProductsMapper.toEntity(model))
+        .toList(growable: false);
 
-//   @override
-//   Future<bool> approveUserReview({
-//     required int reviewId,
-//     required String reviewType,
-//   }) async {
-//     return remoteDataSource.approveUserReview(
-//       reviewId: reviewId,
-//       reviewType: reviewType,
-//     );
-//   }
-
-//   @override
-//   Future<bool> rejectUserReview({
-//     required int reviewId,
-//     required String reviewType,
-//   }) async {
-//     return remoteDataSource.rejectUserReview(
-//       reviewId: reviewId,
-//       reviewType: reviewType,
-//     );
-//   }
-// }
+    return PaginatedResponse<ProductsEntity>(
+      items: mappedItems,
+      pageInfo: userReviewModels.pageInfo,
+      filters: userReviewModels.filters,
+      detectedItemsKey: userReviewModels.detectedItemsKey,
+    );
+  }
+}
