@@ -4,6 +4,7 @@ import 'package:nativus_pos_desktop/application/constants/products_api_endpoints
 import 'package:nativus_pos_desktop/core/shared/data/models/paginated_response.dart';
 import 'package:nativus_pos_desktop/core/utils/helpers/auth_token_storage.dart';
 import 'package:nativus_pos_desktop/core/utils/helpers/http_helper.dart';
+import 'package:nativus_pos_desktop/features/products/data/models/product_categories_model.dart';
 import 'package:nativus_pos_desktop/features/products/data/models/products_model.dart';
 
 abstract class ProductsRemoteDataSource {
@@ -11,6 +12,8 @@ abstract class ProductsRemoteDataSource {
     required int page,
     required int pageSize,
   });
+
+  Future<List<ProductCategoriesModel>> getProductCategories();
 }
 
 class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
@@ -34,10 +37,7 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
         throw StateError('Missing access token for products request.');
       }
 
-      final uri = ProductsApiEndpoints.getProducts(
-        page: page,
-        items: pageSize,
-      );
+      final uri = ProductsApiEndpoints.getProducts(page: page, items: pageSize);
 
       final headers = HttpHelper.jsonHeaders(accessToken: accessToken);
       final response = await _client.get(uri, headers: headers);
@@ -64,6 +64,43 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
       );
     } catch (e) {
       throw Exception('Error getting products: $e');
+    }
+  }
+
+  @override
+  Future<List<ProductCategoriesModel>> getProductCategories() async {
+    try {
+      final accessToken = _tokenStorage.getAccessToken();
+      if (accessToken == null || accessToken.isEmpty) {
+        throw StateError('Missing access token for products request.');
+      }
+
+      final uri = ProductsApiEndpoints.getProductCategories();
+
+      final headers = HttpHelper.jsonHeaders(accessToken: accessToken);
+      final response = await _client.get(uri, headers: headers);
+
+      if (response.statusCode < 200 || response.statusCode >= 300) {
+        await HttpHelper.clearSessionIfUnauthorized(
+          statusCode: response.statusCode,
+          storage: _tokenStorage,
+        );
+        throw Exception('Failed to load product categories: HTTP ${response.statusCode}');
+      }
+
+      final decoded = json.decode(response.body);
+
+      if (decoded is! Map<String, dynamic>) {
+        throw const FormatException(
+          'Unexpected product categories payload. Expected a JSON object.',
+        );
+      }
+      final items = decoded['productCategories'] as List<dynamic>;
+      return items
+          .map((json) => ProductCategoriesModel.fromJson(json as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      throw Exception('Error getting product categories: $e');
     }
   }
 }

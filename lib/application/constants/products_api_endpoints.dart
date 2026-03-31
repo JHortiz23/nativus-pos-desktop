@@ -4,11 +4,7 @@ class ProductsApiEndpoints {
   static String get baseUrl => ApiHelper.baseUrl;
 
   // ** Get Products **
-  static Uri getProducts({
-    int? page,
-    int? items
-  }) {
-
+  static Uri getProducts({int? page, int? items}) {
     final uri = Uri.parse('$baseUrl/products');
     final finalUri = uri.replace(
       queryParameters: {
@@ -17,5 +13,10 @@ class ProductsApiEndpoints {
       },
     );
     return finalUri;
+  }
+
+  // ** Get Product Categories **
+  static Uri getProductCategories() {
+    return Uri.parse('$baseUrl/products/categories');
   }
 }

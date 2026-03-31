@@ -2,6 +2,7 @@ part of 'products_bloc.dart';
 
 class ProductsState extends Equatable {
   final PaginatedResponse<ProductsEntity>? products;
+  final List<ProductCategoriesEntity>? productCategories;
   final RequestsEnum getProductsRequest;
   final bool isLoading;
   final String errorMessage;
@@ -10,6 +11,7 @@ class ProductsState extends Equatable {
 
   const ProductsState({
     this.products,
+    this.productCategories,
     this.getProductsRequest = RequestsEnum.initial,
     this.isLoading = false,
     this.errorMessage = '',
@@ -19,6 +21,7 @@ class ProductsState extends Equatable {
 
   ProductsState copyWith({
     PaginatedResponse<ProductsEntity>? products,
+    List<ProductCategoriesEntity>? productCategories,
     RequestsEnum? getProductsRequest,
     bool? isLoading,
     String? errorMessage,
@@ -27,6 +30,7 @@ class ProductsState extends Equatable {
   }) {
     return ProductsState(
       products: products ?? this.products,
+      productCategories: productCategories ?? this.productCategories,
       getProductsRequest: getProductsRequest ?? this.getProductsRequest,
       isLoading: isLoading ?? this.isLoading,
       errorMessage: errorMessage ?? this.errorMessage,
@@ -38,6 +42,7 @@ class ProductsState extends Equatable {
   @override
   List<Object?> get props => [
     products,
+    productCategories,
     getProductsRequest,
     isLoading,
     errorMessage,

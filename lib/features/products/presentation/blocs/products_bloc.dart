@@ -2,7 +2,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nativus_pos_desktop/core/enums/requests_anums.dart';
 import 'package:nativus_pos_desktop/core/shared/data/models/paginated_response.dart';
+import 'package:nativus_pos_desktop/features/products/domain/entities/product_categories_entity.dart';
 import 'package:nativus_pos_desktop/features/products/domain/entities/products_entity.dart';
+import 'package:nativus_pos_desktop/features/products/domain/use_cases/get_product_categories_use_case.dart';
 import 'package:nativus_pos_desktop/features/products/domain/use_cases/get_products_use_case.dart';
 
 part 'products_event.dart';
@@ -10,10 +12,14 @@ part 'products_state.dart';
 
 class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
   final GetProductsUseCase getProductsUseCase;
+  final GetProductCategoriesUseCase getProductCategoriesUseCase;
 
-  ProductsBloc({required this.getProductsUseCase})
-    : super(const ProductsState()) {
+  ProductsBloc({
+    required this.getProductsUseCase,
+    required this.getProductCategoriesUseCase,
+  }) : super(const ProductsState()) {
     on<GetProductsEvent>(_onGetProducts);
+    on<GetProductCategoriesEvent>(_onGetProductCategories);
   }
 
   Future<void> _onGetProducts(
@@ -37,6 +43,27 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
           products: productsResponse,
           page: page,
           pageSize: pageSize,
+          isLoading: false,
+          errorMessage: '',
+        ),
+      );
+    } catch (e) {
+      emit(state.copyWith(errorMessage: e.toString(), isLoading: false));
+    }
+  }
+
+  Future<void> _onGetProductCategories(
+    GetProductCategoriesEvent event,
+    Emitter<ProductsState> emit,
+  ) async {
+    emit(state.copyWith(isLoading: true, errorMessage: ''));
+
+    try {
+      final productCategories = await getProductCategoriesUseCase();
+
+      emit(
+        state.copyWith(
+          productCategories: productCategories,
           isLoading: false,
           errorMessage: '',
         ),

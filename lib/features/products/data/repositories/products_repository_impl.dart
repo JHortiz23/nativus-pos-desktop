@@ -1,8 +1,8 @@
-
-
 import 'package:nativus_pos_desktop/core/shared/data/models/paginated_response.dart';
 import 'package:nativus_pos_desktop/features/products/data/datasources/remote/products_remote_datasource.dart';
+import 'package:nativus_pos_desktop/features/products/data/mappers/product_categories_mapper.dart';
 import 'package:nativus_pos_desktop/features/products/data/mappers/products_mapper.dart';
+import 'package:nativus_pos_desktop/features/products/domain/entities/product_categories_entity.dart';
 import 'package:nativus_pos_desktop/features/products/domain/entities/products_entity.dart';
 import 'package:nativus_pos_desktop/features/products/domain/repositories/products_repository.dart';
 
@@ -14,11 +14,11 @@ class ProductsRepositoryImpl implements ProductsRepository {
   @override
   Future<PaginatedResponse<ProductsEntity>> getProducts({
     int page = 1,
-    int pageSize = 100
+    int pageSize = 100,
   }) async {
     final userReviewModels = await remoteDataSource.getProducts(
       page: page,
-      pageSize: pageSize
+      pageSize: pageSize,
     );
 
     final mappedItems = userReviewModels.items
@@ -31,5 +31,14 @@ class ProductsRepositoryImpl implements ProductsRepository {
       filters: userReviewModels.filters,
       detectedItemsKey: userReviewModels.detectedItemsKey,
     );
+  }
+
+  @override
+  Future<List<ProductCategoriesEntity>> getProductCategories() async {
+    final categoryModels = await remoteDataSource.getProductCategories();
+
+    return categoryModels
+        .map((model) => ProductCategoriesMapper.toEntity(model))
+        .toList(growable: false);
   }
 }
