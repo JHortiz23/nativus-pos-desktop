@@ -27,40 +27,6 @@ class _ProductsPageState extends State<ProductsPage> {
   late final ProductsBloc _productsBloc;
   ProductCardLayout _layout = ProductCardLayout.grid;
 
-  // final List<ProductCategory> _categories = const [
-  //   ProductCategory(
-  //     id: _allCategoryId,
-  //     label: 'Todo',
-  //     icon: Icons.dashboard_customize_rounded,
-  //   ),
-  //   ProductCategory(
-  //     id: 'bebidas',
-  //     label: 'Bebidas',
-  //     icon: Icons.local_bar_rounded,
-  //   ),
-  //   ProductCategory(
-  //     id: 'mariscos',
-  //     label: 'Mariscos',
-  //     icon: Icons.set_meal_rounded,
-  //   ),
-  //   ProductCategory(
-  //     id: 'comida-rapida',
-  //     label: 'Comida Rapida',
-  //     icon: Icons.lunch_dining_rounded,
-  //   ),
-  //   ProductCategory(id: 'postres', label: 'Postres', icon: Icons.cake_outlined),
-  //   ProductCategory(
-  //     id: 'entradas',
-  //     label: 'Entradas',
-  //     icon: Icons.ramen_dining_rounded,
-  //   ),
-  //   ProductCategory(
-  //     id: 'carnes',
-  //     label: 'Carnes',
-  //     icon: Icons.kebab_dining_rounded,
-  //   ),
-  // ];
-
   @override
   void initState() {
     super.initState();

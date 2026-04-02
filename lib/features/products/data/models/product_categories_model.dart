@@ -20,7 +20,7 @@ class ProductCategoriesModel {
       id: JsonParsingHelper.asInt(json['id']),
       name: JsonParsingHelper.asString(json['name']),
       isActive: JsonParsingHelper.asBool(json['isActive']),
-      isDeleted: JsonParsingHelper.asBool(json['isDeleted']),
+      isDeleted: JsonParsingHelper.asBool(json['isDeleted'] ?? json['isDleted']),
     );
   }
 

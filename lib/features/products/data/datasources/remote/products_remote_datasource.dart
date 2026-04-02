@@ -90,15 +90,19 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
 
       final decoded = json.decode(response.body);
 
-      if (decoded is! Map<String, dynamic>) {
+      if (decoded is! List) {
         throw const FormatException(
-          'Unexpected product categories payload. Expected a JSON object.',
+          'Unexpected product categories payload. Expected a JSON list.',
         );
       }
-      final items = decoded['productCategories'] as List<dynamic>;
+
+      final items = decoded;
       return items
-          .map((json) => ProductCategoriesModel.fromJson(json as Map<String, dynamic>))
-          .toList();
+          .map(
+            (json) =>
+                ProductCategoriesModel.fromJson(json as Map<String, dynamic>),
+          )
+          .toList(growable: false);
     } catch (e) {
       throw Exception('Error getting product categories: $e');
     }
