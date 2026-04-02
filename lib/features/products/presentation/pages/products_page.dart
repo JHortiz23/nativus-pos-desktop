@@ -12,6 +12,7 @@ import 'package:nativus_pos_desktop/features/products/presentation/widgets/cards
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/cards/products_list.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/empty_products_state.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/filters/category_chip.dart';
+import 'package:nativus_pos_desktop/features/products/presentation/widgets/products_error_state.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/filters/search_field.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/toggles/view_toggle.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
@@ -275,7 +276,7 @@ class _ProductsPageState extends State<ProductsPage> {
                               )
                             else if (state.errorMessage.isNotEmpty &&
                                 visibleProducts.isEmpty)
-                              _ProductsErrorState(
+                              ProductsErrorState(
                                 message: state.errorMessage,
                                 onRetry: () {
                                   context.read<ProductsBloc>().add(
@@ -361,57 +362,5 @@ class _ProductsPageState extends State<ProductsPage> {
 
       return matchesCategory && matchesSearch;
     }).toList();
-  }
-}
-
-class _ProductsErrorState extends StatelessWidget {
-  const _ProductsErrorState({required this.message, required this.onRetry});
-
-  final String message;
-  final VoidCallback onRetry;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-      decoration: BoxDecoration(
-        color: colorScheme.darkSurfaceAlt,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: colorScheme.softBorder),
-      ),
-      child: Column(
-        children: [
-          Icon(
-            Icons.error_outline_rounded,
-            size: 42,
-            color: colorScheme.redOrange,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'No fue posible cargar los productos',
-            style: theme.textTheme.headlineSmall?.copyWith(
-              color: colorScheme.baseWhite,
-              fontSize: 22,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            message,
-            textAlign: TextAlign.center,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: colorScheme.textMuted,
-              fontSize: 15,
-            ),
-          ),
-          const SizedBox(height: 20),
-          FilledButton(onPressed: onRetry, child: const Text('Reintentar')),
-        ],
-      ),
-    );
   }
 }
