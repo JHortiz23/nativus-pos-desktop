@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
+import 'package:nativus_pos_desktop/features/products/domain/entities/product_categories_entity.dart';
 import 'package:nativus_pos_desktop/features/products/domain/entities/products_entity.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/blocs/products_bloc.dart';
-import 'package:nativus_pos_desktop/features/products/presentation/models/product_category.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/cards/product_card.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/cards/products_grid.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/cards/products_list.dart';
@@ -21,47 +21,45 @@ class ProductsPage extends StatefulWidget {
 }
 
 class _ProductsPageState extends State<ProductsPage> {
-  static const String _allCategoryId = 'all';
-
   late final NumberFormat _currencyFormat;
   late final ScrollController _scrollController;
   // Products Bloc
   late final ProductsBloc _productsBloc;
   ProductCardLayout _layout = ProductCardLayout.grid;
 
-  final List<ProductCategory> _categories = const [
-    ProductCategory(
-      id: _allCategoryId,
-      label: 'Todo',
-      icon: Icons.dashboard_customize_rounded,
-    ),
-    ProductCategory(
-      id: 'bebidas',
-      label: 'Bebidas',
-      icon: Icons.local_bar_rounded,
-    ),
-    ProductCategory(
-      id: 'mariscos',
-      label: 'Mariscos',
-      icon: Icons.set_meal_rounded,
-    ),
-    ProductCategory(
-      id: 'comida-rapida',
-      label: 'Comida Rapida',
-      icon: Icons.lunch_dining_rounded,
-    ),
-    ProductCategory(id: 'postres', label: 'Postres', icon: Icons.cake_outlined),
-    ProductCategory(
-      id: 'entradas',
-      label: 'Entradas',
-      icon: Icons.ramen_dining_rounded,
-    ),
-    ProductCategory(
-      id: 'carnes',
-      label: 'Carnes',
-      icon: Icons.kebab_dining_rounded,
-    ),
-  ];
+  // final List<ProductCategory> _categories = const [
+  //   ProductCategory(
+  //     id: _allCategoryId,
+  //     label: 'Todo',
+  //     icon: Icons.dashboard_customize_rounded,
+  //   ),
+  //   ProductCategory(
+  //     id: 'bebidas',
+  //     label: 'Bebidas',
+  //     icon: Icons.local_bar_rounded,
+  //   ),
+  //   ProductCategory(
+  //     id: 'mariscos',
+  //     label: 'Mariscos',
+  //     icon: Icons.set_meal_rounded,
+  //   ),
+  //   ProductCategory(
+  //     id: 'comida-rapida',
+  //     label: 'Comida Rapida',
+  //     icon: Icons.lunch_dining_rounded,
+  //   ),
+  //   ProductCategory(id: 'postres', label: 'Postres', icon: Icons.cake_outlined),
+  //   ProductCategory(
+  //     id: 'entradas',
+  //     label: 'Entradas',
+  //     icon: Icons.ramen_dining_rounded,
+  //   ),
+  //   ProductCategory(
+  //     id: 'carnes',
+  //     label: 'Carnes',
+  //     icon: Icons.kebab_dining_rounded,
+  //   ),
+  // ];
 
   @override
   void initState() {
@@ -71,6 +69,8 @@ class _ProductsPageState extends State<ProductsPage> {
     _productsBloc = context.read<ProductsBloc>();
     // Load initial products
     _productsBloc.add(const GetProductsEvent());
+    // Load product categories
+    _productsBloc.add(const GetProductCategoriesEvent());
   }
 
   @override
@@ -86,7 +86,10 @@ class _ProductsPageState extends State<ProductsPage> {
 
     return BlocBuilder<ProductsBloc, ProductsState>(
       builder: (context, state) {
-        final visibleProducts = state.products?.items ?? const <ProductsEntity>[];
+        final visibleProducts =
+            state.products?.items ?? const <ProductsEntity>[];
+        final categories =
+            state.productCategories ?? const <ProductCategoriesEntity>[];
 
         return Container(
           decoration: BoxDecoration(
@@ -124,7 +127,9 @@ class _ProductsPageState extends State<ProductsPage> {
                       ],
                     );
                     final actionBlock = Flex(
-                      direction: isCompactHeader ? Axis.vertical : Axis.horizontal,
+                      direction: isCompactHeader
+                          ? Axis.vertical
+                          : Axis.horizontal,
                       crossAxisAlignment: isCompactHeader
                           ? CrossAxisAlignment.start
                           : CrossAxisAlignment.center,
@@ -241,11 +246,11 @@ class _ProductsPageState extends State<ProductsPage> {
                               spacing: 12,
                               runSpacing: 12,
                               children: [
-                                for (final category in _categories)
+                                for (final category in categories)
                                   ProductCategoryChip(
-                                    label: category.label,
-                                    icon: category.icon,
-                                    selected: category.id == _allCategoryId,
+                                    label: category.name,
+                                    icon: _resolveCategoryIcon(category),
+                                    selected: false,
                                     enabled: false,
                                     onTap: () {},
                                   ),
@@ -353,6 +358,35 @@ class _ProductsPageState extends State<ProductsPage> {
     }
 
     return Icons.inventory_2_rounded;
+  }
+
+  IconData _resolveCategoryIcon(ProductCategoriesEntity category) {
+    final normalizedName = category.name.toLowerCase();
+
+    if (normalizedName.contains('cafe') || normalizedName.contains('coffee')) {
+      return Icons.local_cafe_rounded;
+    }
+    if (normalizedName.contains('agua') ||
+        normalizedName.contains('jugo') ||
+        normalizedName.contains('refresco') ||
+        normalizedName.contains('bebida')) {
+      return Icons.local_drink_rounded;
+    }
+    if (normalizedName.contains('postre') || normalizedName.contains('cake')) {
+      return Icons.cake_rounded;
+    }
+    if (normalizedName.contains('pizza') ||
+        normalizedName.contains('hamburguesa') ||
+        normalizedName.contains('burger')) {
+      return Icons.lunch_dining_rounded;
+    }
+    if (normalizedName.contains('marisco') ||
+        normalizedName.contains('pescado') ||
+        normalizedName.contains('seafood')) {
+      return Icons.set_meal_rounded;
+    }
+
+    return Icons.category_rounded;
   }
 }
 
