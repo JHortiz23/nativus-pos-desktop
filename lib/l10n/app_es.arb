@@ -49,5 +49,6 @@
   "empty_products_no_matches": "No encontramos coincidencias para tu busqueda actual.",
   "product_card_inactive_caps": "INACTIVO",
   "product_card_status_active": "Activo",
-  "product_card_status_inactive": "Inactivo"
+  "product_card_status_inactive": "Inactivo",
+  "all_label": "Todos"
 }

@@ -6,19 +6,22 @@ class ProductSearchField extends StatelessWidget {
   const ProductSearchField({
     super.key,
     required this.onChanged,
+    this.controller,
     this.enabled = true,
   });
 
   final ValueChanged<String> onChanged;
+  final TextEditingController? controller;
   final bool enabled;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final localizations = AppLocalizations.of(context)!;  
+    final localizations = AppLocalizations.of(context)!;
 
     return TextField(
+      controller: controller,
       enabled: enabled,
       onChanged: onChanged,
       cursorColor: colorScheme.accentPrimary,

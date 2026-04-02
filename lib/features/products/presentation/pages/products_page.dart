@@ -14,6 +14,7 @@ import 'package:nativus_pos_desktop/features/products/presentation/widgets/empty
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/filters/category_chip.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/filters/search_field.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/toggles/view_toggle.dart';
+import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({super.key});
@@ -25,15 +26,19 @@ class ProductsPage extends StatefulWidget {
 class _ProductsPageState extends State<ProductsPage> {
   late final NumberFormat _currencyFormat;
   late final ScrollController _scrollController;
+  late final TextEditingController _searchController;
   // Products Bloc
   late final ProductsBloc _productsBloc;
   ProductCardLayout _layout = ProductCardLayout.grid;
+  int? _selectedCategoryId;
+  String _searchQuery = '';
 
   @override
   void initState() {
     super.initState();
     _currencyFormat = NumberFormat.decimalPattern('es_CR');
     _scrollController = ScrollController();
+    _searchController = TextEditingController();
     _productsBloc = context.read<ProductsBloc>();
     // Load initial products
     _productsBloc.add(const GetProductsEvent());
@@ -44,6 +49,7 @@ class _ProductsPageState extends State<ProductsPage> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -51,18 +57,29 @@ class _ProductsPageState extends State<ProductsPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final localizations = AppLocalizations.of(context)!;
 
     return BlocBuilder<ProductsBloc, ProductsState>(
       builder: (context, state) {
-        final visibleProducts =
-            state.products?.items ?? const <ProductsEntity>[];
+        final allProducts = state.products?.items ?? const <ProductsEntity>[];
         final categories =
             state.productCategories ?? const <ProductCategoriesEntity>[];
         final registeredCategories =
             ProductCategoryFilterHelper.registeredCategories(
               categories: categories,
-              products: visibleProducts,
+              products: allProducts,
             );
+        final availableCategoryIds = registeredCategories
+            .map((category) => category.id)
+            .toSet();
+        final selectedCategoryId =
+            availableCategoryIds.contains(_selectedCategoryId)
+            ? _selectedCategoryId
+            : null;
+        final visibleProducts = _applyFilters(
+          products: allProducts,
+          selectedCategoryId: selectedCategoryId,
+        );
 
         return Container(
           decoration: BoxDecoration(
@@ -174,9 +191,13 @@ class _ProductsPageState extends State<ProductsPage> {
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     final isCompactControls = constraints.maxWidth < 880;
-                    final searchField = const ProductSearchField(
-                      enabled: false,
-                      onChanged: _noopOnSearchChanged,
+                    final interactiveSearchField = ProductSearchField(
+                      controller: _searchController,
+                      onChanged: (value) {
+                        setState(() {
+                          _searchQuery = value;
+                        });
+                      },
                     );
 
                     return Scrollbar(
@@ -188,7 +209,7 @@ class _ProductsPageState extends State<ProductsPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             if (isCompactControls) ...[
-                              searchField,
+                              interactiveSearchField,
                               const SizedBox(height: 14),
                               ProductViewToggle(
                                 layout: _layout,
@@ -202,7 +223,7 @@ class _ProductsPageState extends State<ProductsPage> {
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Expanded(child: searchField),
+                                  Expanded(child: interactiveSearchField),
                                   const SizedBox(width: 14),
                                   ProductViewToggle(
                                     layout: _layout,
@@ -219,15 +240,28 @@ class _ProductsPageState extends State<ProductsPage> {
                               spacing: 12,
                               runSpacing: 12,
                               children: [
+                                ProductCategoryChip(
+                                  label: localizations.all_label,
+                                  icon: Icons.apps_rounded,
+                                  selected: selectedCategoryId == null,
+                                  onTap: () {
+                                    setState(() {
+                                      _selectedCategoryId = null;
+                                    });
+                                  },
+                                ),
                                 for (final category in registeredCategories)
                                   ProductCategoryChip(
                                     label: category.name,
                                     icon: ProductCategoryIconHelper.resolve(
                                       category.name,
                                     ),
-                                    selected: false,
-                                    enabled: false,
-                                    onTap: () {},
+                                    selected: selectedCategoryId == category.id,
+                                    onTap: () {
+                                      setState(() {
+                                        _selectedCategoryId = category.id;
+                                      });
+                                    },
                                   ),
                               ],
                             ),
@@ -253,9 +287,9 @@ class _ProductsPageState extends State<ProductsPage> {
                               AnimatedSwitcher(
                                 duration: const Duration(milliseconds: 180),
                                 child: visibleProducts.isEmpty
-                                    ? const EmptyProductsState(
+                                    ? EmptyProductsState(
                                         key: ValueKey('empty-products-state'),
-                                        query: '',
+                                        query: _searchQuery.trim(),
                                       )
                                     : _layout == ProductCardLayout.grid
                                     ? ProductsGrid(
@@ -309,7 +343,25 @@ class _ProductsPageState extends State<ProductsPage> {
     ];
   }
 
-  static void _noopOnSearchChanged(String _) {}
+  List<ProductsEntity> _applyFilters({
+    required List<ProductsEntity> products,
+    required int? selectedCategoryId,
+  }) {
+    final normalizedQuery = _searchQuery.trim().toLowerCase();
+
+    return products.where((product) {
+      final matchesCategory =
+          selectedCategoryId == null ||
+          product.categoryId == selectedCategoryId;
+      final matchesSearch =
+          normalizedQuery.isEmpty ||
+          product.name.toLowerCase().contains(normalizedQuery) ||
+          product.description.toLowerCase().contains(normalizedQuery) ||
+          product.categoryName.toLowerCase().contains(normalizedQuery);
+
+      return matchesCategory && matchesSearch;
+    }).toList();
+  }
 }
 
 class _ProductsErrorState extends StatelessWidget {

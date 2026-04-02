@@ -49,6 +49,7 @@
   "empty_products_no_matches": "We did not find matches for your current search.",
   "product_card_inactive_caps": "INACTIVE",
   "product_card_status_active": "Active",
-  "product_card_status_inactive": "Inactive"
+  "product_card_status_inactive": "Inactive",
+  "all_label": "All"
 }
 

@@ -376,6 +376,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Inactive'**
   String get product_card_status_inactive;
+
+  /// No description provided for @all_label.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get all_label;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

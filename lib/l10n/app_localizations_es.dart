@@ -148,4 +148,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get product_card_status_inactive => 'Inactivo';
+
+  @override
+  String get all_label => 'Todos';
 }
