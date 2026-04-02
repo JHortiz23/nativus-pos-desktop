@@ -223,7 +223,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                   ProductCategoryChip(
                                     label: category.name,
                                     icon: ProductCategoryIconHelper.resolve(
-                                      category,
+                                      category.name,
                                     ),
                                     selected: false,
                                     enabled: false,
@@ -302,38 +302,14 @@ class _ProductsPageState extends State<ProductsPage> {
           name: product.name,
           description: product.description,
           price: _formatPrice(product.price),
-          category: 'General',
-          productIcon: _resolveProductIcon(product),
+          category: product.categoryName,
+          productIcon: ProductCategoryIconHelper.resolve(product.categoryName),
           isActive: product.isActive,
         ),
     ];
   }
 
   static void _noopOnSearchChanged(String _) {}
-
-  IconData _resolveProductIcon(ProductsEntity product) {
-    final normalizedName = product.name.toLowerCase();
-
-    if (normalizedName.contains('cafe') || normalizedName.contains('coffee')) {
-      return Icons.local_cafe_rounded;
-    }
-    if (normalizedName.contains('agua') ||
-        normalizedName.contains('jugo') ||
-        normalizedName.contains('refresco') ||
-        normalizedName.contains('bebida')) {
-      return Icons.local_drink_rounded;
-    }
-    if (normalizedName.contains('postre') || normalizedName.contains('cake')) {
-      return Icons.cake_rounded;
-    }
-    if (normalizedName.contains('pizza') ||
-        normalizedName.contains('hamburguesa') ||
-        normalizedName.contains('burger')) {
-      return Icons.lunch_dining_rounded;
-    }
-
-    return Icons.inventory_2_rounded;
-  }
 }
 
 class _ProductsErrorState extends StatelessWidget {

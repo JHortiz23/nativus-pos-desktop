@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:nativus_pos_desktop/features/products/domain/entities/product_categories_entity.dart';
 
 class ProductCategoryIconHelper {
-  static IconData resolve(ProductCategoriesEntity category) {
-    final normalizedName = category.name.toLowerCase();
+  static IconData resolve(String category) {
+    final normalizedName = category.toLowerCase();
 
     //Entries
     if (normalizedName.contains('entradas')) {

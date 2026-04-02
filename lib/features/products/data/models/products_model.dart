@@ -5,6 +5,7 @@ import 'package:nativus_pos_desktop/features/products/domain/entities/products_e
 class ProductsModel {
   final int id;
   final int? categoryId;
+  final String categoryName;
   final String name;
   final String description;
   final bool isActive;
@@ -14,6 +15,7 @@ class ProductsModel {
   ProductsModel({
     required this.id,
     this.categoryId,
+    required this.categoryName,
     required this.name,
     required this.description,
     required this.isActive,
@@ -27,6 +29,7 @@ class ProductsModel {
     return ProductsModel(
       id: JsonParsingHelper.asInt(json['id']),
       categoryId: _parseCategoryId(json, category),
+      categoryName: JsonParsingHelper.asString(category['name']),
       name: JsonParsingHelper.asString(json['name']),
       description: JsonParsingHelper.asString(json['description']),
       isActive: JsonParsingHelper.asBool(json['isActive']),
@@ -38,6 +41,7 @@ class ProductsModel {
   ProductsModel copyWith({
     int? id,
     int? categoryId,
+    String? categoryName,
     String? name,
     String? description,
     bool? isActive,
@@ -47,6 +51,7 @@ class ProductsModel {
     return ProductsModel(
       id: id ?? this.id,
       categoryId: categoryId ?? this.categoryId,
+      categoryName: categoryName ?? this.categoryName,
       name: name ?? this.name,
       description: description ?? this.description,
       isActive: isActive ?? this.isActive,
@@ -63,6 +68,7 @@ class ProductsModel {
     return {
       'id': id,
       'categoryId': categoryId,
+      'categoryName': categoryName,
       'name': name,
       'description': description,
       'isActive': isActive,

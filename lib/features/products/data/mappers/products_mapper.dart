@@ -6,6 +6,7 @@ class ProductsMapper {
     return ProductsEntity(
       id: model.id,
       categoryId: model.categoryId,
+      categoryName: model.categoryName,
       name: model.name,
       description: model.description,
       isActive: model.isActive,
@@ -18,6 +19,7 @@ class ProductsMapper {
     return ProductsModel(
       id: entity.id,
       categoryId: entity.categoryId,
+      categoryName: entity.categoryName,
       name: entity.name,
       description: entity.description,
       isActive: entity.isActive,
