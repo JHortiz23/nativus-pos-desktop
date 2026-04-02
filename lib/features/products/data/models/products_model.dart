@@ -4,6 +4,7 @@ import 'package:nativus_pos_desktop/features/products/domain/entities/products_e
 
 class ProductsModel {
   final int id;
+  final int? categoryId;
   final String name;
   final String description;
   final bool isActive;
@@ -12,6 +13,7 @@ class ProductsModel {
 
   ProductsModel({
     required this.id,
+    this.categoryId,
     required this.name,
     required this.description,
     required this.isActive,
@@ -20,8 +22,11 @@ class ProductsModel {
   });
 
   factory ProductsModel.fromJson(Map<String, dynamic> json) {
+    final category = JsonParsingHelper.asMap(json['category']);
+
     return ProductsModel(
       id: JsonParsingHelper.asInt(json['id']),
+      categoryId: _parseCategoryId(json, category),
       name: JsonParsingHelper.asString(json['name']),
       description: JsonParsingHelper.asString(json['description']),
       isActive: JsonParsingHelper.asBool(json['isActive']),
@@ -32,6 +37,7 @@ class ProductsModel {
 
   ProductsModel copyWith({
     int? id,
+    int? categoryId,
     String? name,
     String? description,
     bool? isActive,
@@ -40,6 +46,7 @@ class ProductsModel {
   }) {
     return ProductsModel(
       id: id ?? this.id,
+      categoryId: categoryId ?? this.categoryId,
       name: name ?? this.name,
       description: description ?? this.description,
       isActive: isActive ?? this.isActive,
@@ -55,11 +62,30 @@ class ProductsModel {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'categoryId': categoryId,
       'name': name,
       'description': description,
       'isActive': isActive,
       'createdAt': createdAt,
       'price': price,
     };
+  }
+
+  static int? _parseCategoryId(
+    Map<String, dynamic> json,
+    Map<String, dynamic> category,
+  ) {
+    final rawCategoryId =
+        json['categoryId'] ?? json['category_id'] ?? json['productCategoryId'];
+
+    if (rawCategoryId != null) {
+      return JsonParsingHelper.asInt(rawCategoryId);
+    }
+
+    if (category.isNotEmpty && category['id'] != null) {
+      return JsonParsingHelper.asInt(category['id']);
+    }
+
+    return null;
   }
 }

@@ -5,6 +5,7 @@ import 'package:nativus_pos_desktop/application/theme/theme.dart';
 import 'package:nativus_pos_desktop/features/products/domain/entities/product_categories_entity.dart';
 import 'package:nativus_pos_desktop/features/products/domain/entities/products_entity.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/blocs/products_bloc.dart';
+import 'package:nativus_pos_desktop/features/products/presentation/helpers/product_category_filter_helper.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/helpers/product_category_icon_helper.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/cards/product_card.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/cards/products_grid.dart';
@@ -57,6 +58,11 @@ class _ProductsPageState extends State<ProductsPage> {
             state.products?.items ?? const <ProductsEntity>[];
         final categories =
             state.productCategories ?? const <ProductCategoriesEntity>[];
+        final registeredCategories =
+            ProductCategoryFilterHelper.registeredCategories(
+              categories: categories,
+              products: visibleProducts,
+            );
 
         return Container(
           decoration: BoxDecoration(
@@ -213,7 +219,7 @@ class _ProductsPageState extends State<ProductsPage> {
                               spacing: 12,
                               runSpacing: 12,
                               children: [
-                                for (final category in categories)
+                                for (final category in registeredCategories)
                                   ProductCategoryChip(
                                     label: category.name,
                                     icon: ProductCategoryIconHelper.resolve(

@@ -5,6 +5,7 @@ class ProductsMapper {
   static ProductsEntity toEntity(ProductsModel model) {
     return ProductsEntity(
       id: model.id,
+      categoryId: model.categoryId,
       name: model.name,
       description: model.description,
       isActive: model.isActive,
@@ -16,6 +17,7 @@ class ProductsMapper {
   static ProductsModel fromEntity(ProductsEntity entity) {
     return ProductsModel(
       id: entity.id,
+      categoryId: entity.categoryId,
       name: entity.name,
       description: entity.description,
       isActive: entity.isActive,
