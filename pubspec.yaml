@@ -41,6 +41,7 @@ dependencies:
   go_router: ^17.1.0
   http: ^1.5.0
   shared_preferences: ^2.5.3
+  flutter_svg: ^2.2.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -72,6 +73,7 @@ flutter:
   assets:
     - .env.dev
     - .env.prod
+    - assets/svgs/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

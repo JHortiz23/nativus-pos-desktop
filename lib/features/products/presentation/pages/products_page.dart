@@ -5,6 +5,7 @@ import 'package:nativus_pos_desktop/application/theme/theme.dart';
 import 'package:nativus_pos_desktop/features/products/domain/entities/product_categories_entity.dart';
 import 'package:nativus_pos_desktop/features/products/domain/entities/products_entity.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/blocs/products_bloc.dart';
+import 'package:nativus_pos_desktop/features/products/presentation/helpers/product_category_icon_helper.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/cards/product_card.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/cards/products_grid.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/cards/products_list.dart';
@@ -215,7 +216,9 @@ class _ProductsPageState extends State<ProductsPage> {
                                 for (final category in categories)
                                   ProductCategoryChip(
                                     label: category.name,
-                                    icon: _resolveCategoryIcon(category),
+                                    icon: ProductCategoryIconHelper.resolve(
+                                      category,
+                                    ),
                                     selected: false,
                                     enabled: false,
                                     onTap: () {},
@@ -324,35 +327,6 @@ class _ProductsPageState extends State<ProductsPage> {
     }
 
     return Icons.inventory_2_rounded;
-  }
-
-  IconData _resolveCategoryIcon(ProductCategoriesEntity category) {
-    final normalizedName = category.name.toLowerCase();
-
-    if (normalizedName.contains('cafe') || normalizedName.contains('coffee')) {
-      return Icons.local_cafe_rounded;
-    }
-    if (normalizedName.contains('agua') ||
-        normalizedName.contains('jugo') ||
-        normalizedName.contains('refresco') ||
-        normalizedName.contains('bebida')) {
-      return Icons.local_drink_rounded;
-    }
-    if (normalizedName.contains('postre') || normalizedName.contains('cake')) {
-      return Icons.cake_rounded;
-    }
-    if (normalizedName.contains('pizza') ||
-        normalizedName.contains('hamburguesa') ||
-        normalizedName.contains('burger')) {
-      return Icons.lunch_dining_rounded;
-    }
-    if (normalizedName.contains('marisco') ||
-        normalizedName.contains('pescado') ||
-        normalizedName.contains('seafood')) {
-      return Icons.set_meal_rounded;
-    }
-
-    return Icons.category_rounded;
   }
 }
 
