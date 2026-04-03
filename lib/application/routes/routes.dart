@@ -19,8 +19,6 @@ class AppRouter {
 
   static final GlobalKey<NavigatorState> rootNavigatorKey =
       GlobalKey<NavigatorState>(debugLabel: 'rootNavigator');
-  static final GlobalKey<NavigatorState> shellNavigatorKey =
-      GlobalKey<NavigatorState>(debugLabel: 'shellNavigator');
 
   static final List<ShellNavigationItem> shellDestinations = [
     ShellNavigationItem(
@@ -87,30 +85,30 @@ class AppRouter {
           name: RouteNames.login,
           builder: (context, state) => const LoginPage(),
         ),
-        ShellRoute(
-          navigatorKey: shellNavigatorKey,
-          builder: (context, state, child) =>
-              AppShellPage(location: state.uri.path, child: child),
-          routes: shellDestinations.map(_buildShellRoute).toList(),
+        StatefulShellRoute.indexedStack(
+          builder: (context, state, navigationShell) =>
+              AppShellPage(navigationShell: navigationShell),
+          branches: shellDestinations.map(_buildShellBranch).toList(),
         ),
       ],
     );
   }
 
-  static bool isRouteSelected({
-    required String currentLocation,
-    required String targetLocation,
-  }) {
-    return currentLocation == targetLocation ||
-        currentLocation.startsWith('$targetLocation/');
-  }
-
-  static GoRoute _buildShellRoute(ShellNavigationItem destination) {
-    return GoRoute(
-      path: destination.path,
-      name: destination.routeName,
-      builder: destination.builder,
-      routes: destination.routes,
+  static StatefulShellBranch _buildShellBranch(
+    ShellNavigationItem destination,
+  ) {
+    return StatefulShellBranch(
+      navigatorKey: GlobalKey<NavigatorState>(
+        debugLabel: '${destination.routeName}Navigator',
+      ),
+      routes: [
+        GoRoute(
+          path: destination.path,
+          name: destination.routeName,
+          builder: destination.builder,
+          routes: destination.routes,
+        ),
+      ],
     );
   }
 }

@@ -5,10 +5,9 @@ import 'package:nativus_pos_desktop/application/theme/theme.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
 
 class AppShellPage extends StatefulWidget {
-  const AppShellPage({super.key, required this.location, required this.child});
+  const AppShellPage({super.key, required this.navigationShell});
 
-  final String location;
-  final Widget child;
+  final StatefulNavigationShell navigationShell;
 
   @override
   State<AppShellPage> createState() => _AppShellPageState();
@@ -149,19 +148,28 @@ class _AppShellPageState extends State<AppShellPage> {
                               ),
                               child: Column(
                                 children: [
-                                  for (final item
-                                      in AppRouter.shellDestinations)
+                                  for (final entry
+                                      in AppRouter.shellDestinations.indexed)
                                     Padding(
                                       padding: const EdgeInsets.only(bottom: 8),
                                       child: _SidebarMenuItem(
-                                        icon: item.icon,
-                                        label: item.label(localizations),
+                                        icon: entry.$2.icon,
+                                        label: entry.$2.label(localizations),
                                         expanded: showExpandedContent,
-                                        selected: AppRouter.isRouteSelected(
-                                          currentLocation: widget.location,
-                                          targetLocation: item.path,
-                                        ),
-                                        onTap: () => context.go(item.path),
+                                        selected:
+                                            widget
+                                                .navigationShell
+                                                .currentIndex ==
+                                            entry.$1,
+                                        onTap: () =>
+                                            widget.navigationShell.goBranch(
+                                              entry.$1,
+                                              initialLocation:
+                                                  entry.$1 ==
+                                                  widget
+                                                      .navigationShell
+                                                      .currentIndex,
+                                            ),
                                       ),
                                     ),
                                   const Spacer(),
@@ -215,7 +223,7 @@ class _AppShellPageState extends State<AppShellPage> {
                       color: colorScheme.darkBackground,
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    child: widget.child,
+                    child: widget.navigationShell,
                   ),
                 ),
               ],
