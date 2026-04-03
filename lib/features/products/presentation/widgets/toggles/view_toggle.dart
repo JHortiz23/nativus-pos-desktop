@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
-import 'package:nativus_pos_desktop/features/products/presentation/widgets/cards/product_card.dart';
+import 'package:nativus_pos_desktop/core/enums/view_enum.dart';
 
 class ProductViewToggle extends StatelessWidget {
   const ProductViewToggle({

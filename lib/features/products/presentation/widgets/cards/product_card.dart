@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
+import 'package:nativus_pos_desktop/core/enums/view_enum.dart';
+import 'package:nativus_pos_desktop/features/products/presentation/widgets/buttons/action_button.dart';
+import 'package:nativus_pos_desktop/features/products/presentation/widgets/badages/category_badge.dart';
+import 'package:nativus_pos_desktop/features/products/presentation/widgets/cards/product_leading.dart';
+import 'package:nativus_pos_desktop/features/products/presentation/widgets/badages/status_badge.dart';
+import 'package:nativus_pos_desktop/features/products/presentation/widgets/cards/tooltip_text.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
-
-enum ProductCardLayout { grid, list }
 
 class ProductCard extends StatelessWidget {
   const ProductCard({
@@ -99,10 +103,9 @@ class _GridProductCard extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  Text(
-                    name,
+                  TooltipText(
+                    message: name,
                     maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
                     style: theme.textTheme.headlineSmall?.copyWith(
                       color: colorScheme.baseWhite,
                       fontSize: 18,
@@ -110,10 +113,9 @@ class _GridProductCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 6),
-                  Text(
-                    description,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                  TooltipText(
+                    message: description,
+                    maxLines: 1,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: colorScheme.textMuted,
                       fontSize: 14,
@@ -132,7 +134,13 @@ class _GridProductCard extends StatelessWidget {
                           ),
                         ),
                       ),
-                      _CategoryBadge(label: category),
+                      const SizedBox(width: 12),
+                      Flexible(
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: CategoryBadge(label: category),
+                        ),
+                      ),
                     ],
                   ),
                 ],
@@ -209,7 +217,7 @@ class _ListProductCard extends StatelessWidget {
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _ProductLeading(
+                      ProductLeading(
                         name: name,
                         description: description,
                         category: category,
@@ -229,13 +237,13 @@ class _ListProductCard extends StatelessWidget {
                               fontWeight: FontWeight.w800,
                             ),
                           ),
-                          _StatusBadge(isActive: isActive),
-                          _ActionButton(
+                          StatusBadge(isActive: isActive),
+                          ActionButton(
                             icon: Icons.edit_outlined,
                             color: colorScheme.textSoft,
                             background: colorScheme.darkSurfaceAlt,
                           ),
-                          _ActionButton(
+                          ActionButton(
                             icon: Icons.delete_outline_rounded,
                             color: colorScheme.redOrange,
                             background: colorScheme.redOrange.withValues(
@@ -249,7 +257,7 @@ class _ListProductCard extends StatelessWidget {
                 : Row(
                     children: [
                       Expanded(
-                        child: _ProductLeading(
+                        child: ProductLeading(
                           name: name,
                           description: description,
                           category: category,
@@ -266,15 +274,15 @@ class _ListProductCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 16),
-                      _StatusBadge(isActive: isActive),
+                      StatusBadge(isActive: isActive),
                       const SizedBox(width: 10),
-                      _ActionButton(
+                      ActionButton(
                         icon: Icons.edit_outlined,
                         color: colorScheme.textSoft,
                         background: colorScheme.darkSurfaceAlt,
                       ),
                       const SizedBox(width: 10),
-                      _ActionButton(
+                      ActionButton(
                         icon: Icons.delete_outline_rounded,
                         color: colorScheme.redOrange,
                         background: colorScheme.redOrange.withValues(
@@ -286,162 +294,6 @@ class _ListProductCard extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-class _ProductLeading extends StatelessWidget {
-  const _ProductLeading({
-    required this.name,
-    required this.description,
-    required this.category,
-    required this.productIcon,
-  });
-
-  final String name;
-  final String description;
-  final String category;
-  final IconData productIcon;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Row(
-      children: [
-        Container(
-          width: 48,
-          height: 48,
-          decoration: BoxDecoration(
-            color: colorScheme.accentPrimary.withValues(alpha: 0.14),
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Icon(productIcon, color: colorScheme.accentPrimary, size: 26),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                name,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  color: colorScheme.baseWhite,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                '$description - $category',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: colorScheme.textMuted,
-                  fontSize: 14,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _CategoryBadge extends StatelessWidget {
-  const _CategoryBadge({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-      decoration: BoxDecoration(
-        color: colorScheme.darkSurfaceAlt,
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Text(
-        label,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: theme.textTheme.bodyLarge?.copyWith(
-          color: colorScheme.textMuted,
-          fontSize: 12,
-          fontWeight: FontWeight.w700,
-        ),
-      ),
-    );
-  }
-}
-
-class _StatusBadge extends StatelessWidget {
-  const _StatusBadge({required this.isActive});
-
-  final bool isActive;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
-    final localizations = AppLocalizations.of(context)!;
-    final foreground = isActive ? colorScheme.baseGreen : colorScheme.textMuted;
-    final background = isActive
-        ? colorScheme.baseGreen.withValues(alpha: 0.12)
-        : colorScheme.darkSurfaceAlt;
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
-      decoration: BoxDecoration(
-        color: background,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: colorScheme.softBorder),
-      ),
-      child: Text(
-        isActive
-            ? localizations.product_card_status_active
-            : localizations.product_card_status_inactive,
-        style: theme.textTheme.bodyLarge?.copyWith(
-          color: foreground,
-          fontSize: 13,
-          fontWeight: FontWeight.w700,
-        ),
-      ),
-    );
-  }
-}
-
-class _ActionButton extends StatelessWidget {
-  const _ActionButton({
-    required this.icon,
-    required this.color,
-    required this.background,
-  });
-
-  final IconData icon;
-  final Color color;
-  final Color background;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Container(
-      width: 42,
-      height: 42,
-      decoration: BoxDecoration(
-        color: background,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: colorScheme.softBorder),
-      ),
-      child: Icon(icon, color: color, size: 20),
     );
   }
 }
