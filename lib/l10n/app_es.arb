@@ -50,5 +50,21 @@
   "product_card_inactive_caps": "INACTIVO",
   "product_card_status_active": "Activo",
   "product_card_status_inactive": "Inactivo",
-  "all_label": "Todos"
+  "all_label": "Todos",
+  "product_management": "Gestión de Productos",
+  "product_management_description": "Administra tu catalogo, categorias y estado de cada producto.",
+  "product_label": "Producto",
+  "new_product": "Nuevo Producto",
+  "add_product_name_label": "NOMBRE",
+  "add_product_name_hint": "Ej: Ceviche de Camarón",
+  "add_product_price_label": "PRECIO (₡)",
+  "add_product_price_hint": "0",
+  "add_product_category_label": "CATEGORÍA",
+  "add_product_category_drinks": "Bebidas",
+  "add_product_category_food": "Comidas",
+  "add_product_description_label": "DESCRIPCIÓN",
+  "add_product_description_hint": "Ej: Con papas fritas, salsa de la casa y guarnición del día",
+  "add_product_active_label": "Producto activo",
+  "add_product_cancel_button": "Cancelar",
+  "add_product_submit_button": "Crear Producto"
 }

@@ -151,4 +151,52 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get all_label => 'Todos';
+
+  @override
+  String get product_management => 'Gestión de Productos';
+
+  @override
+  String get product_management_description => 'Administra tu catalogo, categorias y estado de cada producto.';
+
+  @override
+  String get product_label => 'Producto';
+
+  @override
+  String get new_product => 'Nuevo Producto';
+
+  @override
+  String get add_product_name_label => 'NOMBRE';
+
+  @override
+  String get add_product_name_hint => 'Ej: Ceviche de Camarón';
+
+  @override
+  String get add_product_price_label => 'PRECIO (₡)';
+
+  @override
+  String get add_product_price_hint => '0';
+
+  @override
+  String get add_product_category_label => 'CATEGORÍA';
+
+  @override
+  String get add_product_category_drinks => 'Bebidas';
+
+  @override
+  String get add_product_category_food => 'Comidas';
+
+  @override
+  String get add_product_description_label => 'DESCRIPCIÓN';
+
+  @override
+  String get add_product_description_hint => 'Ej: Con papas fritas, salsa de la casa y guarnición del día';
+
+  @override
+  String get add_product_active_label => 'Producto activo';
+
+  @override
+  String get add_product_cancel_button => 'Cancelar';
+
+  @override
+  String get add_product_submit_button => 'Crear Producto';
 }

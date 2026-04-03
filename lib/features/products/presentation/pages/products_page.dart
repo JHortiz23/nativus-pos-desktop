@@ -11,6 +11,7 @@ import 'package:nativus_pos_desktop/features/products/presentation/helpers/produ
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/cards/product_card.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/cards/products_grid.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/cards/products_list.dart';
+import 'package:nativus_pos_desktop/features/products/presentation/widgets/dialogs/add_product_dialog.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/empty_products_state.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/filters/category_chip.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/products_error_state.dart';
@@ -101,7 +102,7 @@ class _ProductsPageState extends State<ProductsPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Gestion de Productos',
+                          localizations.product_management,
                           style: theme.textTheme.headlineMedium?.copyWith(
                             color: colorScheme.baseWhite,
                             fontSize: 34,
@@ -110,7 +111,7 @@ class _ProductsPageState extends State<ProductsPage> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Administra tu catalogo, categorias y estado visual de cada producto.',
+                          localizations.product_management_description,
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: colorScheme.textMuted,
                             fontSize: 15,
@@ -127,7 +128,9 @@ class _ProductsPageState extends State<ProductsPage> {
                           : CrossAxisAlignment.center,
                       children: [
                         Text(
-                          '${visibleProducts.length} productos',
+                          visibleProducts.length == 1
+                              ? '${visibleProducts.length} ${localizations.product_label}'
+                              : '${visibleProducts.length} ${localizations.sidebarProducts}',
                           style: theme.textTheme.bodyLarge?.copyWith(
                             color: colorScheme.textSoft,
                             fontSize: 15,
@@ -138,28 +141,30 @@ class _ProductsPageState extends State<ProductsPage> {
                           width: isCompactHeader ? 0 : 18,
                           height: isCompactHeader ? 14 : 0,
                         ),
-                        IgnorePointer(
-                          ignoring: true,
-                          child: FilledButton.icon(
-                            onPressed: () {},
-                            style: FilledButton.styleFrom(
-                              backgroundColor: colorScheme.accentPrimary,
-                              foregroundColor: colorScheme.black,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 22,
-                                vertical: 18,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              textStyle: theme.textTheme.bodyLarge?.copyWith(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w800,
-                              ),
+                        FilledButton.icon(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => const AddProductDialog(),
+                            );
+                          },
+                          style: FilledButton.styleFrom(
+                            backgroundColor: colorScheme.accentPrimary,
+                            foregroundColor: colorScheme.black,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 22,
+                              vertical: 18,
                             ),
-                            icon: const Icon(Icons.add_rounded),
-                            label: const Text('Nuevo Producto'),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            textStyle: theme.textTheme.bodyLarge?.copyWith(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w800,
+                            ),
                           ),
+                          icon: const Icon(Icons.add_rounded),
+                          label: Text(localizations.new_product),
                         ),
                       ],
                     );

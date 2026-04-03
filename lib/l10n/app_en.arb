@@ -50,6 +50,22 @@
   "product_card_inactive_caps": "INACTIVE",
   "product_card_status_active": "Active",
   "product_card_status_inactive": "Inactive",
-  "all_label": "All"
+  "all_label": "All",
+  "product_management": "Product Management",
+  "product_management_description": "Manage your catalog, categories, and the status of each product.",
+  "product_label": "Product",
+  "new_product": "New Product",
+  "add_product_name_label": "NAME",
+  "add_product_name_hint": "E.g.: Shrimp Ceviche",
+  "add_product_price_label": "PRICE (₡)",
+  "add_product_price_hint": "0",
+  "add_product_category_label": "CATEGORY",
+  "add_product_category_drinks": "Drinks",
+  "add_product_category_food": "Food",
+  "add_product_description_label": "DESCRIPTION",
+  "add_product_description_hint": "E.g.: With french fries, house sauce, and daily side",
+  "add_product_active_label": "Active product",
+  "add_product_cancel_button": "Cancel",
+  "add_product_submit_button": "Create Product"
 }
 

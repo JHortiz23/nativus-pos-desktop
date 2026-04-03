@@ -382,6 +382,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'All'**
   String get all_label;
+
+  /// No description provided for @product_management.
+  ///
+  /// In en, this message translates to:
+  /// **'Product Management'**
+  String get product_management;
+
+  /// No description provided for @product_management_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage your catalog, categories, and the status of each product.'**
+  String get product_management_description;
+
+  /// No description provided for @product_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Product'**
+  String get product_label;
+
+  /// No description provided for @new_product.
+  ///
+  /// In en, this message translates to:
+  /// **'New Product'**
+  String get new_product;
+
+  /// No description provided for @add_product_name_label.
+  ///
+  /// In en, this message translates to:
+  /// **'NAME'**
+  String get add_product_name_label;
+
+  /// No description provided for @add_product_name_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'E.g.: Shrimp Ceviche'**
+  String get add_product_name_hint;
+
+  /// No description provided for @add_product_price_label.
+  ///
+  /// In en, this message translates to:
+  /// **'PRICE (₡)'**
+  String get add_product_price_label;
+
+  /// No description provided for @add_product_price_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'0'**
+  String get add_product_price_hint;
+
+  /// No description provided for @add_product_category_label.
+  ///
+  /// In en, this message translates to:
+  /// **'CATEGORY'**
+  String get add_product_category_label;
+
+  /// No description provided for @add_product_category_drinks.
+  ///
+  /// In en, this message translates to:
+  /// **'Drinks'**
+  String get add_product_category_drinks;
+
+  /// No description provided for @add_product_category_food.
+  ///
+  /// In en, this message translates to:
+  /// **'Food'**
+  String get add_product_category_food;
+
+  /// No description provided for @add_product_description_label.
+  ///
+  /// In en, this message translates to:
+  /// **'DESCRIPTION'**
+  String get add_product_description_label;
+
+  /// No description provided for @add_product_description_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'E.g.: With french fries, house sauce, and daily side'**
+  String get add_product_description_hint;
+
+  /// No description provided for @add_product_active_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Active product'**
+  String get add_product_active_label;
+
+  /// No description provided for @add_product_cancel_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get add_product_cancel_button;
+
+  /// No description provided for @add_product_submit_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Product'**
+  String get add_product_submit_button;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
