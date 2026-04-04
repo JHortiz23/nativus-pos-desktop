@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
+import 'package:nativus_pos_desktop/features/products/domain/entities/products_entity.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/blocs/products_bloc.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
 
 class AddProductDialog extends StatefulWidget {
-  const AddProductDialog({super.key});
+  final ProductsEntity? product;
+
+  const AddProductDialog({super.key, this.product});
 
   @override
   State<AddProductDialog> createState() => _AddProductDialogState();
@@ -12,24 +16,57 @@ class AddProductDialog extends StatefulWidget {
 
 class _AddProductDialogState extends State<AddProductDialog> {
   final _formKey = GlobalKey<FormState>();
+  late final TextEditingController _nameCtrl;
+  late final TextEditingController _priceCtrl;
+  late final TextEditingController _descCtrl;
   bool _isActive = true;
-  String _selectedCategory = 'Bebidas';
-  // set bloc
-  late ProductsBloc productsBloc;
+  int? _selectedCategoryId;
 
+  @override
+  void initState() {
+    super.initState();
+    final p = widget.product;
+    _nameCtrl = TextEditingController(text: p?.name ?? '');
+    _priceCtrl = TextEditingController(text: p?.price.toString() ?? '');
+    _descCtrl = TextEditingController(text: p?.description ?? '');
+    _isActive = p?.isActive ?? true;
+    _selectedCategoryId = p?.categoryId;
+  }
+
+  @override
+  void dispose() {
+    _nameCtrl.dispose();
+    _priceCtrl.dispose();
+    _descCtrl.dispose();
+    super.dispose();
+  }
+
+  void _submit() {
+    if (!_formKey.currentState!.validate() || _selectedCategoryId == null) {
+      return;
+    }
+
+    context.read<ProductsBloc>().add(
+      AddProductEvent(
+        categoryId: _selectedCategoryId!,
+        name: _nameCtrl.text.trim(),
+        description: _descCtrl.text.trim(),
+        price: double.tryParse(_priceCtrl.text) ?? 0.0,
+        isActive: _isActive,
+      ),
+    );
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final localizations = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
+    final isEditing = widget.product != null;
 
     return Dialog(
       backgroundColor: colorScheme.darkSurface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24),
-        side: BorderSide(color: colorScheme.softBorder),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       child: Container(
         width: 560,
         padding: const EdgeInsets.all(28),
@@ -44,8 +81,8 @@ class _AddProductDialogState extends State<AddProductDialog> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    localizations.new_product,
-                    style: theme.textTheme.headlineMedium?.copyWith(
+                    isEditing ? 'Editar Producto' : l10n.new_product,
+                    style: TextStyle(
                       color: colorScheme.baseWhite,
                       fontSize: 24,
                       fontWeight: FontWeight.w700,
@@ -53,41 +90,44 @@ class _AddProductDialogState extends State<AddProductDialog> {
                   ),
                   IconButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    icon: Icon(Icons.close_rounded, color: colorScheme.textMuted),
+                    icon: Icon(
+                      Icons.close_rounded,
+                      color: colorScheme.textMuted,
+                    ),
                     style: IconButton.styleFrom(
                       backgroundColor: colorScheme.darkSurfaceAlt,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 32),
 
-              // Name and Price fields
               Row(
                 children: [
                   Expanded(
-                    child: _buildFormField(
-                      context: context,
-                      label: localizations.add_product_name_label,
+                    child: _Field(
+                      label: l10n.add_product_name_label,
                       child: TextFormField(
+                        controller: _nameCtrl,
                         style: TextStyle(color: colorScheme.baseWhite),
-                        decoration: _inputDecoration(context, localizations.add_product_name_hint),
+                        decoration: _decor(context, l10n.add_product_name_hint),
+                        validator: (v) => v!.trim().isEmpty ? '' : null,
                       ),
                     ),
                   ),
                   const SizedBox(width: 20),
                   Expanded(
-                    child: _buildFormField(
-                      context: context,
-                      label: localizations.add_product_price_label,
+                    child: _Field(
+                      label: l10n.add_product_price_label,
                       child: TextFormField(
-                        initialValue: '12500',
+                        controller: _priceCtrl,
                         style: TextStyle(color: colorScheme.baseWhite),
                         keyboardType: TextInputType.number,
-                        decoration: _inputDecoration(context, localizations.add_product_price_hint),
+                        decoration: _decor(
+                          context,
+                          l10n.add_product_price_hint,
+                        ),
+                        validator: (v) => v!.trim().isEmpty ? '' : null,
                       ),
                     ),
                   ),
@@ -95,138 +135,112 @@ class _AddProductDialogState extends State<AddProductDialog> {
               ),
               const SizedBox(height: 20),
 
-              // Category Dropdown
-              _buildFormField(
-                context: context,
-                label: localizations.add_product_category_label,
-                child: DropdownButtonFormField<String>(
-                  initialValue: _selectedCategory,
-                  dropdownColor: colorScheme.darkSurfaceAlt,
-                  style: TextStyle(color: colorScheme.baseWhite, fontSize: 16),
-                  icon: Icon(Icons.arrow_drop_down, color: colorScheme.textMuted),
-                  decoration: _inputDecoration(context, '').copyWith(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                  ),
-                  items: [
-                    DropdownMenuItem(
-                      value: 'Bebidas',
-                      child: Row(
-                        children: [
-                          const Text('🍹', style: TextStyle(fontSize: 18)),
-                          const SizedBox(width: 8),
-                          Text(
-                            localizations.add_product_category_drinks,
-                            style: TextStyle(color: colorScheme.baseWhite, fontWeight: FontWeight.w500),
-                          ),
-                        ],
+              BlocBuilder<ProductsBloc, ProductsState>(
+                builder: (context, state) {
+                  final categories = state.productCategories ?? [];
+                  // Validate selected ID actually exists in new categories list
+                  if (categories.isNotEmpty && _selectedCategoryId == null) {
+                    _selectedCategoryId = categories.first.id;
+                  }
+
+                  return _Field(
+                    label: l10n.add_product_category_label,
+                    child: DropdownButtonFormField<int>(
+                      initialValue: _selectedCategoryId,
+                      menuMaxHeight: 300,
+                      dropdownColor: colorScheme.darkSurfaceAlt,
+                      style: TextStyle(
+                        color: colorScheme.baseWhite,
+                        fontSize: 16,
                       ),
+                      decoration: _decor(context, ''),
+                      items: categories
+                          .map(
+                            (c) => DropdownMenuItem(
+                              value: c.id,
+                              child: Text(c.name),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (v) => setState(() => _selectedCategoryId = v),
                     ),
-                    DropdownMenuItem(
-                      value: 'Comidas',
-                      child: Row(
-                        children: [
-                          const Text('🍔', style: TextStyle(fontSize: 18)),
-                          const SizedBox(width: 8),
-                          Text(
-                            localizations.add_product_category_food,
-                            style: TextStyle(color: colorScheme.baseWhite, fontWeight: FontWeight.w500),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                  onChanged: (value) {
-                    if (value != null) {
-                      setState(() {
-                        _selectedCategory = value;
-                      });
-                    }
-                  },
-                ),
+                  );
+                },
               ),
               const SizedBox(height: 20),
 
-              // Description Text Area
-              _buildFormField(
-                context: context,
-                label: localizations.add_product_description_label,
+              _Field(
+                label: l10n.add_product_description_label,
                 child: TextFormField(
+                  controller: _descCtrl,
                   maxLines: 4,
                   style: TextStyle(color: colorScheme.baseWhite),
-                  decoration: _inputDecoration(context, localizations.add_product_description_hint),
+                  decoration: _decor(
+                    context,
+                    l10n.add_product_description_hint,
+                  ),
                 ),
               ),
               const SizedBox(height: 28),
 
-              // Switch Product Active
               Row(
                 children: [
                   Switch(
                     value: _isActive,
-                    onChanged: (value) {
-                      setState(() {
-                        _isActive = value;
-                      });
-                    },
+                    onChanged: (v) => setState(() => _isActive = v),
                     activeThumbColor: colorScheme.baseWhite,
                     activeTrackColor: colorScheme.accentPrimary,
-                    inactiveThumbColor: colorScheme.textMuted,
-                    inactiveTrackColor: colorScheme.darkSurfaceAlt,
                   ),
                   const SizedBox(width: 12),
                   Text(
-                    localizations.add_product_active_label,
-                    style: theme.textTheme.bodyLarge?.copyWith(
+                    l10n.add_product_active_label,
+                    style: TextStyle(
                       color: colorScheme.baseWhite,
                       fontSize: 16,
-                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 36),
 
-              // Action Buttons
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   OutlinedButton(
                     onPressed: () => Navigator.of(context).pop(),
                     style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                      side: BorderSide(color: colorScheme.softBorder),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 16,
                       ),
+                      side: BorderSide(color: colorScheme.softBorder),
                     ),
                     child: Text(
-                      localizations.add_product_cancel_button,
+                      l10n.add_product_cancel_button,
                       style: TextStyle(
                         color: colorScheme.baseWhite,
                         fontSize: 16,
-                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
                   const SizedBox(width: 16),
                   ElevatedButton(
-                    onPressed: () {
-                      // create product using bloc
-                      // productsBloc.add(AddProductEvent(
-                    },
+                    onPressed: _submit,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: colorScheme.accentPrimary,
                       foregroundColor: colorScheme.darkSurface,
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 16,
                       ),
                     ),
                     child: Text(
-                      localizations.add_product_submit_button,
+                      isEditing
+                          ? 'Guardar Cambios'
+                          : l10n.add_product_submit_button,
                       style: const TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -239,21 +253,43 @@ class _AddProductDialogState extends State<AddProductDialog> {
     );
   }
 
-  Widget _buildFormField({
-    required BuildContext context,
-    required String label,
-    required Widget child,
-  }) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
+  InputDecoration _decor(BuildContext context, String hint) {
+    final cs = Theme.of(context).colorScheme;
+    final border = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(color: cs.softBorder),
+    );
+    return InputDecoration(
+      hintText: hint,
+      hintStyle: TextStyle(color: cs.textMuted.withValues(alpha: 0.5)),
+      filled: true,
+      fillColor: cs.darkSurfaceAlt,
+      contentPadding: const EdgeInsets.all(16),
+      border: border,
+      enabledBorder: border,
+      focusedBorder: border.copyWith(
+        borderSide: BorderSide(color: cs.accentPrimary),
+      ),
+    );
+  }
+}
 
+class _Field extends StatelessWidget {
+  final String label;
+  final Widget child;
+  const _Field({required this.label, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: theme.textTheme.labelMedium?.copyWith(
-            color: colorScheme.textMuted,
+          style: TextStyle(
+            color: cs.textMuted,
+            fontSize: 12,
             fontWeight: FontWeight.w800,
             letterSpacing: 1.2,
           ),
@@ -261,29 +297,6 @@ class _AddProductDialogState extends State<AddProductDialog> {
         const SizedBox(height: 8),
         child,
       ],
-    );
-  }
-
-  InputDecoration _inputDecoration(BuildContext context, String hintText) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return InputDecoration(
-      hintText: hintText,
-      hintStyle: TextStyle(color: colorScheme.textMuted.withValues(alpha: 0.5)),
-      filled: true,
-      fillColor: colorScheme.darkSurfaceAlt,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: colorScheme.softBorder),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: colorScheme.softBorder),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: colorScheme.accentPrimary),
-      ),
     );
   }
 }
