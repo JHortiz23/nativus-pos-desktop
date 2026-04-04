@@ -199,4 +199,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get add_product_submit_button => 'Crear Producto';
+
+  @override
+  String get message_product_added => 'Producto Agregado Correctamente';
 }

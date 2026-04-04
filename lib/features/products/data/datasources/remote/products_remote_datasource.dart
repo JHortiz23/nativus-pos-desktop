@@ -42,17 +42,45 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
     required double price,
     required bool isActive,
   }) async {
-    // Implementation for adding a product
-    return AddedProductModel(
-      id: 1,
-      restaurantId:
-          categoryId, // This should be replaced with the actual ID from the response
-      categoryId: categoryId,
-      name: name,
-      description: description,
-      price: price,
-      isActive: isActive,
-    );
+    try {
+      final accessToken = _tokenStorage.getAccessToken();
+      if (accessToken == null || accessToken.isEmpty) {
+        throw StateError('Missing access token for add product request.');
+      }
+
+      final uri = ProductsApiEndpoints.addProduct();
+
+      final headers = HttpHelper.jsonHeaders(accessToken: accessToken);
+      final body = json.encode({
+        'name': name,
+        'price': price,
+        'categoryId': categoryId,
+        'description': description,
+        'isActive': isActive,
+      });
+
+      final response = await _client.post(uri, headers: headers, body: body);
+
+      if (response.statusCode < 200 || response.statusCode >= 300) {
+        await HttpHelper.clearSessionIfUnauthorized(
+          statusCode: response.statusCode,
+          storage: _tokenStorage,
+        );
+        throw Exception('Failed to add product: HTTP ${response.statusCode}');
+      }
+
+      final decoded = json.decode(response.body);
+
+      if (decoded is! Map<String, dynamic>) {
+        throw const FormatException(
+          'Unexpected add product response. Expected a JSON object.',
+        );
+      }
+
+      return AddedProductModel.fromJson(decoded);
+    } catch (e) {
+      throw Exception('Error adding product: $e');
+    }
   }
 
   @override

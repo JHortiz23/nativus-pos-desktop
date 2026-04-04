@@ -66,5 +66,6 @@
   "add_product_description_hint": "Ej: Con papas fritas, salsa de la casa y guarnición del día",
   "add_product_active_label": "Producto activo",
   "add_product_cancel_button": "Cancelar",
-  "add_product_submit_button": "Crear Producto"
+  "add_product_submit_button": "Crear Producto",
+  "message_product_added": "Producto Agregado Correctamente"
 }

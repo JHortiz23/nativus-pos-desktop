@@ -5,6 +5,7 @@ import 'package:nativus_pos_desktop/application/theme/theme.dart';
 import 'package:nativus_pos_desktop/features/products/domain/entities/products_entity.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/blocs/products_bloc.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
+import 'package:nativus_pos_desktop/shared/widgets/toasts/app_toast.dart';
 
 class AddProductDialog extends StatefulWidget {
   final ProductsEntity? product;
@@ -56,7 +57,6 @@ class _AddProductDialogState extends State<AddProductDialog> {
         isActive: _isActive,
       ),
     );
-    Navigator.of(context).pop();
   }
 
   @override
@@ -65,192 +65,227 @@ class _AddProductDialogState extends State<AddProductDialog> {
     final l10n = AppLocalizations.of(context)!;
     final isEditing = widget.product != null;
 
-    return Dialog(
-      backgroundColor: colorScheme.darkSurface,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-      child: Container(
-        width: 560,
-        padding: const EdgeInsets.all(28),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    isEditing ? 'Editar Producto' : l10n.new_product,
-                    style: TextStyle(
-                      color: colorScheme.baseWhite,
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: Icon(
-                      Icons.close_rounded,
-                      color: colorScheme.textMuted,
-                    ),
-                    style: IconButton.styleFrom(
-                      backgroundColor: colorScheme.darkSurfaceAlt,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 32),
+    return BlocListener<ProductsBloc, ProductsState>(
+      listenWhen: (previous, current) =>
+          previous.isLoading && !current.isLoading,
+      listener: (context, state) {
+        if (state is ProductAdded) {
+          // Show success message
+          AppToast.show(
+            context,
+            message: l10n.message_product_added,
+            borderColor: colorScheme.baseGreen,
+          );
 
-              Row(
-                children: [
-                  Expanded(
-                    child: _Field(
-                      label: l10n.add_product_name_label,
-                      child: TextFormField(
-                        controller: _nameCtrl,
-                        style: TextStyle(color: colorScheme.baseWhite),
-                        decoration: _decor(context, l10n.add_product_name_hint),
-                        validator: (v) => v!.trim().isEmpty ? '' : null,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: _Field(
-                      label: l10n.add_product_price_label,
-                      child: TextFormField(
-                        controller: _priceCtrl,
-                        style: TextStyle(color: colorScheme.baseWhite),
-                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
-                        ],
-                        decoration: _decor(
-                          context,
-                          l10n.add_product_price_hint,
-                        ),
-                        validator: (v) => (v == null || v.trim().isEmpty || double.tryParse(v) == null) ? '' : null,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-
-              BlocBuilder<ProductsBloc, ProductsState>(
-                builder: (context, state) {
-                  final categories = state.productCategories ?? [];
-                  // Validate selected ID actually exists in new categories list
-                  if (categories.isNotEmpty && _selectedCategoryId == null) {
-                    _selectedCategoryId = categories.first.id;
-                  }
-
-                  return _Field(
-                    label: l10n.add_product_category_label,
-                    child: DropdownButtonFormField<int>(
-                      initialValue: _selectedCategoryId,
-                      menuMaxHeight: 300,
-                      dropdownColor: colorScheme.darkSurfaceAlt,
+          Navigator.of(context).pop();
+        } else if (state is ProductError) {
+          AppToast.show(
+            context,
+            message: state.errorMessage,
+            borderColor: colorScheme.error,
+          );
+        }
+      },
+      child: Dialog(
+        backgroundColor: colorScheme.darkSurface,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        child: Container(
+          width: 560,
+          padding: const EdgeInsets.all(28),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Header
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      isEditing ? 'Editar Producto' : l10n.new_product,
                       style: TextStyle(
                         color: colorScheme.baseWhite,
-                        fontSize: 16,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
                       ),
-                      decoration: _decor(context, ''),
-                      items: categories
-                          .map(
-                            (c) => DropdownMenuItem(
-                              value: c.id,
-                              child: Text(c.name),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (v) => setState(() => _selectedCategoryId = v),
                     ),
-                  );
-                },
-              ),
-              const SizedBox(height: 20),
+                    IconButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: Icon(
+                        Icons.close_rounded,
+                        color: colorScheme.textMuted,
+                      ),
+                      style: IconButton.styleFrom(
+                        backgroundColor: colorScheme.darkSurfaceAlt,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 32),
 
-              _Field(
-                label: l10n.add_product_description_label,
-                child: TextFormField(
-                  controller: _descCtrl,
-                  maxLines: 4,
-                  style: TextStyle(color: colorScheme.baseWhite),
-                  decoration: _decor(
-                    context,
-                    l10n.add_product_description_hint,
+                Row(
+                  children: [
+                    Expanded(
+                      child: _Field(
+                        label: l10n.add_product_name_label,
+                        child: TextFormField(
+                          controller: _nameCtrl,
+                          style: TextStyle(color: colorScheme.baseWhite),
+                          decoration: _decor(
+                            context,
+                            l10n.add_product_name_hint,
+                          ),
+                          validator: (v) => v!.trim().isEmpty ? '' : null,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    Expanded(
+                      child: _Field(
+                        label: l10n.add_product_price_label,
+                        child: TextFormField(
+                          controller: _priceCtrl,
+                          style: TextStyle(color: colorScheme.baseWhite),
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                              RegExp(r'^\d*\.?\d*'),
+                            ),
+                          ],
+                          decoration: _decor(
+                            context,
+                            l10n.add_product_price_hint,
+                          ),
+                          validator: (v) =>
+                              (v == null ||
+                                  v.trim().isEmpty ||
+                                  double.tryParse(v) == null)
+                              ? ''
+                              : null,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+
+                BlocBuilder<ProductsBloc, ProductsState>(
+                  builder: (context, state) {
+                    final categories = state.productCategories ?? [];
+                    // Validate selected ID actually exists in new categories list
+                    if (categories.isNotEmpty && _selectedCategoryId == null) {
+                      _selectedCategoryId = categories.first.id;
+                    }
+
+                    return _Field(
+                      label: l10n.add_product_category_label,
+                      child: DropdownButtonFormField<int>(
+                        initialValue: _selectedCategoryId,
+                        menuMaxHeight: 300,
+                        dropdownColor: colorScheme.darkSurfaceAlt,
+                        style: TextStyle(
+                          color: colorScheme.baseWhite,
+                          fontSize: 16,
+                        ),
+                        decoration: _decor(context, ''),
+                        items: categories
+                            .map(
+                              (c) => DropdownMenuItem(
+                                value: c.id,
+                                child: Text(c.name),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (v) =>
+                            setState(() => _selectedCategoryId = v),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 20),
+
+                _Field(
+                  label: l10n.add_product_description_label,
+                  child: TextFormField(
+                    controller: _descCtrl,
+                    maxLines: 4,
+                    style: TextStyle(color: colorScheme.baseWhite),
+                    decoration: _decor(
+                      context,
+                      l10n.add_product_description_hint,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 28),
+                const SizedBox(height: 28),
 
-              Row(
-                children: [
-                  Switch(
-                    value: _isActive,
-                    onChanged: (v) => setState(() => _isActive = v),
-                    activeThumbColor: colorScheme.baseWhite,
-                    activeTrackColor: colorScheme.accentPrimary,
-                  ),
-                  const SizedBox(width: 12),
-                  Text(
-                    l10n.add_product_active_label,
-                    style: TextStyle(
-                      color: colorScheme.baseWhite,
-                      fontSize: 16,
+                Row(
+                  children: [
+                    Switch(
+                      value: _isActive,
+                      onChanged: (v) => setState(() => _isActive = v),
+                      activeThumbColor: colorScheme.baseWhite,
+                      activeTrackColor: colorScheme.accentPrimary,
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 36),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  OutlinedButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 16,
-                      ),
-                      side: BorderSide(color: colorScheme.softBorder),
-                    ),
-                    child: Text(
-                      l10n.add_product_cancel_button,
+                    const SizedBox(width: 12),
+                    Text(
+                      l10n.add_product_active_label,
                       style: TextStyle(
                         color: colorScheme.baseWhite,
                         fontSize: 16,
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 16),
-                  ElevatedButton(
-                    onPressed: _submit,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: colorScheme.accentPrimary,
-                      foregroundColor: colorScheme.darkSurface,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 16,
+                  ],
+                ),
+                const SizedBox(height: 36),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    OutlinedButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 16,
+                        ),
+                        side: BorderSide(color: colorScheme.softBorder),
+                      ),
+                      child: Text(
+                        l10n.add_product_cancel_button,
+                        style: TextStyle(
+                          color: colorScheme.baseWhite,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
-                    child: Text(
-                      isEditing
-                          ? 'Guardar Cambios'
-                          : l10n.add_product_submit_button,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                    const SizedBox(width: 16),
+                    ElevatedButton(
+                      onPressed: _submit,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: colorScheme.accentPrimary,
+                        foregroundColor: colorScheme.darkSurface,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 16,
+                        ),
+                      ),
+                      child: Text(
+                        isEditing
+                            ? 'Guardar Cambios'
+                            : l10n.add_product_submit_button,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -279,7 +314,11 @@ class _AddProductDialogState extends State<AddProductDialog> {
       ),
       errorBorder: errorBorder,
       focusedErrorBorder: errorBorder,
-      errorStyle: const TextStyle(height: 0, fontSize: 0, color: Colors.transparent),
+      errorStyle: const TextStyle(
+        height: 0,
+        fontSize: 0,
+        color: Colors.transparent,
+      ),
     );
   }
 }

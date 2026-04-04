@@ -66,6 +66,7 @@
   "add_product_description_hint": "E.g.: With french fries, house sauce, and daily side",
   "add_product_active_label": "Active product",
   "add_product_cancel_button": "Cancel",
-  "add_product_submit_button": "Create Product"
+  "add_product_submit_button": "Create Product",
+  "message_product_added": "Product Added Successfully"
 }
 

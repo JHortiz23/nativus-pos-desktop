@@ -478,6 +478,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Create Product'**
   String get add_product_submit_button;
+
+  /// No description provided for @message_product_added.
+  ///
+  /// In en, this message translates to:
+  /// **'Product Added Successfully'**
+  String get message_product_added;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

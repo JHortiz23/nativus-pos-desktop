@@ -3,6 +3,11 @@ import 'package:nativus_pos_desktop/core/utils/helpers/api_helper.dart';
 class ProductsApiEndpoints {
   static String get baseUrl => ApiHelper.baseUrl;
 
+  // ** Add Product **
+  static Uri addProduct() {
+    return Uri.parse('$baseUrl/products');
+  }
+
   // ** Get Products **
   static Uri getProducts({int? page, int? items}) {
     final uri = Uri.parse('$baseUrl/products');
