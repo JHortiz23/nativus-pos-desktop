@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
 import 'package:nativus_pos_desktop/features/products/domain/entities/products_entity.dart';
@@ -122,12 +123,15 @@ class _AddProductDialogState extends State<AddProductDialog> {
                       child: TextFormField(
                         controller: _priceCtrl,
                         style: TextStyle(color: colorScheme.baseWhite),
-                        keyboardType: TextInputType.number,
+                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
+                        ],
                         decoration: _decor(
                           context,
                           l10n.add_product_price_hint,
                         ),
-                        validator: (v) => v!.trim().isEmpty ? '' : null,
+                        validator: (v) => (v == null || v.trim().isEmpty || double.tryParse(v) == null) ? '' : null,
                       ),
                     ),
                   ),
@@ -275,7 +279,7 @@ class _AddProductDialogState extends State<AddProductDialog> {
       ),
       errorBorder: errorBorder,
       focusedErrorBorder: errorBorder,
-      errorStyle: const TextStyle(height: 0, color: Colors.transparent),
+      errorStyle: const TextStyle(height: 0, fontSize: 0, color: Colors.transparent),
     );
   }
 }
