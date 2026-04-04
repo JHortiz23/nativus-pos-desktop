@@ -259,6 +259,9 @@ class _AddProductDialogState extends State<AddProductDialog> {
       borderRadius: BorderRadius.circular(12),
       borderSide: BorderSide(color: cs.softBorder),
     );
+    final errorBorder = border.copyWith(
+      borderSide: BorderSide(color: cs.error),
+    );
     return InputDecoration(
       hintText: hint,
       hintStyle: TextStyle(color: cs.textMuted.withValues(alpha: 0.5)),
@@ -270,6 +273,9 @@ class _AddProductDialogState extends State<AddProductDialog> {
       focusedBorder: border.copyWith(
         borderSide: BorderSide(color: cs.accentPrimary),
       ),
+      errorBorder: errorBorder,
+      focusedErrorBorder: errorBorder,
+      errorStyle: const TextStyle(height: 0, color: Colors.transparent),
     );
   }
 }
