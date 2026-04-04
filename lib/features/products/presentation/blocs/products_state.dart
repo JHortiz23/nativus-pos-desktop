@@ -52,21 +52,24 @@ class ProductsState extends Equatable {
 }
 
 class ProductError extends ProductsState {
-  final String errorMessage;
-
   const ProductError({
-    required this.errorMessage,
+    required super.errorMessage,
+    super.products,
+    super.productCategories,
+    super.getProductsRequest = RequestsEnum.failure,
     super.isLoading = false,
     super.page,
     super.pageSize,
   });
-
 }
 
 class AddingProduct extends ProductsState {
   const AddingProduct({
+    super.products,
+    super.productCategories,
+    super.getProductsRequest = RequestsEnum.loading,
     super.isLoading = true,
-    super.errorMessage,
+    super.errorMessage = '',
     super.page,
     super.pageSize,
   });
@@ -74,8 +77,11 @@ class AddingProduct extends ProductsState {
 
 class ProductAdded extends ProductsState {
   const ProductAdded({
+    super.products,
+    super.productCategories,
+    super.getProductsRequest = RequestsEnum.success,
     super.isLoading = false,
-    super.errorMessage,
+    super.errorMessage = '',
     super.page,
     super.pageSize,
   });

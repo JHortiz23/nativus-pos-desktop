@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
+import 'package:nativus_pos_desktop/features/products/presentation/blocs/products_bloc.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
 
 class AddProductDialog extends StatefulWidget {
@@ -13,6 +14,9 @@ class _AddProductDialogState extends State<AddProductDialog> {
   final _formKey = GlobalKey<FormState>();
   bool _isActive = true;
   String _selectedCategory = 'Bebidas';
+  // set bloc
+  late ProductsBloc productsBloc;
+
 
   @override
   Widget build(BuildContext context) {
@@ -207,7 +211,8 @@ class _AddProductDialogState extends State<AddProductDialog> {
                   const SizedBox(width: 16),
                   ElevatedButton(
                     onPressed: () {
-                      // Create product action
+                      // create product using bloc
+                      // productsBloc.add(AddProductEvent(
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: colorScheme.accentPrimary,

@@ -26,13 +26,62 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
     on<GetProductCategoriesEvent>(_onGetProductCategories);
   }
 
-  
+  Future<void> _onAddProduct(
+    AddProductEvent event,
+    Emitter<ProductsState> emit,
+  ) async {
+    emit(
+      AddingProduct(
+        products: state.products,
+        productCategories: state.productCategories,
+        page: state.page,
+        pageSize: state.pageSize,
+      ),
+    );
+
+    try {
+      await addProductUseCase(
+        categoryId: event.categoryId,
+        name: event.name,
+        description: event.description,
+        price: event.price,
+        isActive: event.isActive,
+      );
+
+      emit(
+        ProductAdded(
+          products: state.products,
+          productCategories: state.productCategories,
+          page: state.page,
+          pageSize: state.pageSize,
+        ),
+      );
+      // emit a state to trigger products refresh after adding a product
+      add(GetProductsEvent(page: state.page, pageSize: state.pageSize));
+    } catch (e) {
+      emit(
+        ProductError(
+          errorMessage: e.toString(),
+          products: state.products,
+          productCategories: state.productCategories,
+          page: state.page,
+          pageSize: state.pageSize,
+        ),
+      );
+    }
+  }
 
   Future<void> _onGetProducts(
     GetProductsEvent event,
     Emitter<ProductsState> emit,
   ) async {
-    emit(state.copyWith(isLoading: true, errorMessage: ''));
+    emit(
+      state.copyWith(
+        isLoading: true,
+        errorMessage: '',
+        getProductsRequest: RequestsEnum.loading,
+      ),
+    );
 
     // Determine values to use (prefer event arguments, fallback to state defaults/current)
     final pageSize = event.pageSize > 0 ? event.pageSize : state.pageSize;
@@ -49,12 +98,19 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
           products: productsResponse,
           page: page,
           pageSize: pageSize,
+          getProductsRequest: RequestsEnum.success,
           isLoading: false,
           errorMessage: '',
         ),
       );
     } catch (e) {
-      emit(state.copyWith(errorMessage: e.toString(), isLoading: false));
+      emit(
+        state.copyWith(
+          errorMessage: e.toString(),
+          isLoading: false,
+          getProductsRequest: RequestsEnum.failure,
+        ),
+      );
     }
   }
 
