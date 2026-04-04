@@ -346,6 +346,16 @@ class _ProductsPageState extends State<ProductsPage> {
           category: product.categoryName,
           productIcon: ProductCategoryIconHelper.resolve(product.categoryName),
           isActive: product.isActive,
+          onEdit: () {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (_) => BlocProvider.value(
+                value: context.read<ProductsBloc>(),
+                child: AddProductDialog(product: product),
+              ),
+            );
+          },
         ),
     ];
   }

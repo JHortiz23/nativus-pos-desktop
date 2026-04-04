@@ -18,6 +18,7 @@ class ProductCard extends StatelessWidget {
     required this.category,
     required this.productIcon,
     required this.isActive,
+    this.onEdit,
   });
 
   final ProductCardLayout layout;
@@ -27,6 +28,7 @@ class ProductCard extends StatelessWidget {
   final String category;
   final IconData productIcon;
   final bool isActive;
+  final VoidCallback? onEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +45,7 @@ class ProductCard extends StatelessWidget {
         category: category,
         productIcon: productIcon,
         isActive: isActive,
+        onEdit: onEdit,
       ),
       ProductCardLayout.list => _ListProductCard(
         name: name,
@@ -51,6 +54,7 @@ class ProductCard extends StatelessWidget {
         category: category,
         productIcon: productIcon,
         isActive: isActive,
+        onEdit: onEdit,
       ),
     };
   }
@@ -64,6 +68,7 @@ class _GridProductCard extends StatelessWidget {
     required this.category,
     required this.productIcon,
     required this.isActive,
+    this.onEdit,
   });
 
   final String name;
@@ -72,6 +77,7 @@ class _GridProductCard extends StatelessWidget {
   final String category;
   final IconData productIcon;
   final bool isActive;
+  final VoidCallback? onEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -191,6 +197,7 @@ class _ListProductCard extends StatelessWidget {
     required this.category,
     required this.productIcon,
     required this.isActive,
+    this.onEdit,
   });
 
   final String name;
@@ -199,6 +206,7 @@ class _ListProductCard extends StatelessWidget {
   final String category;
   final IconData productIcon;
   final bool isActive;
+  final VoidCallback? onEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -247,6 +255,7 @@ class _ListProductCard extends StatelessWidget {
                             icon: Icons.edit_outlined,
                             color: colorScheme.textSoft,
                             background: colorScheme.darkSurfaceAlt,
+                            onTap: onEdit,
                           ),
                           ActionButton(
                             icon: Icons.delete_outline_rounded,
@@ -285,6 +294,7 @@ class _ListProductCard extends StatelessWidget {
                         icon: Icons.edit_outlined,
                         color: colorScheme.textSoft,
                         background: colorScheme.darkSurfaceAlt,
+                        onTap: onEdit,
                       ),
                       const SizedBox(width: 10),
                       ActionButton(
