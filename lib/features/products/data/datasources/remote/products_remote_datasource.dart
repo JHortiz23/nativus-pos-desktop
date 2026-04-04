@@ -4,10 +4,18 @@ import 'package:nativus_pos_desktop/application/constants/products_api_endpoints
 import 'package:nativus_pos_desktop/core/shared/data/models/paginated_response.dart';
 import 'package:nativus_pos_desktop/core/utils/helpers/auth_token_storage.dart';
 import 'package:nativus_pos_desktop/core/utils/helpers/http_helper.dart';
+import 'package:nativus_pos_desktop/features/products/data/models/added_product_model.dart';
 import 'package:nativus_pos_desktop/features/products/data/models/product_categories_model.dart';
 import 'package:nativus_pos_desktop/features/products/data/models/products_model.dart';
 
 abstract class ProductsRemoteDataSource {
+  Future<AddedProductModel> addProduct({
+    required int categoryId,
+    required String name,
+    required String description,
+    required double price,
+    required bool isActive,
+  });
   Future<PaginatedResponse<ProductsModel>> getProducts({
     required int page,
     required int pageSize,
@@ -25,6 +33,27 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
     required AuthTokenStorage tokenStorage,
   }) : _client = client,
        _tokenStorage = tokenStorage;
+
+  @override
+  Future<AddedProductModel> addProduct({
+    required int categoryId,
+    required String name,
+    required String description,
+    required double price,
+    required bool isActive,
+  }) async {
+    // Implementation for adding a product
+    return AddedProductModel(
+      id: 1,
+      restaurantId:
+          categoryId, // This should be replaced with the actual ID from the response
+      categoryId: categoryId,
+      name: name,
+      description: description,
+      price: price,
+      isActive: isActive,
+    );
+  }
 
   @override
   Future<PaginatedResponse<ProductsModel>> getProducts({
@@ -85,7 +114,9 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
           statusCode: response.statusCode,
           storage: _tokenStorage,
         );
-        throw Exception('Failed to load product categories: HTTP ${response.statusCode}');
+        throw Exception(
+          'Failed to load product categories: HTTP ${response.statusCode}',
+        );
       }
 
       final decoded = json.decode(response.body);

@@ -50,3 +50,33 @@ class ProductsState extends Equatable {
     page,
   ];
 }
+
+class ProductError extends ProductsState {
+  final String errorMessage;
+
+  const ProductError({
+    required this.errorMessage,
+    super.isLoading = false,
+    super.page,
+    super.pageSize,
+  });
+
+}
+
+class AddingProduct extends ProductsState {
+  const AddingProduct({
+    super.isLoading = true,
+    super.errorMessage,
+    super.page,
+    super.pageSize,
+  });
+}
+
+class ProductAdded extends ProductsState {
+  const ProductAdded({
+    super.isLoading = false,
+    super.errorMessage,
+    super.page,
+    super.pageSize,
+  });
+}

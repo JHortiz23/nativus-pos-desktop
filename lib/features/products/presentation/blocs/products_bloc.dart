@@ -4,6 +4,7 @@ import 'package:nativus_pos_desktop/core/enums/requests_anums.dart';
 import 'package:nativus_pos_desktop/core/shared/data/models/paginated_response.dart';
 import 'package:nativus_pos_desktop/features/products/domain/entities/product_categories_entity.dart';
 import 'package:nativus_pos_desktop/features/products/domain/entities/products_entity.dart';
+import 'package:nativus_pos_desktop/features/products/domain/use_cases/add_product_use_case.dart';
 import 'package:nativus_pos_desktop/features/products/domain/use_cases/get_product_categories_use_case.dart';
 import 'package:nativus_pos_desktop/features/products/domain/use_cases/get_products_use_case.dart';
 
@@ -11,16 +12,21 @@ part 'products_event.dart';
 part 'products_state.dart';
 
 class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
+  final AddProductUseCase addProductUseCase;
   final GetProductsUseCase getProductsUseCase;
   final GetProductCategoriesUseCase getProductCategoriesUseCase;
 
   ProductsBloc({
+    required this.addProductUseCase,
     required this.getProductsUseCase,
     required this.getProductCategoriesUseCase,
   }) : super(const ProductsState()) {
+    on<AddProductEvent>(_onAddProduct);
     on<GetProductsEvent>(_onGetProducts);
     on<GetProductCategoriesEvent>(_onGetProductCategories);
   }
+
+  
 
   Future<void> _onGetProducts(
     GetProductsEvent event,
