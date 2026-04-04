@@ -202,4 +202,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get message_product_added => 'Product Added Successfully';
+
+  @override
+  String get no_description => 'No description';
 }

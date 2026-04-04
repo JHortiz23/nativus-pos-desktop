@@ -484,6 +484,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Product Added Successfully'**
   String get message_product_added;
+
+  /// No description provided for @no_description.
+  ///
+  /// In en, this message translates to:
+  /// **'No description'**
+  String get no_description;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

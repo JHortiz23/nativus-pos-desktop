@@ -202,4 +202,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get message_product_added => 'Producto Agregado Correctamente';
+
+  @override
+  String get no_description => 'Sin descripción';
 }

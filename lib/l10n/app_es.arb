@@ -67,5 +67,6 @@
   "add_product_active_label": "Producto activo",
   "add_product_cancel_button": "Cancelar",
   "add_product_submit_button": "Crear Producto",
-  "message_product_added": "Producto Agregado Correctamente"
+  "message_product_added": "Producto Agregado Correctamente",
+  "no_description": "Sin descripción"
 }

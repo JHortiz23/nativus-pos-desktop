@@ -30,10 +30,15 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    final displayDescription = description.trim().isEmpty
+        ? localizations.no_description
+        : description;
+
     return switch (layout) {
       ProductCardLayout.grid => _GridProductCard(
         name: name,
-        description: description,
+        description: displayDescription,
         price: price,
         category: category,
         productIcon: productIcon,
@@ -41,7 +46,7 @@ class ProductCard extends StatelessWidget {
       ),
       ProductCardLayout.list => _ListProductCard(
         name: name,
-        description: description,
+        description: displayDescription,
         price: price,
         category: category,
         productIcon: productIcon,
