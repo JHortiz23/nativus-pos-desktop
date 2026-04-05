@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
 import 'package:nativus_pos_desktop/features/products/domain/entities/products_entity.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/blocs/products_bloc.dart';
+import 'package:nativus_pos_desktop/features/products/presentation/helpers/product_price_helper.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
 import 'package:nativus_pos_desktop/shared/widgets/toasts/app_toast.dart';
 
@@ -30,7 +31,9 @@ class _AddProductDialogState extends State<AddProductDialog> {
     super.initState();
     final p = widget.product;
     _nameCtrl = TextEditingController(text: p?.name ?? '');
-    _priceCtrl = TextEditingController(text: p?.price.toString() ?? '');
+    _priceCtrl = TextEditingController(
+      text: ProductPriceHelper.formatEditablePrice(p?.price),
+    );
     _descCtrl = TextEditingController(text: p?.description ?? '');
     _isActive = p?.isActive ?? true;
     _selectedCategoryId = p?.categoryId;
