@@ -70,6 +70,7 @@
   "message_product_added": "Product Added Successfully",
   "no_description": "No description",
   "message_save_changes": "Save Changes",
-  "edit_product": "Edit Product"
+  "edit_product": "Edit Product",
+  "message_product_updated": "Product Updated Successfully"
 }
 

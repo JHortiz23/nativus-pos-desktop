@@ -211,4 +211,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get edit_product => 'Editar Producto';
+
+  @override
+  String get message_product_updated => 'Producto Actualizado Correctamente';
 }

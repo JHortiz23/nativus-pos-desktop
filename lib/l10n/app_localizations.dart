@@ -502,6 +502,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Edit Product'**
   String get edit_product;
+
+  /// No description provided for @message_product_updated.
+  ///
+  /// In en, this message translates to:
+  /// **'Product Updated Successfully'**
+  String get message_product_updated;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

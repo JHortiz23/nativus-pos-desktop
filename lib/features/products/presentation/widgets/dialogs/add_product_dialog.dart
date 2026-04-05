@@ -94,6 +94,15 @@ class _AddProductDialogState extends State<AddProductDialog> {
           );
 
           Navigator.of(context).pop();
+        } else if (state is ProductUpdated) {
+          // Show success message
+          AppToast.show(
+            context,
+            message: l10n.message_product_updated,
+            borderColor: colorScheme.baseGreen,
+          );
+
+          Navigator.of(context).pop();
         } else if (state is ProductError) {
           AppToast.show(
             context,

@@ -70,5 +70,6 @@
   "message_product_added": "Producto Agregado Correctamente",
   "no_description": "Sin descripción",
   "message_save_changes": "Guardar Cambios",
-  "edit_product": "Editar Producto"
+  "edit_product": "Editar Producto",
+  "message_product_updated": "Producto Actualizado Correctamente"
 }
