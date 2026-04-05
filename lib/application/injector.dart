@@ -68,7 +68,7 @@ Future<void> initInjector() async {
   sl.registerLazySingleton<AddProductUseCase>(
     () => AddProductUseCase(productsRepository: sl<ProductsRepository>()),
   );
-  
+
   sl.registerLazySingleton<GetProductsUseCase>(
     () => GetProductsUseCase(productsRepository: sl<ProductsRepository>()),
   );
@@ -77,6 +77,10 @@ Future<void> initInjector() async {
     () => GetProductCategoriesUseCase(
       productsRepository: sl<ProductsRepository>(),
     ),
+  );
+
+  sl.registerLazySingleton<UpdateProductUseCase>(
+    () => UpdateProductUseCase(productsRepository: sl<ProductsRepository>()),
   );
 
   // ** Cubits **
@@ -92,6 +96,7 @@ Future<void> initInjector() async {
       addProductUseCase: sl(),
       getProductsUseCase: sl(),
       getProductCategoriesUseCase: sl(),
+      updateProductUseCase: sl(),
     ),
   );
 }
