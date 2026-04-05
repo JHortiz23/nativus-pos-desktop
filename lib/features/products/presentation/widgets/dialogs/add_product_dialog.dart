@@ -294,7 +294,7 @@ class _AddProductDialogState extends State<AddProductDialog> {
                         foregroundColor: colorScheme.darkSurface,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 24,
-                          vertical: 16,
+                          vertical: 15,
                         ),
                       ),
                       child: Text(
@@ -302,7 +302,7 @@ class _AddProductDialogState extends State<AddProductDialog> {
                             ? l10n.message_save_changes
                             : l10n.add_product_submit_button,
                         style: const TextStyle(
-                          fontSize: 16,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
