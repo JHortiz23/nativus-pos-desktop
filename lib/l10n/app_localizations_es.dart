@@ -205,4 +205,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get no_description => 'Sin descripción';
+
+  @override
+  String get message_save_changes => 'Guardar Cambios';
+
+  @override
+  String get edit_product => 'Editar Producto';
 }

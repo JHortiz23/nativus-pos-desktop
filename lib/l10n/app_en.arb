@@ -68,6 +68,8 @@
   "add_product_cancel_button": "Cancel",
   "add_product_submit_button": "Create Product",
   "message_product_added": "Product Added Successfully",
-  "no_description": "No description"
+  "no_description": "No description",
+  "message_save_changes": "Save Changes",
+  "edit_product": "Edit Product"
 }
 

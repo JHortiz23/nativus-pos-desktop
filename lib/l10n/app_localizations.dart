@@ -490,6 +490,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No description'**
   String get no_description;
+
+  /// No description provided for @message_save_changes.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Changes'**
+  String get message_save_changes;
+
+  /// No description provided for @edit_product.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Product'**
+  String get edit_product;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

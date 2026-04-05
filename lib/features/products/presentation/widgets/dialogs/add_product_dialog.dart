@@ -21,6 +21,7 @@ class _AddProductDialogState extends State<AddProductDialog> {
   late final TextEditingController _nameCtrl;
   late final TextEditingController _priceCtrl;
   late final TextEditingController _descCtrl;
+  bool get _isEditing => widget.product != null;
   bool _isActive = true;
   int? _selectedCategoryId;
 
@@ -48,22 +49,34 @@ class _AddProductDialogState extends State<AddProductDialog> {
       return;
     }
 
-    context.read<ProductsBloc>().add(
-      AddProductEvent(
-        categoryId: _selectedCategoryId!,
-        name: _nameCtrl.text.trim(),
-        description: _descCtrl.text.trim(),
-        price: double.tryParse(_priceCtrl.text) ?? 0.0,
-        isActive: _isActive,
-      ),
-    );
+    if (_isEditing) {
+      context.read<ProductsBloc>().add(
+        UpdateProductEvent(
+          id: widget.product!.id,
+          categoryId: _selectedCategoryId!,
+          name: _nameCtrl.text.trim(),
+          description: _descCtrl.text.trim(),
+          price: double.tryParse(_priceCtrl.text) ?? 0.0,
+          isActive: _isActive,
+        ),
+      );
+    } else {
+      context.read<ProductsBloc>().add(
+        AddProductEvent(
+          categoryId: _selectedCategoryId!,
+          name: _nameCtrl.text.trim(),
+          description: _descCtrl.text.trim(),
+          price: double.tryParse(_priceCtrl.text) ?? 0.0,
+          isActive: _isActive,
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final l10n = AppLocalizations.of(context)!;
-    final isEditing = widget.product != null;
 
     return BlocListener<ProductsBloc, ProductsState>(
       listenWhen: (previous, current) =>
@@ -103,7 +116,7 @@ class _AddProductDialogState extends State<AddProductDialog> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      isEditing ? 'Editar Producto' : l10n.new_product,
+                      _isEditing ? l10n.edit_product : l10n.new_product,
                       style: TextStyle(
                         color: colorScheme.baseWhite,
                         fontSize: 24,
@@ -273,8 +286,8 @@ class _AddProductDialogState extends State<AddProductDialog> {
                         ),
                       ),
                       child: Text(
-                        isEditing
-                            ? 'Guardar Cambios'
+                        _isEditing
+                            ? l10n.message_save_changes
                             : l10n.add_product_submit_button,
                         style: const TextStyle(
                           fontSize: 16,

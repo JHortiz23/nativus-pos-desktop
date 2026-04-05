@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
 import 'package:nativus_pos_desktop/core/enums/view_enum.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/buttons/action_button.dart';
-import 'package:nativus_pos_desktop/features/products/presentation/widgets/badages/category_badge.dart';
+import 'package:nativus_pos_desktop/features/products/presentation/widgets/badges/category_badge.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/cards/product_leading.dart';
-import 'package:nativus_pos_desktop/features/products/presentation/widgets/badages/status_badge.dart';
+import 'package:nativus_pos_desktop/features/products/presentation/widgets/badges/status_badge.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/cards/tooltip_text.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
 
