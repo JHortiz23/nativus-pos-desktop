@@ -17,4 +17,12 @@ abstract class ProductsRepository {
   });
 
   Future<List<ProductCategoriesEntity>> getProductCategories();
+  Future<ProductsEntity> updateProduct({
+    required int id,
+    required int categoryId,
+    required String name,
+    required String description,
+    required double price,
+    required bool isActive,
+  });
 }

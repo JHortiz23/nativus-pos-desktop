@@ -62,4 +62,25 @@ class ProductsRepositoryImpl implements ProductsRepository {
         .map((model) => ProductCategoriesMapper.toEntity(model))
         .toList(growable: false);
   }
+
+  @override
+  Future<ProductsEntity> updateProduct({
+    required int id,
+    required int categoryId,
+    required String name,
+    required String description,
+    required double price,
+    required bool isActive,
+  }) async {
+    final model = await remoteDataSource.updateProduct(
+      id: id,
+      categoryId: categoryId,
+      name: name,
+      description: description,
+      price: price,
+      isActive: isActive,
+    );
+
+    return ProductsMapper.toEntity(model);
+  }
 }

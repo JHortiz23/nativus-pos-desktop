@@ -24,4 +24,9 @@ class ProductsApiEndpoints {
   static Uri getProductCategories() {
     return Uri.parse('$baseUrl/products/categories');
   }
+
+  // ** Update Product **
+  static Uri updateProduct({required int id}) {
+    return Uri.parse('$baseUrl/products/$id');
+  }
 }

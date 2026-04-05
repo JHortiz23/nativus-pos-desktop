@@ -22,6 +22,15 @@ abstract class ProductsRemoteDataSource {
   });
 
   Future<List<ProductCategoriesModel>> getProductCategories();
+
+  Future<ProductsModel> updateProduct({
+    required int id,
+    required int categoryId,
+    required String name,
+    required String description,
+    required double price,
+    required bool isActive,
+  });
 }
 
 class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
@@ -164,6 +173,58 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
           .toList(growable: false);
     } catch (e) {
       throw Exception('Error getting product categories: $e');
+    }
+  }
+
+  @override
+  Future<ProductsModel> updateProduct({
+    required int id,
+    required int categoryId,
+    required String name,
+    required String description,
+    required double price,
+    required bool isActive,
+  }) async {
+    try {
+      final accessToken = _tokenStorage.getAccessToken();
+      if (accessToken == null || accessToken.isEmpty) {
+        throw StateError('Missing access token for update product request.');
+      }
+
+      final uri = ProductsApiEndpoints.updateProduct(id: id);
+
+      final headers = HttpHelper.jsonHeaders(accessToken: accessToken);
+      final body = json.encode({
+        'name': name,
+        'price': price,
+        'categoryId': categoryId,
+        'description': description,
+        'isActive': isActive,
+      });
+
+      final response = await _client.put(uri, headers: headers, body: body);
+
+      if (response.statusCode < 200 || response.statusCode >= 300) {
+        await HttpHelper.clearSessionIfUnauthorized(
+          statusCode: response.statusCode,
+          storage: _tokenStorage,
+        );
+        throw Exception(
+          'Failed to update product: HTTP ${response.statusCode}',
+        );
+      }
+
+      final decoded = json.decode(response.body);
+
+      if (decoded is! Map<String, dynamic>) {
+        throw const FormatException(
+          'Unexpected update product response. Expected a JSON object.',
+        );
+      }
+
+      return ProductsModel.fromJson(decoded);
+    } catch (e) {
+      throw Exception('Error updating product: $e');
     }
   }
 }
