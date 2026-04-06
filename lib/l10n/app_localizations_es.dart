@@ -214,4 +214,13 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get message_product_updated => 'Producto Actualizado Correctamente';
+
+  @override
+  String get delete_action => 'Eliminar';
+
+  @override
+  String get delete_product_dialog_title => 'Eliminar Producto';
+
+  @override
+  String get delete_product_dialog_message => '¿Eliminar este producto? Esta acción no se puede deshacer.';
 }

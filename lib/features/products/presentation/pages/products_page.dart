@@ -18,6 +18,7 @@ import 'package:nativus_pos_desktop/features/products/presentation/widgets/produ
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/filters/search_field.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/toggles/view_toggle.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
+import 'package:nativus_pos_desktop/shared/shared.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({super.key});
@@ -356,8 +357,25 @@ class _ProductsPageState extends State<ProductsPage> {
               ),
             );
           },
+          onDelete: () => _confirmDeleteProduct(product),
         ),
     ];
+  }
+
+  Future<void> _confirmDeleteProduct(ProductsEntity product) async {
+    final localizations = AppLocalizations.of(context)!;
+    final shouldDelete = await showAppConfirmationDialog(
+      context: context,
+      title: localizations.delete_product_dialog_title,
+      message: localizations.delete_product_dialog_message,
+      confirmLabel: localizations.delete_action,
+    );
+
+    if (shouldDelete != true || !mounted) {
+      return;
+    }
+
+    context.read<ProductsBloc>().add(DeleteProductEvent(id: product.id));
   }
 
   List<ProductsEntity> _applyFilters({

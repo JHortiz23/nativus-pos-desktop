@@ -19,6 +19,7 @@ class ProductCard extends StatelessWidget {
     required this.productIcon,
     required this.isActive,
     this.onEdit,
+    this.onDelete,
   });
 
   final ProductCardLayout layout;
@@ -29,6 +30,7 @@ class ProductCard extends StatelessWidget {
   final IconData productIcon;
   final bool isActive;
   final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +48,7 @@ class ProductCard extends StatelessWidget {
         productIcon: productIcon,
         isActive: isActive,
         onEdit: onEdit,
+        onDelete: onDelete,
       ),
       ProductCardLayout.list => _ListProductCard(
         name: name,
@@ -55,6 +58,7 @@ class ProductCard extends StatelessWidget {
         productIcon: productIcon,
         isActive: isActive,
         onEdit: onEdit,
+        onDelete: onDelete,
       ),
     };
   }
@@ -69,6 +73,7 @@ class _GridProductCard extends StatelessWidget {
     required this.productIcon,
     required this.isActive,
     this.onEdit,
+    this.onDelete,
   });
 
   final String name;
@@ -78,6 +83,7 @@ class _GridProductCard extends StatelessWidget {
   final IconData productIcon;
   final bool isActive;
   final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -198,6 +204,7 @@ class _ListProductCard extends StatelessWidget {
     required this.productIcon,
     required this.isActive,
     this.onEdit,
+    this.onDelete,
   });
 
   final String name;
@@ -207,6 +214,7 @@ class _ListProductCard extends StatelessWidget {
   final IconData productIcon;
   final bool isActive;
   final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -263,6 +271,7 @@ class _ListProductCard extends StatelessWidget {
                             background: colorScheme.redOrange.withValues(
                               alpha: 0.12,
                             ),
+                            onTap: onDelete,
                           ),
                         ],
                       ),
@@ -303,6 +312,7 @@ class _ListProductCard extends StatelessWidget {
                         background: colorScheme.redOrange.withValues(
                           alpha: 0.12,
                         ),
+                        onTap: onDelete,
                       ),
                     ],
                   ),

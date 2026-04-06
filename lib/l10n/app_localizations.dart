@@ -508,6 +508,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Product Updated Successfully'**
   String get message_product_updated;
+
+  /// No description provided for @delete_action.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete_action;
+
+  /// No description provided for @delete_product_dialog_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Product'**
+  String get delete_product_dialog_title;
+
+  /// No description provided for @delete_product_dialog_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this product? This action cannot be undone.'**
+  String get delete_product_dialog_message;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
