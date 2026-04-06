@@ -83,6 +83,10 @@ Future<void> initInjector() async {
     () => UpdateProductUseCase(productsRepository: sl<ProductsRepository>()),
   );
 
+  sl.registerLazySingleton<DeleteProductUseCase>(
+    () => DeleteProductUseCase(productsRepository: sl<ProductsRepository>()),
+  );
+
   // ** Cubits **
   /// AUTHENTICATION
   sl.registerFactory<LoginCubit>(
@@ -97,6 +101,7 @@ Future<void> initInjector() async {
       getProductsUseCase: sl(),
       getProductCategoriesUseCase: sl(),
       updateProductUseCase: sl(),
+      deleteProductUseCase: sl(),
     ),
   );
 }

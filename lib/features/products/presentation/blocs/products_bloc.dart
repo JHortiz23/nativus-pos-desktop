@@ -14,17 +14,20 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
   final GetProductsUseCase getProductsUseCase;
   final GetProductCategoriesUseCase getProductCategoriesUseCase;
   final UpdateProductUseCase updateProductUseCase;
+  final DeleteProductUseCase deleteProductUseCase;
 
   ProductsBloc({
     required this.addProductUseCase,
     required this.getProductsUseCase,
     required this.getProductCategoriesUseCase,
     required this.updateProductUseCase,
+    required this.deleteProductUseCase,
   }) : super(const ProductsState()) {
     on<AddProductEvent>(_onAddProduct);
     on<GetProductsEvent>(_onGetProducts);
     on<GetProductCategoriesEvent>(_onGetProductCategories);
     on<UpdateProductEvent>(_onUpdateProduct);
+    on<DeleteProductEvent>(_onDeleteProduct);
   }
 
   Future<void> _onAddProduct(
@@ -168,6 +171,44 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
         ),
       );
       // emit a state to trigger products refresh after updating a product
+      add(GetProductsEvent(page: state.page, pageSize: state.pageSize));
+    } catch (e) {
+      emit(
+        ProductError(
+          errorMessage: e.toString(),
+          products: state.products,
+          productCategories: state.productCategories,
+          page: state.page,
+          pageSize: state.pageSize,
+        ),
+      );
+    }
+  }
+
+  Future<void> _onDeleteProduct(
+    DeleteProductEvent event,
+    Emitter<ProductsState> emit,
+  ) async {
+    emit(
+      DeletingProduct(
+        products: state.products,
+        productCategories: state.productCategories,
+        page: state.page,
+        pageSize: state.pageSize,
+      ),
+    );
+
+    try {
+      await deleteProductUseCase(id: event.id);
+      emit(
+        ProductDeleted(
+          products: state.products,
+          productCategories: state.productCategories,
+          page: state.page,
+          pageSize: state.pageSize,
+        ),
+      );
+      // emit a state to trigger products refresh after deleting a product
       add(GetProductsEvent(page: state.page, pageSize: state.pageSize));
     } catch (e) {
       emit(

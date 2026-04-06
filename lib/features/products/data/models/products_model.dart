@@ -2,7 +2,7 @@ import 'package:nativus_pos_desktop/core/utils/helpers/json_parsing_helper.dart'
 import 'package:nativus_pos_desktop/features/products/data/mappers/products_mapper.dart';
 import 'package:nativus_pos_desktop/features/products/domain/entities/products_entity.dart';
 
-class ProductsModel {
+class ProductModel {
   final int id;
   final int? categoryId;
   final String categoryName;
@@ -12,7 +12,7 @@ class ProductsModel {
   final String createdAt;
   final double price;
 
-  ProductsModel({
+  ProductModel({
     required this.id,
     this.categoryId,
     required this.categoryName,
@@ -23,10 +23,10 @@ class ProductsModel {
     required this.price,
   });
 
-  factory ProductsModel.fromJson(Map<String, dynamic> json) {
+  factory ProductModel.fromJson(Map<String, dynamic> json) {
     final category = JsonParsingHelper.asMap(json['category']);
 
-    return ProductsModel(
+    return ProductModel(
       id: JsonParsingHelper.asInt(json['id']),
       categoryId: _parseCategoryId(json, category),
       categoryName: JsonParsingHelper.asString(category['name']),
@@ -38,7 +38,7 @@ class ProductsModel {
     );
   }
 
-  ProductsModel copyWith({
+  ProductModel copyWith({
     int? id,
     int? categoryId,
     String? categoryName,
@@ -48,7 +48,7 @@ class ProductsModel {
     String? createdAt,
     double? price,
   }) {
-    return ProductsModel(
+    return ProductModel(
       id: id ?? this.id,
       categoryId: categoryId ?? this.categoryId,
       categoryName: categoryName ?? this.categoryName,
@@ -60,7 +60,7 @@ class ProductsModel {
     );
   }
 
-  factory ProductsModel.fromEntity(ProductsEntity entity) {
+  factory ProductModel.fromEntity(ProductsEntity entity) {
     return ProductsMapper.fromEntity(entity);
   }
 

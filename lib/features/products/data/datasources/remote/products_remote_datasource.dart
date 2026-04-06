@@ -16,14 +16,14 @@ abstract class ProductsRemoteDataSource {
     required double price,
     required bool isActive,
   });
-  Future<PaginatedResponse<ProductsModel>> getProducts({
+  Future<PaginatedResponse<ProductModel>> getProducts({
     required int page,
     required int pageSize,
   });
 
   Future<List<ProductCategoriesModel>> getProductCategories();
 
-  Future<ProductsModel> updateProduct({
+  Future<ProductModel> updateProduct({
     required int id,
     required int categoryId,
     required String name,
@@ -31,6 +31,8 @@ abstract class ProductsRemoteDataSource {
     required double price,
     required bool isActive,
   });
+
+  Future<ProductModel> deleteProduct({required int id});
 }
 
 class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
@@ -93,7 +95,7 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
   }
 
   @override
-  Future<PaginatedResponse<ProductsModel>> getProducts({
+  Future<PaginatedResponse<ProductModel>> getProducts({
     required int page,
     required int pageSize,
   }) async {
@@ -123,9 +125,9 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
           'Unexpected products payload. Expected a JSON object.',
         );
       }
-      return PaginatedResponse<ProductsModel>.fromJson(
+      return PaginatedResponse<ProductModel>.fromJson(
         decoded,
-        (json) => ProductsModel.fromJson(json),
+        (json) => ProductModel.fromJson(json),
         itemsKey: 'products',
       );
     } catch (e) {
@@ -177,7 +179,7 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
   }
 
   @override
-  Future<ProductsModel> updateProduct({
+  Future<ProductModel> updateProduct({
     required int id,
     required int categoryId,
     required String name,
@@ -222,9 +224,46 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
         );
       }
 
-      return ProductsModel.fromJson(decoded);
+      return ProductModel.fromJson(decoded);
     } catch (e) {
       throw Exception('Error updating product: $e');
+    }
+  }
+
+  @override
+  Future<ProductModel> deleteProduct({required int id}) async {
+    try {
+      final accessToken = _tokenStorage.getAccessToken();
+      if (accessToken == null || accessToken.isEmpty) {
+        throw StateError('Missing access token for delete product request.');
+      }
+
+      final uri = ProductsApiEndpoints.deleteProduct(id: id);
+
+      final headers = HttpHelper.jsonHeaders(accessToken: accessToken);
+      final response = await _client.delete(uri, headers: headers);
+
+      if (response.statusCode < 200 || response.statusCode >= 300) {
+        await HttpHelper.clearSessionIfUnauthorized(
+          statusCode: response.statusCode,
+          storage: _tokenStorage,
+        );
+        throw Exception(
+          'Failed to delete product: HTTP ${response.statusCode}',
+        );
+      }
+
+      final decoded = json.decode(response.body);
+
+      if (decoded is! Map<String, dynamic>) {
+        throw const FormatException(
+          'Unexpected delete product response. Expected a JSON object.',
+        );
+      }
+
+      return ProductModel.fromJson(decoded);
+    } catch (e) {
+      throw Exception('Error deleting product: $e');
     }
   }
 }

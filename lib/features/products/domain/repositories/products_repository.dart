@@ -25,4 +25,5 @@ abstract class ProductsRepository {
     required double price,
     required bool isActive,
   });
+  Future<ProductsEntity> deleteProduct({required int id});
 }

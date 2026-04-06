@@ -2,7 +2,7 @@ import 'package:nativus_pos_desktop/features/products/data/models/products_model
 import 'package:nativus_pos_desktop/features/products/domain/entities/products_entity.dart';
 
 class ProductsMapper {
-  static ProductsEntity toEntity(ProductsModel model) {
+  static ProductsEntity toEntity(ProductModel model) {
     return ProductsEntity(
       id: model.id,
       categoryId: model.categoryId,
@@ -15,8 +15,8 @@ class ProductsMapper {
     );
   }
 
-  static ProductsModel fromEntity(ProductsEntity entity) {
-    return ProductsModel(
+  static ProductModel fromEntity(ProductsEntity entity) {
+    return ProductModel(
       id: entity.id,
       categoryId: entity.categoryId,
       categoryName: entity.categoryName,

@@ -83,4 +83,11 @@ class ProductsRepositoryImpl implements ProductsRepository {
 
     return ProductsMapper.toEntity(model);
   }
+
+  @override
+  Future<ProductsEntity> deleteProduct({required int id}) async {
+    final model = await remoteDataSource.deleteProduct(id: id);
+
+    return ProductsMapper.toEntity(model);
+  }
 }

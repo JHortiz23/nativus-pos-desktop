@@ -110,3 +110,27 @@ class ProductUpdated extends ProductsState {
     super.pageSize,
   });
 }
+
+class DeletingProduct extends ProductsState {
+  const DeletingProduct({
+    super.products,
+    super.productCategories,
+    super.getProductsRequest = RequestsEnum.loading,
+    super.isLoading = true,
+    super.errorMessage = '',
+    super.page,
+    super.pageSize,
+  });
+}
+
+class ProductDeleted extends ProductsState {
+  const ProductDeleted({
+    super.products,
+    super.productCategories,
+    super.getProductsRequest = RequestsEnum.success,
+    super.isLoading = false,
+    super.errorMessage = '',
+    super.page,
+    super.pageSize,
+  });
+}

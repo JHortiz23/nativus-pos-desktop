@@ -29,4 +29,9 @@ class ProductsApiEndpoints {
   static Uri updateProduct({required int id}) {
     return Uri.parse('$baseUrl/products/$id');
   }
+
+  // ** Delete Product **
+  static Uri deleteProduct({required int id}) {
+    return Uri.parse('$baseUrl/products/$id');
+  }
 }
