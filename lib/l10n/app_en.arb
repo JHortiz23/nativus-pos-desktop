@@ -72,6 +72,7 @@
   "message_save_changes": "Save Changes",
   "edit_product": "Edit Product",
   "message_product_updated": "Product Updated Successfully",
+  "message_product_deleted": "Product Deleted Successfully",
   "delete_action": "Delete",
   "delete_product_dialog_title": "Delete Product",
   "delete_product_dialog_message": "Delete this product? This action cannot be undone."

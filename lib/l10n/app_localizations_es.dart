@@ -216,6 +216,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get message_product_updated => 'Producto Actualizado Correctamente';
 
   @override
+  String get message_product_deleted => 'Producto Eliminado Correctamente';
+
+  @override
   String get delete_action => 'Eliminar';
 
   @override

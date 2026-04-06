@@ -509,6 +509,12 @@ abstract class AppLocalizations {
   /// **'Product Updated Successfully'**
   String get message_product_updated;
 
+  /// No description provided for @message_product_deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Product Deleted Successfully'**
+  String get message_product_deleted;
+
   /// No description provided for @delete_action.
   ///
   /// In en, this message translates to:

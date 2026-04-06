@@ -72,6 +72,7 @@
   "message_save_changes": "Guardar Cambios",
   "edit_product": "Editar Producto",
   "message_product_updated": "Producto Actualizado Correctamente",
+  "message_product_deleted": "Producto Eliminado Correctamente",
   "delete_action": "Eliminar",
   "delete_product_dialog_title": "Eliminar Producto",
   "delete_product_dialog_message": "¿Eliminar este producto? Esta acción no se puede deshacer."

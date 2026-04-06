@@ -114,7 +114,7 @@ class AppConfirmationDialog extends StatelessWidget {
                       cancelLabel ?? l10n.add_product_cancel_button,
                       style: theme.textTheme.bodyLarge?.copyWith(
                         color: colorScheme.baseWhite,
-                        fontSize: 16,
+                        fontSize: 15,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -137,7 +137,7 @@ class AppConfirmationDialog extends StatelessWidget {
                       confirmLabel ?? l10n.delete_action,
                       style: theme.textTheme.bodyLarge?.copyWith(
                         color: colorScheme.baseWhite,
-                        fontSize: 16,
+                        fontSize: 15,
                         fontWeight: FontWeight.w800,
                       ),
                     ),
