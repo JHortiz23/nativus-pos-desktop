@@ -299,7 +299,6 @@ class _ProductsPageState extends State<ProductsPage> {
                                   PointerDeviceKind.unknown,
                                 },
                               ),
-                                      alpha: 0.08,
                               child: RawScrollbar(
                                 controller: _categoryScrollController,
                                 thumbVisibility: true,
@@ -322,23 +321,23 @@ class _ProductsPageState extends State<ProductsPage> {
                                 child: SingleChildScrollView(
                                   controller: _categoryScrollController,
                                   scrollDirection: Axis.horizontal,
-                                    padding: const EdgeInsets.only(bottom: 14),
-                                    child: Row(
-                                      children: [
-                                        for (
-                                          var index = 0;
-                                          index < categoryChips.length;
-                                          index++
-                                        ) ...[
-                                          categoryChips[index],
-                                          if (index != categoryChips.length - 1)
-                                            const SizedBox(width: 12),
-                                        ],
+                                  padding: const EdgeInsets.only(bottom: 14),
+                                  child: Row(
+                                    children: [
+                                      for (
+                                        var index = 0;
+                                        index < categoryChips.length;
+                                        index++
+                                      ) ...[
+                                        categoryChips[index],
+                                        if (index != categoryChips.length - 1)
+                                          const SizedBox(width: 12),
                                       ],
-                                    ),
+                                    ],
                                   ),
                                 ),
                               ),
+                            ),
                             const SizedBox(height: 22),
                             Expanded(
                               child: Builder(
@@ -393,6 +392,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                     crossAxisMargin: 2,
                                     child: SingleChildScrollView(
                                       controller: _scrollController,
+                                      padding: const EdgeInsets.only(right: 14),
                                       child: AnimatedSwitcher(
                                         duration: const Duration(
                                           milliseconds: 180,
