@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -30,6 +31,7 @@ class ProductsPage extends StatefulWidget {
 class _ProductsPageState extends State<ProductsPage> {
   late final NumberFormat _currencyFormat;
   late final ScrollController _scrollController;
+  late final ScrollController _categoryScrollController;
   late final TextEditingController _searchController;
   // Products Bloc
   late final ProductsBloc _productsBloc;
@@ -42,6 +44,7 @@ class _ProductsPageState extends State<ProductsPage> {
     super.initState();
     _currencyFormat = NumberFormat.decimalPattern('es_CR');
     _scrollController = ScrollController();
+    _categoryScrollController = ScrollController();
     _searchController = TextEditingController();
     _productsBloc = context.read<ProductsBloc>();
     // Load initial products
@@ -53,6 +56,7 @@ class _ProductsPageState extends State<ProductsPage> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _categoryScrollController.dispose();
     _searchController.dispose();
     super.dispose();
   }
@@ -285,20 +289,64 @@ class _ProductsPageState extends State<ProductsPage> {
                                 ],
                               ),
                             const SizedBox(height: 20),
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children: [
-                                  for (
-                                    var index = 0;
-                                    index < categoryChips.length;
-                                    index++
-                                  ) ...[
-                                    categoryChips[index],
-                                    if (index != categoryChips.length - 1)
-                                      const SizedBox(width: 12),
-                                  ],
-                                ],
+                            ScrollConfiguration(
+                              behavior: const MaterialScrollBehavior().copyWith(
+                                dragDevices: {
+                                  PointerDeviceKind.touch,
+                                  PointerDeviceKind.mouse,
+                                  PointerDeviceKind.trackpad,
+                                  PointerDeviceKind.stylus,
+                                  PointerDeviceKind.unknown,
+                                },
+                              ),
+                              child: ScrollbarTheme(
+                                data: ScrollbarTheme.of(context).copyWith(
+                                  thumbColor: WidgetStatePropertyAll(
+                                    colorScheme.textSoft.withValues(
+                                      alpha: 0.3,
+                                    ),
+                                  ),
+                                  trackColor: WidgetStatePropertyAll(
+                                    colorScheme.textSoft.withValues(
+                                      alpha: 0.08,
+                                    ),
+                                    
+                                  ),
+                                
+                                  trackBorderColor: WidgetStatePropertyAll(
+                                    colorScheme.transparent,
+                                  ),
+                                  radius: const Radius.circular(999),
+                                  thickness: const WidgetStatePropertyAll(6),
+                                  crossAxisMargin: 2,
+                                  minThumbLength: 56,
+                                ),
+                                child: Scrollbar(
+                                  controller: _categoryScrollController,
+                                  thumbVisibility: true,
+                                  trackVisibility: true,
+                                  notificationPredicate: (notification) =>
+                                      notification.metrics.axis ==
+                                      Axis.horizontal,
+                                  child: SingleChildScrollView(
+                                    controller: _categoryScrollController,
+                                    scrollDirection: Axis.horizontal,
+                                    padding: const EdgeInsets.only(bottom: 14),
+                                    child: Row(
+                                      children: [
+                                        for (
+                                          var index = 0;
+                                          index < categoryChips.length;
+                                          index++
+                                        ) ...[
+                                          categoryChips[index],
+                                          if (index != categoryChips.length - 1)
+                                            const SizedBox(width: 12),
+                                        ],
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                             const SizedBox(height: 22),
