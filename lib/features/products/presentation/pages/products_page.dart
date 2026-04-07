@@ -226,117 +226,152 @@ class _ProductsPageState extends State<ProductsPage> {
                           });
                         },
                       );
+                      final categoryChips = <Widget>[
+                        ProductCategoryChip(
+                          label: localizations.all_label,
+                          icon: Icons.apps_rounded,
+                          selected: selectedCategoryId == null,
+                          onTap: () {
+                            setState(() {
+                              _selectedCategoryId = null;
+                            });
+                          },
+                        ),
+                        for (final category in registeredCategories)
+                          ProductCategoryChip(
+                            label: category.name,
+                            icon: ProductCategoryIconHelper.resolve(
+                              category.name,
+                            ),
+                            selected: selectedCategoryId == category.id,
+                            onTap: () {
+                              setState(() {
+                                _selectedCategoryId = category.id;
+                              });
+                            },
+                          ),
+                      ];
 
-                      return Scrollbar(
-                        controller: _scrollController,
-                        child: SingleChildScrollView(
-                          controller: _scrollController,
-                          padding: const EdgeInsets.fromLTRB(8, 24, 8, 24),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (isCompactControls) ...[
-                                interactiveSearchField,
-                                const SizedBox(height: 14),
-                                ProductViewToggle(
-                                  layout: _layout,
-                                  onChanged: (layout) {
-                                    setState(() {
-                                      _layout = layout;
-                                    });
-                                  },
-                                ),
-                              ] else
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Expanded(child: interactiveSearchField),
-                                    const SizedBox(width: 14),
-                                    ProductViewToggle(
-                                      layout: _layout,
-                                      onChanged: (layout) {
-                                        setState(() {
-                                          _layout = layout;
-                                        });
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              const SizedBox(height: 20),
-                              Wrap(
-                                spacing: 12,
-                                runSpacing: 12,
+                      return Padding(
+                        padding: const EdgeInsets.fromLTRB(8, 24, 8, 24),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (isCompactControls) ...[
+                              interactiveSearchField,
+                              const SizedBox(height: 14),
+                              ProductViewToggle(
+                                layout: _layout,
+                                onChanged: (layout) {
+                                  setState(() {
+                                    _layout = layout;
+                                  });
+                                },
+                              ),
+                            ] else
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  ProductCategoryChip(
-                                    label: localizations.all_label,
-                                    icon: Icons.apps_rounded,
-                                    selected: selectedCategoryId == null,
-                                    onTap: () {
+                                  Expanded(child: interactiveSearchField),
+                                  const SizedBox(width: 14),
+                                  ProductViewToggle(
+                                    layout: _layout,
+                                    onChanged: (layout) {
                                       setState(() {
-                                        _selectedCategoryId = null;
+                                        _layout = layout;
                                       });
                                     },
                                   ),
-                                  for (final category in registeredCategories)
-                                    ProductCategoryChip(
-                                      label: category.name,
-                                      icon: ProductCategoryIconHelper.resolve(
-                                        category.name,
-                                      ),
-                                      selected:
-                                          selectedCategoryId == category.id,
-                                      onTap: () {
-                                        setState(() {
-                                          _selectedCategoryId = category.id;
-                                        });
-                                      },
-                                    ),
                                 ],
                               ),
-                              const SizedBox(height: 22),
-                              if (state.isLoading && visibleProducts.isEmpty)
-                                const Center(
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 48),
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                )
-                              else if (state.errorMessage.isNotEmpty &&
-                                  visibleProducts.isEmpty)
-                                ProductsErrorState(
-                                  message: state.errorMessage,
-                                  onRetry: () {
-                                    context.read<ProductsBloc>().add(
-                                      const GetProductsEvent(),
-                                    );
-                                  },
-                                )
-                              else
-                                AnimatedSwitcher(
-                                  duration: const Duration(milliseconds: 180),
-                                  child: visibleProducts.isEmpty
-                                      ? EmptyProductsState(
-                                          key: ValueKey('empty-products-state'),
-                                          query: _searchQuery.trim(),
-                                        )
-                                      : _layout == ProductCardLayout.grid
-                                      ? ProductsGrid(
-                                          key: const ValueKey('products-grid'),
-                                          children: _buildProductCards(
-                                            visibleProducts,
-                                            ProductCardLayout.grid,
-                                          ),
-                                        )
-                                      : ProductsList(
-                                          key: const ValueKey('products-list'),
-                                          children: _buildProductCards(
-                                            visibleProducts,
-                                            ProductCardLayout.list,
-                                          ),
+                            const SizedBox(height: 20),
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  for (
+                                    var index = 0;
+                                    index < categoryChips.length;
+                                    index++
+                                  ) ...[
+                                    categoryChips[index],
+                                    if (index != categoryChips.length - 1)
+                                      const SizedBox(width: 12),
+                                  ],
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 22),
+                            Expanded(
+                              child: Builder(
+                                builder: (context) {
+                                  if (state.isLoading &&
+                                      visibleProducts.isEmpty) {
+                                    return const Center(
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: 48,
                                         ),
-                                ),
-                            ],
-                          ),
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    );
+                                  }
+
+                                  if (state.errorMessage.isNotEmpty &&
+                                      visibleProducts.isEmpty) {
+                                    return ProductsErrorState(
+                                      message: state.errorMessage,
+                                      onRetry: () {
+                                        context.read<ProductsBloc>().add(
+                                          const GetProductsEvent(),
+                                        );
+                                      },
+                                    );
+                                  }
+
+                                  if (visibleProducts.isEmpty) {
+                                    return EmptyProductsState(
+                                      key: const ValueKey(
+                                        'empty-products-state',
+                                      ),
+                                      query: _searchQuery.trim(),
+                                    );
+                                  }
+
+                                  return Scrollbar(
+                                    controller: _scrollController,
+                                    child: SingleChildScrollView(
+                                      controller: _scrollController,
+                                      child: AnimatedSwitcher(
+                                        duration: const Duration(
+                                          milliseconds: 180,
+                                        ),
+                                        child: _layout == ProductCardLayout.grid
+                                            ? ProductsGrid(
+                                                key: const ValueKey(
+                                                  'products-grid',
+                                                ),
+                                                children: _buildProductCards(
+                                                  visibleProducts,
+                                                  ProductCardLayout.grid,
+                                                ),
+                                              )
+                                            : ProductsList(
+                                                key: const ValueKey(
+                                                  'products-list',
+                                                ),
+                                                children: _buildProductCards(
+                                                  visibleProducts,
+                                                  ProductCardLayout.list,
+                                                ),
+                                              ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     },
