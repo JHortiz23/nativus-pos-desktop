@@ -299,38 +299,29 @@ class _ProductsPageState extends State<ProductsPage> {
                                   PointerDeviceKind.unknown,
                                 },
                               ),
-                              child: ScrollbarTheme(
-                                data: ScrollbarTheme.of(context).copyWith(
-                                  thumbColor: WidgetStatePropertyAll(
-                                    colorScheme.textSoft.withValues(
-                                      alpha: 0.3,
-                                    ),
-                                  ),
-                                  trackColor: WidgetStatePropertyAll(
-                                    colorScheme.textSoft.withValues(
                                       alpha: 0.08,
-                                    ),
-                                    
-                                  ),
-                                
-                                  trackBorderColor: WidgetStatePropertyAll(
-                                    colorScheme.transparent,
-                                  ),
-                                  radius: const Radius.circular(999),
-                                  thickness: const WidgetStatePropertyAll(6),
-                                  crossAxisMargin: 2,
-                                  minThumbLength: 56,
+                              child: RawScrollbar(
+                                controller: _categoryScrollController,
+                                thumbVisibility: true,
+                                trackVisibility: true,
+                                thumbColor: colorScheme.textSoft.withValues(
+                                  alpha: 0.3,
                                 ),
-                                child: Scrollbar(
+                                trackColor: colorScheme.textSoft.withValues(
+                                  alpha: 0.08,
+                                ),
+                                trackBorderColor: colorScheme.transparent,
+                                radius: const Radius.circular(999),
+                                trackRadius: const Radius.circular(999),
+                                thickness: 6,
+                                crossAxisMargin: 2,
+                                minThumbLength: 56,
+                                notificationPredicate: (notification) =>
+                                    notification.metrics.axis ==
+                                    Axis.horizontal,
+                                child: SingleChildScrollView(
                                   controller: _categoryScrollController,
-                                  thumbVisibility: true,
-                                  trackVisibility: true,
-                                  notificationPredicate: (notification) =>
-                                      notification.metrics.axis ==
-                                      Axis.horizontal,
-                                  child: SingleChildScrollView(
-                                    controller: _categoryScrollController,
-                                    scrollDirection: Axis.horizontal,
+                                  scrollDirection: Axis.horizontal,
                                     padding: const EdgeInsets.only(bottom: 14),
                                     child: Row(
                                       children: [
@@ -348,7 +339,6 @@ class _ProductsPageState extends State<ProductsPage> {
                                   ),
                                 ),
                               ),
-                            ),
                             const SizedBox(height: 22),
                             Expanded(
                               child: Builder(
@@ -386,8 +376,21 @@ class _ProductsPageState extends State<ProductsPage> {
                                     );
                                   }
 
-                                  return Scrollbar(
+                                  return RawScrollbar(
                                     controller: _scrollController,
+                                    thumbVisibility: true,
+                                    trackVisibility: true,
+                                    thumbColor: colorScheme.textSoft.withValues(
+                                      alpha: 0.2,
+                                    ),
+                                    trackColor: colorScheme.textSoft.withValues(
+                                      alpha: 0.08,
+                                    ),
+                                    trackBorderColor: colorScheme.transparent,
+                                    radius: const Radius.circular(999),
+                                    trackRadius: const Radius.circular(999),
+                                    thickness: 6,
+                                    crossAxisMargin: 2,
                                     child: SingleChildScrollView(
                                       controller: _scrollController,
                                       child: AnimatedSwitcher(
