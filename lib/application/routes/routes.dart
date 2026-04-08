@@ -6,6 +6,7 @@ import 'package:nativus_pos_desktop/features/app_shell/presentation/pages/menu_p
 import 'package:nativus_pos_desktop/features/app_shell/presentation/pages/point_of_sale_page.dart';
 import 'package:nativus_pos_desktop/features/auth/presentation/pages/login_page.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/pages/products_page.dart';
+import 'package:nativus_pos_desktop/features/tables/presentation/pages/table_management_page.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
 
 import 'route_names.dart';
@@ -44,8 +45,7 @@ class AppRouter {
       path: RoutePaths.tableManagement,
       icon: Icons.table_restaurant_outlined,
       label: (localizations) => localizations.sidebarTableManagement,
-      builder: (_, _) =>
-          const MenuPlaceholderPage(section: MenuSection.tableManagement),
+      builder: (_, _) => const TableManagementPage(),
     ),
     ShellNavigationItem(
       section: MenuSection.products,
