@@ -325,7 +325,10 @@ class _TopBar extends StatelessWidget {
               children: [
                 tabButtons,
                 const SizedBox(height: 12),
-                statusLegend,
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: statusLegend,
+                ),
               ],
             );
           }
@@ -333,7 +336,7 @@ class _TopBar extends StatelessWidget {
           return Row(
             children: [
               tabButtons,
-              const SizedBox(width: 24),
+              const Spacer(),
               statusLegend,
             ],
           );
@@ -665,7 +668,7 @@ class _SalonesView extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 20, 8, 24),
+      padding: const EdgeInsets.fromLTRB(8, 0, 8, 24),
       child: RawScrollbar(
         controller: scrollController,
         thumbVisibility: true,
@@ -690,16 +693,6 @@ class _SalonesView extends StatelessWidget {
               final salonCards = <Widget>[
                 for (final salon in _mockSalons)
                   _buildSalonCard(salon, itemWidth),
-                // "New Salon" card
-                SizedBox(
-                  width: itemWidth,
-                  height: 180,
-                  child: NewSalonCard(
-                    onTap: () {
-                      // TODO: implement new salon
-                    },
-                  ),
-                ),
               ];
 
               return Wrap(
