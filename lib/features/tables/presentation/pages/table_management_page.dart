@@ -115,7 +115,9 @@ class _TableManagementPageState extends State<TableManagementPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final totalTables = _mockTables.length;
 
     return Container(
       decoration: BoxDecoration(
@@ -126,7 +128,109 @@ class _TableManagementPageState extends State<TableManagementPage> {
       clipBehavior: Clip.antiAlias,
       child: Column(
         children: [
-          // ── Top bar ──
+          // ── Header ──
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12, 22, 12, 18),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final isCompactHeader = constraints.maxWidth < 760;
+                final titleBlock = Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Gestión de Mesas',
+                      style: theme.textTheme.headlineMedium?.copyWith(
+                        color: colorScheme.baseWhite,
+                        fontSize: 34,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Administra tus mesas, salones y el estado de cada una.',
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: colorScheme.textMuted,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ],
+                );
+                final actionBlock = Flex(
+                  direction:
+                      isCompactHeader ? Axis.vertical : Axis.horizontal,
+                  crossAxisAlignment: isCompactHeader
+                      ? CrossAxisAlignment.start
+                      : CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      totalTables == 1
+                          ? '$totalTables mesa'
+                          : '$totalTables mesas',
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        color: colorScheme.textSoft,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(
+                      width: isCompactHeader ? 0 : 18,
+                      height: isCompactHeader ? 14 : 0,
+                    ),
+                    FilledButton.icon(
+                      onPressed: () {
+                        // TODO: implement new table
+                      },
+                      style: FilledButton.styleFrom(
+                        backgroundColor: colorScheme.accentPrimary,
+                        foregroundColor: colorScheme.black,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 22,
+                          vertical: 18,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        textStyle: theme.textTheme.bodyLarge?.copyWith(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      icon: const Icon(Icons.add_rounded),
+                      label: Text(
+                        _activeTab == _MainTab.gestionMesas
+                            ? 'Nueva Mesa'
+                            : 'Nuevo Salón',
+                      ),
+                    ),
+                  ],
+                );
+
+                if (isCompactHeader) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      titleBlock,
+                      const SizedBox(height: 18),
+                      actionBlock,
+                    ],
+                  );
+                }
+
+                return Row(
+                  children: [
+                    Expanded(child: titleBlock),
+                    const SizedBox(width: 18),
+                    actionBlock,
+                  ],
+                );
+              },
+            ),
+          ),
+          Divider(
+            height: 1,
+            color: colorScheme.softBorder.withValues(alpha: 0.7),
+          ),
+          // ── Tab bar ──
           _TopBar(
             activeTab: _activeTab,
             onTabChanged: (tab) => setState(() => _activeTab = tab),
@@ -173,7 +277,6 @@ class _TopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final colorScheme = Theme.of(context).colorScheme;
 
     return Padding(
@@ -216,46 +319,13 @@ class _TopBar extends StatelessWidget {
             ],
           );
 
-          final actionButton = FilledButton.icon(
-            onPressed: () {
-              // TODO: implement action
-            },
-            style: FilledButton.styleFrom(
-              backgroundColor: colorScheme.accentPrimary,
-              foregroundColor: colorScheme.black,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 22,
-                vertical: 18,
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              textStyle: theme.textTheme.bodyLarge?.copyWith(
-                fontSize: 15,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            icon: const Icon(Icons.add_rounded),
-            label: Text(
-              activeTab == _MainTab.gestionMesas
-                  ? 'Nueva Mesa'
-                  : 'Nuevo Salón',
-            ),
-          );
-
           if (isCompact) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 tabButtons,
                 const SizedBox(height: 12),
-                Row(
-                  children: [
-                    statusLegend,
-                    const Spacer(),
-                    actionButton,
-                  ],
-                ),
+                statusLegend,
               ],
             );
           }
@@ -265,8 +335,6 @@ class _TopBar extends StatelessWidget {
               tabButtons,
               const SizedBox(width: 24),
               statusLegend,
-              const Spacer(),
-              actionButton,
             ],
           );
         },
