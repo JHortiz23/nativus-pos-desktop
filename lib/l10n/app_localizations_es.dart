@@ -226,4 +226,98 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get delete_product_dialog_message => '¿Eliminar este producto? Esta acción no se puede deshacer.';
+
+  @override
+  String get table_management => 'Gestión de Mesas';
+
+  @override
+  String get table_management_description => 'Administra tus mesas, salones y el estado de cada una.';
+
+  @override
+  String get table_management_tables_tab => 'Gestión de Mesas';
+
+  @override
+  String get table_management_salons_tab => 'Salones';
+
+  @override
+  String get table_management_status_available => 'Disponible';
+
+  @override
+  String get table_management_status_occupied => 'Ocupada';
+
+  @override
+  String get table_management_new_table => 'Nueva Mesa';
+
+  @override
+  String get table_management_new_salon => 'Nuevo Salón';
+
+  @override
+  String get table_management_new_salon_description => 'Agregar área al restaurante';
+
+  @override
+  String get table_management_all_salons => 'Todos los Salones';
+
+  @override
+  String get table_management_salon_main => 'Salón Principal';
+
+  @override
+  String get table_management_salon_vip => 'Salón VIP';
+
+  @override
+  String get table_management_salon_terrace => 'Terraza';
+
+  @override
+  String table_management_tables_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '# mesas',
+      one: '# mesa',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String table_management_available_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '# disponibles',
+      one: '# disponible',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String table_management_people_count(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '# personas',
+      one: '# persona',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String table_management_table_name(int number) {
+    return 'Mesa $number';
+  }
+
+  @override
+  String table_management_salon_summary(int totalTables, int occupiedTables) {
+    String _temp0 = intl.Intl.pluralLogic(
+      totalTables,
+      locale: localeName,
+      other: '# mesas',
+      one: '# mesa',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      occupiedTables,
+      locale: localeName,
+      other: '# ocupadas',
+      one: '# ocupada',
+    );
+    return '$_temp0 · $_temp1';
+  }
 }

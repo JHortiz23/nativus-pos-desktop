@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/widgets/tables/table_card.dart';
+import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
 
 class SalonCard extends StatefulWidget {
   const SalonCard({
@@ -37,6 +38,7 @@ class _SalonCardState extends State<SalonCard> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final localizations = AppLocalizations.of(context)!;
 
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
@@ -112,7 +114,10 @@ class _SalonCardState extends State<SalonCard> {
                             ),
                             const SizedBox(height: 3),
                             Text(
-                              '${widget.totalTables} mesas · ${widget.occupiedTables} ocupada',
+                              localizations.table_management_salon_summary(
+                                widget.totalTables,
+                                widget.occupiedTables,
+                              ),
                               style: theme.textTheme.bodyMedium?.copyWith(
                                 color: colorScheme.textMuted,
                                 fontSize: 13,
@@ -177,6 +182,7 @@ class _NewSalonCardState extends State<NewSalonCard> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final localizations = AppLocalizations.of(context)!;
 
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
@@ -228,7 +234,7 @@ class _NewSalonCardState extends State<NewSalonCard> {
                 ),
                 const SizedBox(height: 14),
                 Text(
-                  'Nuevo Salón',
+                  localizations.table_management_new_salon,
                   style: theme.textTheme.headlineSmall?.copyWith(
                     color: colorScheme.baseWhite,
                     fontSize: 16,
@@ -237,7 +243,7 @@ class _NewSalonCardState extends State<NewSalonCard> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Agregar área al restaurante',
+                  localizations.table_management_new_salon_description,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: colorScheme.textMuted,
                     fontSize: 13,

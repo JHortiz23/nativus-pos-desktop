@@ -75,5 +75,61 @@
   "message_product_deleted": "Producto Eliminado Correctamente",
   "delete_action": "Eliminar",
   "delete_product_dialog_title": "Eliminar Producto",
-  "delete_product_dialog_message": "¿Eliminar este producto? Esta acción no se puede deshacer."
+  "delete_product_dialog_message": "¿Eliminar este producto? Esta acción no se puede deshacer.",
+  "table_management": "Gestión de Mesas",
+  "table_management_description": "Administra tus mesas, salones y el estado de cada una.",
+  "table_management_tables_tab": "Gestión de Mesas",
+  "table_management_salons_tab": "Salones",
+  "table_management_status_available": "Disponible",
+  "table_management_status_occupied": "Ocupada",
+  "table_management_new_table": "Nueva Mesa",
+  "table_management_new_salon": "Nuevo Salón",
+  "table_management_new_salon_description": "Agregar área al restaurante",
+  "table_management_all_salons": "Todos los Salones",
+  "table_management_salon_main": "Salón Principal",
+  "table_management_salon_vip": "Salón VIP",
+  "table_management_salon_terrace": "Terraza",
+  "table_management_tables_count": "{count, plural, =1{# mesa} other{# mesas}}",
+  "@table_management_tables_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "table_management_available_count": "{count, plural, =1{# disponible} other{# disponibles}}",
+  "@table_management_available_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "table_management_people_count": "{count, plural, =1{# persona} other{# personas}}",
+  "@table_management_people_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "table_management_table_name": "Mesa {number}",
+  "@table_management_table_name": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "table_management_salon_summary": "{totalTables, plural, =1{# mesa} other{# mesas}} · {occupiedTables, plural, =1{# ocupada} other{# ocupadas}}",
+  "@table_management_salon_summary": {
+    "placeholders": {
+      "totalTables": {
+        "type": "int"
+      },
+      "occupiedTables": {
+        "type": "int"
+      }
+    }
+  }
 }

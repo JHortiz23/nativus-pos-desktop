@@ -75,6 +75,62 @@
   "message_product_deleted": "Product Deleted Successfully",
   "delete_action": "Delete",
   "delete_product_dialog_title": "Delete Product",
-  "delete_product_dialog_message": "Delete this product? This action cannot be undone."
+  "delete_product_dialog_message": "Delete this product? This action cannot be undone.",
+  "table_management": "Table Maganement",
+  "table_management_description": "Manage your tables, dining areas, and the status of each one.",
+  "table_management_tables_tab": "Table Management",
+  "table_management_salons_tab": "Salons",
+  "table_management_status_available": "Available",
+  "table_management_status_occupied": "Occupied",
+  "table_management_new_table": "New Table",
+  "table_management_new_salon": "New Salon",
+  "table_management_new_salon_description": "Add dining area to the restaurant",
+  "table_management_all_salons": "All Salons",
+  "table_management_salon_main": "Main Hall",
+  "table_management_salon_vip": "VIP Hall",
+  "table_management_salon_terrace": "Terrace",
+  "table_management_tables_count": "{count, plural, =1{# table} other{# tables}}",
+  "@table_management_tables_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "table_management_available_count": "{count, plural, =1{# available} other{# available}}",
+  "@table_management_available_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "table_management_people_count": "{count, plural, =1{# person} other{# people}}",
+  "@table_management_people_count": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "table_management_table_name": "Table {number}",
+  "@table_management_table_name": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "table_management_salon_summary": "{totalTables, plural, =1{# table} other{# tables}} · {occupiedTables, plural, =1{# occupied} other{# occupied}}",
+  "@table_management_salon_summary": {
+    "placeholders": {
+      "totalTables": {
+        "type": "int"
+      },
+      "occupiedTables": {
+        "type": "int"
+      }
+    }
+  }
 }
 

@@ -532,6 +532,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete this product? This action cannot be undone.'**
   String get delete_product_dialog_message;
+
+  /// No description provided for @table_management.
+  ///
+  /// In en, this message translates to:
+  /// **'Table Maganement'**
+  String get table_management;
+
+  /// No description provided for @table_management_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage your tables, dining areas, and the status of each one.'**
+  String get table_management_description;
+
+  /// No description provided for @table_management_tables_tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Table Management'**
+  String get table_management_tables_tab;
+
+  /// No description provided for @table_management_salons_tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Salons'**
+  String get table_management_salons_tab;
+
+  /// No description provided for @table_management_status_available.
+  ///
+  /// In en, this message translates to:
+  /// **'Available'**
+  String get table_management_status_available;
+
+  /// No description provided for @table_management_status_occupied.
+  ///
+  /// In en, this message translates to:
+  /// **'Occupied'**
+  String get table_management_status_occupied;
+
+  /// No description provided for @table_management_new_table.
+  ///
+  /// In en, this message translates to:
+  /// **'New Table'**
+  String get table_management_new_table;
+
+  /// No description provided for @table_management_new_salon.
+  ///
+  /// In en, this message translates to:
+  /// **'New Salon'**
+  String get table_management_new_salon;
+
+  /// No description provided for @table_management_new_salon_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Add dining area to the restaurant'**
+  String get table_management_new_salon_description;
+
+  /// No description provided for @table_management_all_salons.
+  ///
+  /// In en, this message translates to:
+  /// **'All Salons'**
+  String get table_management_all_salons;
+
+  /// No description provided for @table_management_salon_main.
+  ///
+  /// In en, this message translates to:
+  /// **'Main Hall'**
+  String get table_management_salon_main;
+
+  /// No description provided for @table_management_salon_vip.
+  ///
+  /// In en, this message translates to:
+  /// **'VIP Hall'**
+  String get table_management_salon_vip;
+
+  /// No description provided for @table_management_salon_terrace.
+  ///
+  /// In en, this message translates to:
+  /// **'Terrace'**
+  String get table_management_salon_terrace;
+
+  /// No description provided for @table_management_tables_count.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{# table} other{# tables}}'**
+  String table_management_tables_count(int count);
+
+  /// No description provided for @table_management_available_count.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{# available} other{# available}}'**
+  String table_management_available_count(int count);
+
+  /// No description provided for @table_management_people_count.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{# person} other{# people}}'**
+  String table_management_people_count(int count);
+
+  /// No description provided for @table_management_table_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Table {number}'**
+  String table_management_table_name(int number);
+
+  /// No description provided for @table_management_salon_summary.
+  ///
+  /// In en, this message translates to:
+  /// **'{totalTables, plural, =1{# table} other{# tables}} · {occupiedTables, plural, =1{# occupied} other{# occupied}}'**
+  String table_management_salon_summary(int totalTables, int occupiedTables);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

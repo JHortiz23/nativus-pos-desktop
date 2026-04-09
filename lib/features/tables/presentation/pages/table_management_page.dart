@@ -4,6 +4,7 @@ import 'package:nativus_pos_desktop/application/theme/theme.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/widgets/tables/salon_card.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/widgets/tables/salon_tab_chip.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/widgets/tables/table_card.dart';
+import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
 
 // ─── Mock Data ──────────────────────────────────────────────────────────────
 
@@ -11,7 +12,6 @@ class _MockTable {
   const _MockTable({
     required this.id,
     required this.number,
-    required this.name,
     required this.capacity,
     required this.status,
     required this.salonId,
@@ -19,7 +19,6 @@ class _MockTable {
 
   final int id;
   final int number;
-  final String name;
   final int capacity;
   final TableStatus status;
   final int salonId;
@@ -28,13 +27,11 @@ class _MockTable {
 class _MockSalon {
   const _MockSalon({
     required this.id,
-    required this.name,
     required this.icon,
     required this.accentColor,
   });
 
   final int id;
-  final String name;
   final String icon;
   final Color accentColor;
 }
@@ -42,19 +39,16 @@ class _MockSalon {
 const _mockSalons = <_MockSalon>[
   _MockSalon(
     id: 1,
-    name: 'Salón Principal',
     icon: '🏠',
     accentColor: Color(0xFFF0A45F),
   ),
   _MockSalon(
     id: 2,
-    name: 'Salón VIP',
     icon: '⭐',
     accentColor: Color(0xFF65C466),
   ),
   _MockSalon(
     id: 3,
-    name: 'Terraza',
     icon: '🌿',
     accentColor: Color(0xFF5B8DEF),
   ),
@@ -62,20 +56,29 @@ const _mockSalons = <_MockSalon>[
 
 const _mockTables = <_MockTable>[
   // Salón Principal (5 mesas)
-  _MockTable(id: 1, number: 1, name: 'Mesa 1', capacity: 2, status: TableStatus.disponible, salonId: 1),
-  _MockTable(id: 2, number: 2, name: 'Mesa 2', capacity: 4, status: TableStatus.ocupada, salonId: 1),
-  _MockTable(id: 3, number: 3, name: 'Mesa 3', capacity: 4, status: TableStatus.disponible, salonId: 1),
-  _MockTable(id: 4, number: 4, name: 'Mesa 4', capacity: 6, status: TableStatus.disponible, salonId: 1),
-  _MockTable(id: 5, number: 5, name: 'Mesa 5', capacity: 8, status: TableStatus.disponible, salonId: 1),
+  _MockTable(id: 1, number: 1, capacity: 2, status: TableStatus.disponible, salonId: 1),
+  _MockTable(id: 2, number: 2, capacity: 4, status: TableStatus.ocupada, salonId: 1),
+  _MockTable(id: 3, number: 3, capacity: 4, status: TableStatus.disponible, salonId: 1),
+  _MockTable(id: 4, number: 4, capacity: 6, status: TableStatus.disponible, salonId: 1),
+  _MockTable(id: 5, number: 5, capacity: 8, status: TableStatus.disponible, salonId: 1),
   // Salón VIP (3 mesas)
-  _MockTable(id: 6, number: 6, name: 'Mesa 6', capacity: 2, status: TableStatus.disponible, salonId: 2),
-  _MockTable(id: 7, number: 7, name: 'Mesa 7', capacity: 4, status: TableStatus.ocupada, salonId: 2),
-  _MockTable(id: 8, number: 8, name: 'Mesa 8', capacity: 6, status: TableStatus.disponible, salonId: 2),
+  _MockTable(id: 6, number: 6, capacity: 2, status: TableStatus.disponible, salonId: 2),
+  _MockTable(id: 7, number: 7, capacity: 4, status: TableStatus.ocupada, salonId: 2),
+  _MockTable(id: 8, number: 8, capacity: 6, status: TableStatus.disponible, salonId: 2),
   // Terraza (3 mesas)
-  _MockTable(id: 9, number: 9, name: 'Mesa 9', capacity: 2, status: TableStatus.disponible, salonId: 3),
-  _MockTable(id: 10, number: 10, name: 'Mesa 10', capacity: 4, status: TableStatus.disponible, salonId: 3),
-  _MockTable(id: 11, number: 11, name: 'Mesa 11', capacity: 4, status: TableStatus.ocupada, salonId: 3),
+  _MockTable(id: 9, number: 9, capacity: 2, status: TableStatus.disponible, salonId: 3),
+  _MockTable(id: 10, number: 10, capacity: 4, status: TableStatus.disponible, salonId: 3),
+  _MockTable(id: 11, number: 11, capacity: 4, status: TableStatus.ocupada, salonId: 3),
 ];
+
+String _salonName(AppLocalizations localizations, int salonId) {
+  return switch (salonId) {
+    1 => localizations.table_management_salon_main,
+    2 => localizations.table_management_salon_vip,
+    3 => localizations.table_management_salon_terrace,
+    _ => localizations.table_management_salons_tab,
+  };
+}
 
 // ─── Page ───────────────────────────────────────────────────────────────────
 
@@ -117,6 +120,7 @@ class _TableManagementPageState extends State<TableManagementPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final localizations = AppLocalizations.of(context)!;
     final totalTables = _mockTables.length;
 
     return Container(
@@ -138,7 +142,7 @@ class _TableManagementPageState extends State<TableManagementPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Gestión de Mesas',
+                      localizations.table_management,
                       style: theme.textTheme.headlineMedium?.copyWith(
                         color: colorScheme.baseWhite,
                         fontSize: 34,
@@ -147,7 +151,7 @@ class _TableManagementPageState extends State<TableManagementPage> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Administra tus mesas, salones y el estado de cada una.',
+                      localizations.table_management_description,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: colorScheme.textMuted,
                         fontSize: 15,
@@ -163,9 +167,7 @@ class _TableManagementPageState extends State<TableManagementPage> {
                       : CrossAxisAlignment.center,
                   children: [
                     Text(
-                      totalTables == 1
-                          ? '$totalTables mesa'
-                          : '$totalTables mesas',
+                      localizations.table_management_tables_count(totalTables),
                       style: theme.textTheme.bodyLarge?.copyWith(
                         color: colorScheme.textSoft,
                         fontSize: 15,
@@ -198,8 +200,8 @@ class _TableManagementPageState extends State<TableManagementPage> {
                       icon: const Icon(Icons.add_rounded),
                       label: Text(
                         _activeTab == _MainTab.gestionMesas
-                            ? 'Nueva Mesa'
-                            : 'Nuevo Salón',
+                            ? localizations.table_management_new_table
+                            : localizations.table_management_new_salon,
                       ),
                     ),
                   ],
@@ -278,6 +280,7 @@ class _TopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final localizations = AppLocalizations.of(context)!;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
@@ -289,14 +292,14 @@ class _TopBar extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               _MainTabButton(
-                label: 'Gestión de Mesas',
+                label: localizations.table_management_tables_tab,
                 icon: '🏠',
                 selected: activeTab == _MainTab.gestionMesas,
                 onTap: () => onTabChanged(_MainTab.gestionMesas),
               ),
               const SizedBox(width: 8),
               _MainTabButton(
-                label: 'Salones',
+                label: localizations.table_management_salons_tab,
                 icon: '🏘️',
                 selected: activeTab == _MainTab.salones,
                 onTap: () => onTabChanged(_MainTab.salones),
@@ -309,12 +312,12 @@ class _TopBar extends StatelessWidget {
             children: [
               _StatusDot(
                 color: colorScheme.baseGreen,
-                label: 'Disponible',
+                label: localizations.table_management_status_available,
               ),
               const SizedBox(width: 14),
               _StatusDot(
                 color: colorScheme.redOrange,
-                label: 'Ocupada',
+                label: localizations.table_management_status_occupied,
               ),
             ],
           );
@@ -453,6 +456,7 @@ class _GestionMesasView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final localizations = AppLocalizations.of(context)!;
 
     // Group tables by salon
     final groupedBySalon = <int, List<_MockTable>>{};
@@ -482,7 +486,7 @@ class _GestionMesasView extends StatelessWidget {
               child: Row(
                 children: [
                   SalonTabChip(
-                    label: 'Todos los Salones',
+                    label: localizations.table_management_all_salons,
                     icon: '🏠',
                     count: _mockTables.length,
                     selected: selectedSalonId == null,
@@ -491,7 +495,7 @@ class _GestionMesasView extends StatelessWidget {
                   const SizedBox(width: 8),
                   for (final salon in _mockSalons) ...[
                     SalonTabChip(
-                      label: salon.name,
+                      label: _salonName(localizations, salon.id),
                       icon: salon.icon,
                       count: _mockTables
                           .where((t) => t.salonId == salon.id)
@@ -559,6 +563,7 @@ class _SalonSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final localizations = AppLocalizations.of(context)!;
     final available =
         tables.where((t) => t.status == TableStatus.disponible).length;
 
@@ -573,7 +578,7 @@ class _SalonSection extends StatelessWidget {
               Text(salon.icon, style: const TextStyle(fontSize: 22)),
               const SizedBox(width: 10),
               Text(
-                salon.name,
+                _salonName(localizations, salon.id),
                 style: theme.textTheme.headlineSmall?.copyWith(
                   color: colorScheme.baseWhite,
                   fontSize: 18,
@@ -591,7 +596,7 @@ class _SalonSection extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
-                  '${tables.length} mesas',
+                  localizations.table_management_tables_count(tables.length),
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: colorScheme.textMuted,
                     fontSize: 12,
@@ -601,7 +606,7 @@ class _SalonSection extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                '$available disponibles',
+                localizations.table_management_available_count(available),
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: colorScheme.textMuted,
                   fontSize: 13,
@@ -633,7 +638,7 @@ class _SalonSection extends StatelessWidget {
                             (crossAxisCount - 1) * 14) /
                         crossAxisCount,
                     child: TableCard(
-                      name: table.name,
+                      name: localizations.table_management_table_name(table.number),
                       capacity: table.capacity,
                       status: table.status,
                       onEdit: () {
@@ -666,6 +671,7 @@ class _SalonesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final localizations = AppLocalizations.of(context)!;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 0, 8, 24),
@@ -692,7 +698,7 @@ class _SalonesView extends StatelessWidget {
 
               final salonCards = <Widget>[
                 for (final salon in _mockSalons)
-                  _buildSalonCard(salon, itemWidth),
+                  _buildSalonCard(localizations, salon, itemWidth),
               ];
 
               return Wrap(
@@ -707,7 +713,11 @@ class _SalonesView extends StatelessWidget {
     );
   }
 
-  Widget _buildSalonCard(_MockSalon salon, double width) {
+  Widget _buildSalonCard(
+    AppLocalizations localizations,
+    _MockSalon salon,
+    double width,
+  ) {
     final salonTables =
         _mockTables.where((t) => t.salonId == salon.id).toList();
     final occupied =
@@ -716,7 +726,7 @@ class _SalonesView extends StatelessWidget {
     return SizedBox(
       width: width,
       child: SalonCard(
-        name: salon.name,
+        name: _salonName(localizations, salon.id),
         icon: salon.icon,
         accentColor: salon.accentColor,
         totalTables: salonTables.length,

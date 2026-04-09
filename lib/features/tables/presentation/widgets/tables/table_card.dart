@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
+import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
 
 enum TableStatus { disponible, ocupada }
 
@@ -33,10 +34,10 @@ class _TableCardState extends State<TableCard> {
     };
   }
 
-  String _statusLabel() {
+  String _statusLabel(AppLocalizations localizations) {
     return switch (widget.status) {
-      TableStatus.disponible => 'Disponible',
-      TableStatus.ocupada => 'Ocupada',
+      TableStatus.disponible => localizations.table_management_status_available,
+      TableStatus.ocupada => localizations.table_management_status_occupied,
     };
   }
 
@@ -44,6 +45,7 @@ class _TableCardState extends State<TableCard> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = Theme.of(context).colorScheme;
+    final localizations = AppLocalizations.of(context)!;
     final statusColor = _statusColor(colorScheme);
 
     return MouseRegion(
@@ -97,7 +99,7 @@ class _TableCardState extends State<TableCard> {
                   ),
                   const SizedBox(width: 5),
                   Text(
-                    '${widget.capacity} personas',
+                    localizations.table_management_people_count(widget.capacity),
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: colorScheme.textMuted,
                       fontSize: 13,
@@ -119,7 +121,7 @@ class _TableCardState extends State<TableCard> {
                   ),
                   const SizedBox(width: 6),
                   Text(
-                    _statusLabel(),
+                    _statusLabel(localizations),
                     style: theme.textTheme.bodyLarge?.copyWith(
                       color: statusColor,
                       fontSize: 13,
