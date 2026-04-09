@@ -554,7 +554,7 @@ abstract class AppLocalizations {
   /// No description provided for @table_management_salons_tab.
   ///
   /// In en, this message translates to:
-  /// **'Salons'**
+  /// **'Dining Areas'**
   String get table_management_salons_tab;
 
   /// No description provided for @table_management_status_available.
@@ -578,31 +578,31 @@ abstract class AppLocalizations {
   /// No description provided for @table_management_new_salon.
   ///
   /// In en, this message translates to:
-  /// **'New Salon'**
+  /// **'New Dining Area'**
   String get table_management_new_salon;
 
   /// No description provided for @table_management_new_salon_description.
   ///
   /// In en, this message translates to:
-  /// **'Add dining area to the restaurant'**
+  /// **'Add a dining area to the restaurant'**
   String get table_management_new_salon_description;
 
   /// No description provided for @table_management_all_salons.
   ///
   /// In en, this message translates to:
-  /// **'All Salons'**
+  /// **'All Dining Areas'**
   String get table_management_all_salons;
 
   /// No description provided for @table_management_salon_main.
   ///
   /// In en, this message translates to:
-  /// **'Main Hall'**
+  /// **'Main Dining Room'**
   String get table_management_salon_main;
 
   /// No description provided for @table_management_salon_vip.
   ///
   /// In en, this message translates to:
-  /// **'VIP Hall'**
+  /// **'VIP Dining Room'**
   String get table_management_salon_vip;
 
   /// No description provided for @table_management_salon_terrace.

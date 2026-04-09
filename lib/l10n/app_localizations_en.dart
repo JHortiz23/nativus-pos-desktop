@@ -237,7 +237,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get table_management_tables_tab => 'Table Management';
 
   @override
-  String get table_management_salons_tab => 'Salons';
+  String get table_management_salons_tab => 'Dining Areas';
 
   @override
   String get table_management_status_available => 'Available';
@@ -249,19 +249,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get table_management_new_table => 'New Table';
 
   @override
-  String get table_management_new_salon => 'New Salon';
+  String get table_management_new_salon => 'New Dining Area';
 
   @override
-  String get table_management_new_salon_description => 'Add dining area to the restaurant';
+  String get table_management_new_salon_description => 'Add a dining area to the restaurant';
 
   @override
-  String get table_management_all_salons => 'All Salons';
+  String get table_management_all_salons => 'All Dining Areas';
 
   @override
-  String get table_management_salon_main => 'Main Hall';
+  String get table_management_salon_main => 'Main Dining Room';
 
   @override
-  String get table_management_salon_vip => 'VIP Hall';
+  String get table_management_salon_vip => 'VIP Dining Room';
 
   @override
   String get table_management_salon_terrace => 'Terrace';
