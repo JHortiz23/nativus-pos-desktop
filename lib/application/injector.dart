@@ -12,7 +12,13 @@ import 'package:nativus_pos_desktop/features/products/data/repositories/products
 import 'package:nativus_pos_desktop/features/products/domain/repositories/products_repository.dart';
 import 'package:nativus_pos_desktop/features/products/domain/use_cases/product_use_cases.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/blocs/products_bloc.dart';
+import 'package:nativus_pos_desktop/features/tables/data/datasources/remote/tables_remote_datasource.dart';
+import 'package:nativus_pos_desktop/features/tables/data/repositories/tables_repository_impl.dart';
+import 'package:nativus_pos_desktop/features/tables/domain/repositories/tables_repository.dart';
+import 'package:nativus_pos_desktop/features/tables/presentation/blocs/tables_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../features/tables/domain/use_cases/tables_use_cases_export.dart';
 
 final sl = GetIt.instance;
 
@@ -42,6 +48,14 @@ Future<void> initInjector() async {
     ),
   );
 
+  /// TABLES
+  sl.registerLazySingleton<TablesRemoteDataSource>(
+    () => TablesRemoteDataSourceImpl(
+      client: sl<http.Client>(),
+      tokenStorage: sl<AuthTokenStorage>(),
+    ),
+  );
+
   // ** Repositories **
   /// AUTHENTICATION
   sl.registerLazySingleton<AuthRepository>(
@@ -56,6 +70,11 @@ Future<void> initInjector() async {
     () => ProductsRepositoryImpl(
       remoteDataSource: sl<ProductsRemoteDataSource>(),
     ),
+  );
+
+  /// TABLES
+  sl.registerLazySingleton<TablesRepository>(
+    () => TablesRepositoryImpl(remoteDataSource: sl<TablesRemoteDataSource>()),
   );
 
   // ** Use Cases **
@@ -87,6 +106,11 @@ Future<void> initInjector() async {
     () => DeleteProductUseCase(productsRepository: sl<ProductsRepository>()),
   );
 
+  /// TABLES
+  sl.registerLazySingleton<GetDiningAreasUseCase>(
+    () => GetDiningAreasUseCase(tablesRepository: sl<TablesRepository>()),
+  );
+
   // ** Cubits **
   /// AUTHENTICATION
   sl.registerFactory<LoginCubit>(
@@ -102,6 +126,13 @@ Future<void> initInjector() async {
       getProductCategoriesUseCase: sl(),
       updateProductUseCase: sl(),
       deleteProductUseCase: sl(),
+    ),
+  );
+
+  /// TABLES
+  sl.registerFactory<TablesBloc>(
+    () => TablesBloc(
+      getDiningAreasUseCase: sl(),
     ),
   );
 }
