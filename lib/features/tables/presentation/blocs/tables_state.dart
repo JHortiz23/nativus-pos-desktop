@@ -1,8 +1,9 @@
 part of 'tables_bloc.dart';
 
-class   TablesState extends Equatable {
+class TablesState extends Equatable {
   // final PaginatedResponse<ProductsEntity>? products;
   final List<DiningAreaEntity>? diningAreas;
+  final TableSummaryEntity? summary;
   final bool isLoading;
   final String errorMessage;
   final int page;
@@ -11,6 +12,7 @@ class   TablesState extends Equatable {
   const TablesState({
     // this.products,
     this.diningAreas,
+    this.summary,
     this.isLoading = false,
     this.errorMessage = '',
     this.page = 1,
@@ -20,6 +22,7 @@ class   TablesState extends Equatable {
   TablesState copyWith({
     PaginatedResponse<ProductsEntity>? products,
     List<DiningAreaEntity>? diningAreas,
+    TableSummaryEntity? summary,
     RequestsEnum? getProductsRequest,
     bool? isLoading,
     String? errorMessage,
@@ -29,6 +32,7 @@ class   TablesState extends Equatable {
     return TablesState(
       // products: products ?? this.products,
       diningAreas: diningAreas ?? this.diningAreas,
+      summary: summary ?? this.summary,
       isLoading: isLoading ?? this.isLoading,
       errorMessage: errorMessage ?? this.errorMessage,
       page: page ?? this.page,
@@ -40,6 +44,7 @@ class   TablesState extends Equatable {
   List<Object?> get props => [
     // products,
     diningAreas,
+    summary,
     // getProductsRequest,
     isLoading,
     errorMessage,
@@ -53,6 +58,7 @@ class TablesError extends TablesState {
     required super.errorMessage,
     // super.products,
     super.diningAreas,
+    super.summary,
     // super.getProductsRequest = RequestsEnum.failure,
     super.isLoading = false,
     super.page,
@@ -64,6 +70,7 @@ class LoadingDiningAreas extends TablesState {
   const LoadingDiningAreas({
     // super.products,
     super.diningAreas,
+    super.summary,
     // super.getProductsRequest = RequestsEnum.loading,
     super.isLoading = true,
     super.errorMessage = '',
@@ -76,6 +83,7 @@ class DiningAreasLoaded extends TablesState {
   const DiningAreasLoaded({
     // super.products,
     super.diningAreas,
+    super.summary,
     // super.getProductsRequest = RequestsEnum.success,
     super.isLoading = false,
     super.errorMessage = '',

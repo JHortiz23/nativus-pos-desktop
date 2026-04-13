@@ -1,5 +1,5 @@
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
-import 'package:http/http.dart' as http;
 import 'package:nativus_pos_desktop/core/utils/helpers/auth_token_storage.dart';
 import 'package:nativus_pos_desktop/features/auth/data/datasources/local/auth_local_datasource.dart';
 import 'package:nativus_pos_desktop/features/auth/data/datasources/remote/auth_remote_datasource.dart';
@@ -26,7 +26,7 @@ Future<void> initInjector() async {
   final sharedPreferences = await SharedPreferences.getInstance();
 
   sl.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
-  sl.registerLazySingleton<http.Client>(() => http.Client());
+  sl.registerLazySingleton<Dio>(() => Dio());
   sl.registerLazySingleton<AuthTokenStorage>(
     () => AuthTokenStorage(preferences: sl<SharedPreferences>()),
   );
@@ -37,13 +37,13 @@ Future<void> initInjector() async {
   );
 
   sl.registerLazySingleton<AuthRemoteDataSource>(
-    () => AuthRemoteDataSourceImpl(client: sl<http.Client>()),
+    () => AuthRemoteDataSourceImpl(client: sl<Dio>()),
   );
 
   /// PRODUCTS
   sl.registerLazySingleton<ProductsRemoteDataSource>(
     () => ProductsRemoteDataSourceImpl(
-      client: sl<http.Client>(),
+      client: sl<Dio>(),
       tokenStorage: sl<AuthTokenStorage>(),
     ),
   );
@@ -51,7 +51,7 @@ Future<void> initInjector() async {
   /// TABLES
   sl.registerLazySingleton<TablesRemoteDataSource>(
     () => TablesRemoteDataSourceImpl(
-      client: sl<http.Client>(),
+      client: sl<Dio>(),
       tokenStorage: sl<AuthTokenStorage>(),
     ),
   );

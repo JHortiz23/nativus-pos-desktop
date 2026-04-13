@@ -4,6 +4,7 @@ import 'package:nativus_pos_desktop/core/enums/requests_anums.dart';
 import 'package:nativus_pos_desktop/core/shared/data/models/paginated_response.dart';
 import 'package:nativus_pos_desktop/features/products/domain/entities/products_entity.dart';
 import 'package:nativus_pos_desktop/features/tables/domain/entities/dining_area_entity.dart';
+import 'package:nativus_pos_desktop/features/tables/domain/entities/table_summary_entity.dart';
 import 'package:nativus_pos_desktop/features/tables/domain/use_cases/get_dining_areas_use_case.dart';
 
 part 'tables_event.dart';
@@ -125,6 +126,7 @@ class TablesBloc extends Bloc<TablesEvent, TablesState> {
     emit(
       LoadingDiningAreas(
         diningAreas: state.diningAreas,
+        summary: state.summary,
         isLoading: true,
         errorMessage: '',
         page: state.page,
@@ -133,11 +135,12 @@ class TablesBloc extends Bloc<TablesEvent, TablesState> {
     );
 
     try {
-      final diningAreas = await getDiningAreasUseCase();
+      final tablesResponse = await getDiningAreasUseCase();
 
       emit(
         DiningAreasLoaded(
-          diningAreas: diningAreas,
+          diningAreas: tablesResponse.diningAreas,
+          summary: tablesResponse.summary,
           isLoading: false,
           errorMessage: '',
           page: state.page,
@@ -149,6 +152,7 @@ class TablesBloc extends Bloc<TablesEvent, TablesState> {
         TablesError(
           errorMessage: e.toString(),
           diningAreas: state.diningAreas,
+          summary: state.summary,
           isLoading: false,
           page: state.page,
           pageSize: state.pageSize,

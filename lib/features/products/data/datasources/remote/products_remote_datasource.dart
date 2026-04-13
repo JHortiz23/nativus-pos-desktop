@@ -1,5 +1,4 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import 'package:nativus_pos_desktop/application/constants/products_api_endpoints.dart';
 import 'package:nativus_pos_desktop/core/shared/data/models/paginated_response.dart';
 import 'package:nativus_pos_desktop/core/utils/helpers/auth_token_storage.dart';
@@ -36,11 +35,11 @@ abstract class ProductsRemoteDataSource {
 }
 
 class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
-  final http.Client _client;
+  final Dio _client;
   final AuthTokenStorage _tokenStorage;
 
   ProductsRemoteDataSourceImpl({
-    required http.Client client,
+    required Dio client,
     required AuthTokenStorage tokenStorage,
   }) : _client = client,
        _tokenStorage = tokenStorage;
@@ -62,25 +61,32 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
       final uri = ProductsApiEndpoints.addProduct();
 
       final headers = HttpHelper.jsonHeaders(accessToken: accessToken);
-      final body = json.encode({
+      final body = {
         'name': name,
         'price': price,
         'categoryId': categoryId,
         'description': description,
         'isActive': isActive,
-      });
+      };
 
-      final response = await _client.post(uri, headers: headers, body: body);
+      final response = await _client.post(
+        uri.toString(), 
+        options: Options(
+          headers: headers,
+          validateStatus: (status) => true,
+        ),
+        data: body,
+      );
 
-      if (response.statusCode < 200 || response.statusCode >= 300) {
+      if ((response.statusCode ?? 500) < 200 || (response.statusCode ?? 500) >= 300) {
         await HttpHelper.clearSessionIfUnauthorized(
-          statusCode: response.statusCode,
+          statusCode: response.statusCode ?? 500,
           storage: _tokenStorage,
         );
         throw Exception('Failed to add product: HTTP ${response.statusCode}');
       }
 
-      final decoded = json.decode(response.body);
+      final decoded = response.data;
 
       if (decoded is! Map<String, dynamic>) {
         throw const FormatException(
@@ -108,17 +114,24 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
       final uri = ProductsApiEndpoints.getProducts(page: page, items: pageSize);
 
       final headers = HttpHelper.jsonHeaders(accessToken: accessToken);
-      final response = await _client.get(uri, headers: headers);
+      
+      final response = await _client.get(
+        uri.toString(), 
+        options: Options(
+          headers: headers,
+          validateStatus: (status) => true,
+        ),
+      );
 
-      if (response.statusCode < 200 || response.statusCode >= 300) {
+      if ((response.statusCode ?? 500) < 200 || (response.statusCode ?? 500) >= 300) {
         await HttpHelper.clearSessionIfUnauthorized(
-          statusCode: response.statusCode,
+          statusCode: response.statusCode ?? 500,
           storage: _tokenStorage,
         );
         throw Exception('Failed to load products: HTTP ${response.statusCode}');
       }
 
-      final decoded = json.decode(response.body);
+      final decoded = response.data;
 
       if (decoded is! Map<String, dynamic>) {
         throw const FormatException(
@@ -146,11 +159,18 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
       final uri = ProductsApiEndpoints.getProductCategories();
 
       final headers = HttpHelper.jsonHeaders(accessToken: accessToken);
-      final response = await _client.get(uri, headers: headers);
+      
+      final response = await _client.get(
+        uri.toString(), 
+        options: Options(
+          headers: headers,
+          validateStatus: (status) => true,
+        ),
+      );
 
-      if (response.statusCode < 200 || response.statusCode >= 300) {
+      if ((response.statusCode ?? 500) < 200 || (response.statusCode ?? 500) >= 300) {
         await HttpHelper.clearSessionIfUnauthorized(
-          statusCode: response.statusCode,
+          statusCode: response.statusCode ?? 500,
           storage: _tokenStorage,
         );
         throw Exception(
@@ -158,7 +178,7 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
         );
       }
 
-      final decoded = json.decode(response.body);
+      final decoded = response.data;
 
       if (decoded is! List) {
         throw const FormatException(
@@ -196,19 +216,26 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
       final uri = ProductsApiEndpoints.updateProduct(id: id);
 
       final headers = HttpHelper.jsonHeaders(accessToken: accessToken);
-      final body = json.encode({
+      final body = {
         'name': name,
         'price': price,
         'categoryId': categoryId,
         'description': description,
         'isActive': isActive,
-      });
+      };
 
-      final response = await _client.put(uri, headers: headers, body: body);
+      final response = await _client.put(
+        uri.toString(), 
+        options: Options(
+          headers: headers,
+          validateStatus: (status) => true,
+        ),
+        data: body,
+      );
 
-      if (response.statusCode < 200 || response.statusCode >= 300) {
+      if ((response.statusCode ?? 500) < 200 || (response.statusCode ?? 500) >= 300) {
         await HttpHelper.clearSessionIfUnauthorized(
-          statusCode: response.statusCode,
+          statusCode: response.statusCode ?? 500,
           storage: _tokenStorage,
         );
         throw Exception(
@@ -216,7 +243,7 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
         );
       }
 
-      final decoded = json.decode(response.body);
+      final decoded = response.data;
 
       if (decoded is! Map<String, dynamic>) {
         throw const FormatException(
@@ -241,11 +268,18 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
       final uri = ProductsApiEndpoints.deleteProduct(id: id);
 
       final headers = HttpHelper.jsonHeaders(accessToken: accessToken);
-      final response = await _client.delete(uri, headers: headers);
+      
+      final response = await _client.delete(
+        uri.toString(), 
+        options: Options(
+          headers: headers,
+          validateStatus: (status) => true,
+        ),
+      );
 
-      if (response.statusCode < 200 || response.statusCode >= 300) {
+      if ((response.statusCode ?? 500) < 200 || (response.statusCode ?? 500) >= 300) {
         await HttpHelper.clearSessionIfUnauthorized(
-          statusCode: response.statusCode,
+          statusCode: response.statusCode ?? 500,
           storage: _tokenStorage,
         );
         throw Exception(
@@ -253,7 +287,7 @@ class ProductsRemoteDataSourceImpl implements ProductsRemoteDataSource {
         );
       }
 
-      final decoded = json.decode(response.body);
+      final decoded = response.data;
 
       if (decoded is! Map<String, dynamic>) {
         throw const FormatException(

@@ -1,4 +1,4 @@
-import 'package:nativus_pos_desktop/features/tables/domain/entities/dining_area_entity.dart';
+import 'package:nativus_pos_desktop/features/tables/domain/entities/tables_response_entity.dart';
 
 abstract class TablesRepository {
   // Future<AddedProductEntity> addProduct({
@@ -13,7 +13,7 @@ abstract class TablesRepository {
   //   int pageSize = 100,
   // });
 
-  Future<List<DiningAreaEntity>> getDiningAreas();
+  Future<TablesResponseEntity> getDiningAreas();
   // Future<ProductsEntity> updateProduct({
   //   required int id,
   //   required int categoryId,

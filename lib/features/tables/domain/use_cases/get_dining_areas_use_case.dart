@@ -1,6 +1,6 @@
 
 
-import 'package:nativus_pos_desktop/features/tables/domain/entities/dining_area_entity.dart';
+import 'package:nativus_pos_desktop/features/tables/domain/entities/tables_response_entity.dart';
 import 'package:nativus_pos_desktop/features/tables/domain/repositories/tables_repository.dart';
 
 class GetDiningAreasUseCase {
@@ -8,7 +8,7 @@ class GetDiningAreasUseCase {
 
   GetDiningAreasUseCase({required this.tablesRepository});
 
-  Future<List<DiningAreaEntity>> call() {
+  Future<TablesResponseEntity> call() {
     return tablesRepository.getDiningAreas();
   }
 }

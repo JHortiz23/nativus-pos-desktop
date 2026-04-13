@@ -1,6 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
+import 'package:nativus_pos_desktop/features/tables/presentation/blocs/tables_bloc.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/widgets/tables/salon_card.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/widgets/tables/salon_tab_chip.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/widgets/tables/table_card.dart';
@@ -37,38 +39,92 @@ class _MockSalon {
 }
 
 const _mockSalons = <_MockSalon>[
-  _MockSalon(
-    id: 1,
-    icon: '🏠',
-    accentColor: Color(0xFFF0A45F),
-  ),
-  _MockSalon(
-    id: 2,
-    icon: '⭐',
-    accentColor: Color(0xFF65C466),
-  ),
-  _MockSalon(
-    id: 3,
-    icon: '🌿',
-    accentColor: Color(0xFF5B8DEF),
-  ),
+  _MockSalon(id: 1, icon: '🏠', accentColor: Color(0xFFF0A45F)),
+  _MockSalon(id: 2, icon: '⭐', accentColor: Color(0xFF65C466)),
+  _MockSalon(id: 3, icon: '🌿', accentColor: Color(0xFF5B8DEF)),
 ];
 
 const _mockTables = <_MockTable>[
   // Salón Principal (5 mesas)
-  _MockTable(id: 1, number: 1, capacity: 2, status: TableStatus.disponible, salonId: 1),
-  _MockTable(id: 2, number: 2, capacity: 4, status: TableStatus.ocupada, salonId: 1),
-  _MockTable(id: 3, number: 3, capacity: 4, status: TableStatus.disponible, salonId: 1),
-  _MockTable(id: 4, number: 4, capacity: 6, status: TableStatus.disponible, salonId: 1),
-  _MockTable(id: 5, number: 5, capacity: 8, status: TableStatus.disponible, salonId: 1),
+  _MockTable(
+    id: 1,
+    number: 1,
+    capacity: 2,
+    status: TableStatus.disponible,
+    salonId: 1,
+  ),
+  _MockTable(
+    id: 2,
+    number: 2,
+    capacity: 4,
+    status: TableStatus.ocupada,
+    salonId: 1,
+  ),
+  _MockTable(
+    id: 3,
+    number: 3,
+    capacity: 4,
+    status: TableStatus.disponible,
+    salonId: 1,
+  ),
+  _MockTable(
+    id: 4,
+    number: 4,
+    capacity: 6,
+    status: TableStatus.disponible,
+    salonId: 1,
+  ),
+  _MockTable(
+    id: 5,
+    number: 5,
+    capacity: 8,
+    status: TableStatus.disponible,
+    salonId: 1,
+  ),
   // Salón VIP (3 mesas)
-  _MockTable(id: 6, number: 6, capacity: 2, status: TableStatus.disponible, salonId: 2),
-  _MockTable(id: 7, number: 7, capacity: 4, status: TableStatus.ocupada, salonId: 2),
-  _MockTable(id: 8, number: 8, capacity: 6, status: TableStatus.disponible, salonId: 2),
+  _MockTable(
+    id: 6,
+    number: 6,
+    capacity: 2,
+    status: TableStatus.disponible,
+    salonId: 2,
+  ),
+  _MockTable(
+    id: 7,
+    number: 7,
+    capacity: 4,
+    status: TableStatus.ocupada,
+    salonId: 2,
+  ),
+  _MockTable(
+    id: 8,
+    number: 8,
+    capacity: 6,
+    status: TableStatus.disponible,
+    salonId: 2,
+  ),
   // Terraza (3 mesas)
-  _MockTable(id: 9, number: 9, capacity: 2, status: TableStatus.disponible, salonId: 3),
-  _MockTable(id: 10, number: 10, capacity: 4, status: TableStatus.disponible, salonId: 3),
-  _MockTable(id: 11, number: 11, capacity: 4, status: TableStatus.ocupada, salonId: 3),
+  _MockTable(
+    id: 9,
+    number: 9,
+    capacity: 2,
+    status: TableStatus.disponible,
+    salonId: 3,
+  ),
+  _MockTable(
+    id: 10,
+    number: 10,
+    capacity: 4,
+    status: TableStatus.disponible,
+    salonId: 3,
+  ),
+  _MockTable(
+    id: 11,
+    number: 11,
+    capacity: 4,
+    status: TableStatus.ocupada,
+    salonId: 3,
+  ),
 ];
 
 String _salonName(AppLocalizations localizations, int salonId) {
@@ -94,6 +150,8 @@ class TableManagementPage extends StatefulWidget {
 class _TableManagementPageState extends State<TableManagementPage> {
   _MainTab _activeTab = _MainTab.gestionMesas;
   int? _selectedSalonId; // null = "Todos los Salones"
+  // set table bloc
+  late final TablesBloc _bloc;
   late final ScrollController _mesasScrollController;
   late final ScrollController _salonesScrollController;
 
@@ -102,6 +160,14 @@ class _TableManagementPageState extends State<TableManagementPage> {
     super.initState();
     _mesasScrollController = ScrollController();
     _salonesScrollController = ScrollController();
+    _bloc = context.read<TablesBloc>();
+    _bloc.add(GetDiningAreasEvent());
+    final diningAreas = _bloc.state.diningAreas;
+    final summary = _bloc.state.summary;
+
+    if (diningAreas == null || summary == null) {
+      _bloc.add(GetDiningAreasEvent());
+    }
   }
 
   @override
@@ -160,8 +226,7 @@ class _TableManagementPageState extends State<TableManagementPage> {
                   ],
                 );
                 final actionBlock = Flex(
-                  direction:
-                      isCompactHeader ? Axis.vertical : Axis.horizontal,
+                  direction: isCompactHeader ? Axis.vertical : Axis.horizontal,
                   crossAxisAlignment: isCompactHeader
                       ? CrossAxisAlignment.start
                       : CrossAxisAlignment.center,
@@ -269,10 +334,7 @@ class _TableManagementPageState extends State<TableManagementPage> {
 // ─── Top Bar ────────────────────────────────────────────────────────────────
 
 class _TopBar extends StatelessWidget {
-  const _TopBar({
-    required this.activeTab,
-    required this.onTabChanged,
-  });
+  const _TopBar({required this.activeTab, required this.onTabChanged});
 
   final _MainTab activeTab;
   final ValueChanged<_MainTab> onTabChanged;
@@ -328,21 +390,12 @@ class _TopBar extends StatelessWidget {
               children: [
                 tabButtons,
                 const SizedBox(height: 12),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: statusLegend,
-                ),
+                Align(alignment: Alignment.centerRight, child: statusLegend),
               ],
             );
           }
 
-          return Row(
-            children: [
-              tabButtons,
-              const Spacer(),
-              statusLegend,
-            ],
-          );
+          return Row(children: [tabButtons, const Spacer(), statusLegend]);
         },
       ),
     );
@@ -419,10 +472,7 @@ class _StatusDot extends StatelessWidget {
         Container(
           width: 8,
           height: 8,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
         const SizedBox(width: 6),
         Text(
@@ -551,10 +601,7 @@ class _GestionMesasView extends StatelessWidget {
 // ─── Salon Section (Gestión de Mesas) ───────────────────────────────────────
 
 class _SalonSection extends StatelessWidget {
-  const _SalonSection({
-    required this.salon,
-    required this.tables,
-  });
+  const _SalonSection({required this.salon, required this.tables});
 
   final _MockSalon salon;
   final List<_MockTable> tables;
@@ -564,8 +611,9 @@ class _SalonSection extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     final localizations = AppLocalizations.of(context)!;
-    final available =
-        tables.where((t) => t.status == TableStatus.disponible).length;
+    final available = tables
+        .where((t) => t.status == TableStatus.disponible)
+        .length;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -623,10 +671,10 @@ class _SalonSection extends StatelessWidget {
             final crossAxisCount = maxWidth > 900
                 ? 4
                 : maxWidth > 640
-                    ? 3
-                    : maxWidth > 400
-                        ? 2
-                        : 1;
+                ? 3
+                : maxWidth > 400
+                ? 2
+                : 1;
 
             return Wrap(
               spacing: 14,
@@ -634,11 +682,12 @@ class _SalonSection extends StatelessWidget {
               children: [
                 for (final table in tables)
                   SizedBox(
-                    width: (maxWidth -
-                            (crossAxisCount - 1) * 14) /
-                        crossAxisCount,
+                    width:
+                        (maxWidth - (crossAxisCount - 1) * 14) / crossAxisCount,
                     child: TableCard(
-                      name: localizations.table_management_table_name(table.number),
+                      name: localizations.table_management_table_name(
+                        table.number,
+                      ),
                       capacity: table.capacity,
                       status: table.status,
                       onEdit: () {
@@ -661,10 +710,7 @@ class _SalonSection extends StatelessWidget {
 // ─── Salones View ───────────────────────────────────────────────────────────
 
 class _SalonesView extends StatelessWidget {
-  const _SalonesView({
-    super.key,
-    required this.scrollController,
-  });
+  const _SalonesView({super.key, required this.scrollController});
 
   final ScrollController scrollController;
 
@@ -701,11 +747,7 @@ class _SalonesView extends StatelessWidget {
                   _buildSalonCard(localizations, salon, itemWidth),
               ];
 
-              return Wrap(
-                spacing: 16,
-                runSpacing: 16,
-                children: salonCards,
-              );
+              return Wrap(spacing: 16, runSpacing: 16, children: salonCards);
             },
           ),
         ),
@@ -718,10 +760,12 @@ class _SalonesView extends StatelessWidget {
     _MockSalon salon,
     double width,
   ) {
-    final salonTables =
-        _mockTables.where((t) => t.salonId == salon.id).toList();
-    final occupied =
-        salonTables.where((t) => t.status == TableStatus.ocupada).length;
+    final salonTables = _mockTables
+        .where((t) => t.salonId == salon.id)
+        .toList();
+    final occupied = salonTables
+        .where((t) => t.status == TableStatus.ocupada)
+        .length;
 
     return SizedBox(
       width: width,
