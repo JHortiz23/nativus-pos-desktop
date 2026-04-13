@@ -2,155 +2,17 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
+import 'package:nativus_pos_desktop/features/tables/domain/entities/dining_area_entity.dart';
+import 'package:nativus_pos_desktop/features/tables/domain/entities/table_entity.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/blocs/tables_bloc.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/widgets/tables/salon_card.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/widgets/tables/salon_tab_chip.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/widgets/tables/table_card.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
 
-// ─── Mock Data ──────────────────────────────────────────────────────────────
-
-class _MockTable {
-  const _MockTable({
-    required this.id,
-    required this.number,
-    required this.capacity,
-    required this.status,
-    required this.salonId,
-  });
-
-  final int id;
-  final int number;
-  final int capacity;
-  final TableStatus status;
-  final int salonId;
-}
-
-class _MockSalon {
-  const _MockSalon({
-    required this.id,
-    required this.iconData,
-    required this.accentColor,
-  });
-
-  final int id;
-  final IconData iconData;
-  final Color accentColor;
-}
-
-const _mockSalons = <_MockSalon>[
-  _MockSalon(
-    id: 1,
-    iconData: Icons.home_rounded,
-    accentColor: Color(0xFFF0A45F),
-  ),
-  _MockSalon(
-    id: 2,
-    iconData: Icons.star_rounded,
-    accentColor: Color(0xFF65C466),
-  ),
-  _MockSalon(
-    id: 3,
-    iconData: Icons.deck_rounded,
-    accentColor: Color(0xFF5B8DEF),
-  ),
-];
-
-const _mockTables = <_MockTable>[
-  // Salón Principal (5 mesas)
-  _MockTable(
-    id: 1,
-    number: 1,
-    capacity: 2,
-    status: TableStatus.disponible,
-    salonId: 1,
-  ),
-  _MockTable(
-    id: 2,
-    number: 2,
-    capacity: 4,
-    status: TableStatus.ocupada,
-    salonId: 1,
-  ),
-  _MockTable(
-    id: 3,
-    number: 3,
-    capacity: 4,
-    status: TableStatus.disponible,
-    salonId: 1,
-  ),
-  _MockTable(
-    id: 4,
-    number: 4,
-    capacity: 6,
-    status: TableStatus.disponible,
-    salonId: 1,
-  ),
-  _MockTable(
-    id: 5,
-    number: 5,
-    capacity: 8,
-    status: TableStatus.disponible,
-    salonId: 1,
-  ),
-  // Salón VIP (3 mesas)
-  _MockTable(
-    id: 6,
-    number: 6,
-    capacity: 2,
-    status: TableStatus.disponible,
-    salonId: 2,
-  ),
-  _MockTable(
-    id: 7,
-    number: 7,
-    capacity: 4,
-    status: TableStatus.ocupada,
-    salonId: 2,
-  ),
-  _MockTable(
-    id: 8,
-    number: 8,
-    capacity: 6,
-    status: TableStatus.disponible,
-    salonId: 2,
-  ),
-  // Terraza (3 mesas)
-  _MockTable(
-    id: 9,
-    number: 9,
-    capacity: 2,
-    status: TableStatus.disponible,
-    salonId: 3,
-  ),
-  _MockTable(
-    id: 10,
-    number: 10,
-    capacity: 4,
-    status: TableStatus.disponible,
-    salonId: 3,
-  ),
-  _MockTable(
-    id: 11,
-    number: 11,
-    capacity: 4,
-    status: TableStatus.ocupada,
-    salonId: 3,
-  ),
-];
-
-String _salonName(AppLocalizations localizations, int salonId) {
-  return switch (salonId) {
-    1 => localizations.table_management_salon_main,
-    2 => localizations.table_management_salon_vip,
-    3 => localizations.table_management_salon_terrace,
-    _ => localizations.table_management_salons_tab,
-  };
-}
-
-// ─── Page ───────────────────────────────────────────────────────────────────
-
 enum _MainTab { gestionMesas, salones }
+
+const IconData _diningAreaIconData = Icons.deck;
 
 class TableManagementPage extends StatefulWidget {
   const TableManagementPage({super.key});
@@ -162,7 +24,6 @@ class TableManagementPage extends StatefulWidget {
 class _TableManagementPageState extends State<TableManagementPage> {
   _MainTab _activeTab = _MainTab.gestionMesas;
   int? _selectedSalonId; // null = "Todos los Salones"
-  // set table bloc
   late final TablesBloc _bloc;
   late final ScrollController _mesasScrollController;
   late final ScrollController _salonesScrollController;
@@ -173,13 +34,8 @@ class _TableManagementPageState extends State<TableManagementPage> {
     _mesasScrollController = ScrollController();
     _salonesScrollController = ScrollController();
     _bloc = context.read<TablesBloc>();
-    _bloc.add(GetDiningAreasEvent());
-    final diningAreas = _bloc.state.diningAreas;
-    final summary = _bloc.state.summary;
-
-    if (diningAreas == null || summary == null) {
-      _bloc.add(GetDiningAreasEvent());
-    }
+    //Get dining areas with tables
+    _bloc.add(const GetDiningAreasEvent());
   }
 
   @override
@@ -189,161 +45,166 @@ class _TableManagementPageState extends State<TableManagementPage> {
     super.dispose();
   }
 
-  List<_MockTable> get _filteredTables {
-    if (_selectedSalonId == null) return _mockTables;
-    return _mockTables.where((t) => t.salonId == _selectedSalonId).toList();
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = theme.colorScheme;
     final localizations = AppLocalizations.of(context)!;
-    final totalTables = _mockTables.length;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: colorScheme.darkSurface,
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: colorScheme.softBorder),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Column(
-        children: [
-          // ── Header ──
-          Padding(
-            padding: const EdgeInsets.fromLTRB(12, 22, 12, 18),
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final isCompactHeader = constraints.maxWidth < 760;
-                final titleBlock = Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      localizations.table_management,
-                      style: theme.textTheme.headlineMedium?.copyWith(
-                        color: colorScheme.baseWhite,
-                        fontSize: 34,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      localizations.table_management_description,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: colorScheme.textMuted,
-                        fontSize: 15,
-                      ),
-                    ),
-                  ],
-                );
-                final actionBlock = Flex(
-                  direction: isCompactHeader ? Axis.vertical : Axis.horizontal,
-                  crossAxisAlignment: isCompactHeader
-                      ? CrossAxisAlignment.start
-                      : CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      localizations.table_management_tables_count(totalTables),
-                      style: theme.textTheme.bodyLarge?.copyWith(
-                        color: colorScheme.textSoft,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    SizedBox(
-                      width: isCompactHeader ? 0 : 18,
-                      height: isCompactHeader ? 14 : 0,
-                    ),
-                    FilledButton.icon(
-                      onPressed: () {
-                        // TODO: implement new table
-                      },
-                      style: FilledButton.styleFrom(
-                        backgroundColor: colorScheme.accentPrimary,
-                        foregroundColor: colorScheme.black,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 22,
-                          vertical: 18,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        textStyle: theme.textTheme.bodyLarge?.copyWith(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                      icon: const Icon(Icons.add_rounded),
-                      label: Text(
-                        _activeTab == _MainTab.gestionMesas
-                            ? localizations.table_management_new_table
-                            : localizations.table_management_new_salon,
-                      ),
-                    ),
-                  ],
-                );
+    return BlocBuilder<TablesBloc, TablesState>(
+      builder: (context, state) {
+        final diningAreas = _mapDiningAreas(state.diningAreas ?? const []);
+        final totalTables =
+            state.summary?.totalTables ??
+            diningAreas.fold<int>(0, (sum, area) => sum + area.totalTables);
+        final effectiveSelectedSalonId = diningAreas.any(
+          (area) => area.id == _selectedSalonId,
+        )
+            ? _selectedSalonId
+            : null;
 
-                if (isCompactHeader) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      titleBlock,
-                      const SizedBox(height: 18),
-                      actionBlock,
-                    ],
-                  );
-                }
+        return Container(
+          decoration: BoxDecoration(
+            color: colorScheme.darkSurface,
+            borderRadius: BorderRadius.circular(28),
+            border: Border.all(color: colorScheme.softBorder),
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(12, 22, 12, 18),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final isCompactHeader = constraints.maxWidth < 760;
+                    final titleBlock = Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          localizations.table_management,
+                          style: theme.textTheme.headlineMedium?.copyWith(
+                            color: colorScheme.baseWhite,
+                            fontSize: 34,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          localizations.table_management_description,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: colorScheme.textMuted,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ],
+                    );
+                    final actionBlock = Flex(
+                      direction: isCompactHeader ? Axis.vertical : Axis.horizontal,
+                      crossAxisAlignment: isCompactHeader
+                          ? CrossAxisAlignment.start
+                          : CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          localizations.table_management_tables_count(totalTables),
+                          style: theme.textTheme.bodyLarge?.copyWith(
+                            color: colorScheme.textSoft,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        SizedBox(
+                          width: isCompactHeader ? 0 : 18,
+                          height: isCompactHeader ? 14 : 0,
+                        ),
+                        FilledButton.icon(
+                          onPressed: () {
+                            // TODO: implement new table
+                          },
+                          style: FilledButton.styleFrom(
+                            backgroundColor: colorScheme.accentPrimary,
+                            foregroundColor: colorScheme.black,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 22,
+                              vertical: 18,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            textStyle: theme.textTheme.bodyLarge?.copyWith(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          icon: const Icon(Icons.add_rounded),
+                          label: Text(
+                            _activeTab == _MainTab.gestionMesas
+                                ? localizations.table_management_new_table
+                                : localizations.table_management_new_salon,
+                          ),
+                        ),
+                      ],
+                    );
 
-                return Row(
-                  children: [
-                    Expanded(child: titleBlock),
-                    const SizedBox(width: 18),
-                    actionBlock,
-                  ],
-                );
-              },
-            ),
+                    if (isCompactHeader) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          titleBlock,
+                          const SizedBox(height: 18),
+                          actionBlock,
+                        ],
+                      );
+                    }
+
+                    return Row(
+                      children: [
+                        Expanded(child: titleBlock),
+                        const SizedBox(width: 18),
+                        actionBlock,
+                      ],
+                    );
+                  },
+                ),
+              ),
+              Divider(
+                height: 1,
+                color: colorScheme.softBorder.withValues(alpha: 0.7),
+              ),
+              _TopBar(
+                activeTab: _activeTab,
+                onTabChanged: (tab) => setState(() => _activeTab = tab),
+              ),
+              Divider(
+                height: 1,
+                color: colorScheme.softBorder.withValues(alpha: 0.7),
+              ),
+              Expanded(
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 220),
+                  child: _activeTab == _MainTab.gestionMesas
+                      ? _GestionMesasView(
+                          key: const ValueKey('gestion-mesas'),
+                          diningAreas: diningAreas,
+                          totalTables: totalTables,
+                          selectedSalonId: effectiveSelectedSalonId,
+                          onSalonChanged: (id) =>
+                              setState(() => _selectedSalonId = id),
+                          scrollController: _mesasScrollController,
+                        )
+                      : _SalonesView(
+                          key: const ValueKey('salones'),
+                          diningAreas: diningAreas,
+                          scrollController: _salonesScrollController,
+                        ),
+                ),
+              ),
+            ],
           ),
-          Divider(
-            height: 1,
-            color: colorScheme.softBorder.withValues(alpha: 0.7),
-          ),
-          // ── Tab bar ──
-          _TopBar(
-            activeTab: _activeTab,
-            onTabChanged: (tab) => setState(() => _activeTab = tab),
-          ),
-          Divider(
-            height: 1,
-            color: colorScheme.softBorder.withValues(alpha: 0.7),
-          ),
-          // ── Content ──
-          Expanded(
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 220),
-              child: _activeTab == _MainTab.gestionMesas
-                  ? _GestionMesasView(
-                      key: const ValueKey('gestion-mesas'),
-                      selectedSalonId: _selectedSalonId,
-                      onSalonChanged: (id) =>
-                          setState(() => _selectedSalonId = id),
-                      filteredTables: _filteredTables,
-                      scrollController: _mesasScrollController,
-                    )
-                  : _SalonesView(
-                      key: const ValueKey('salones'),
-                      scrollController: _salonesScrollController,
-                    ),
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
-
-// ─── Top Bar ────────────────────────────────────────────────────────────────
 
 class _TopBar extends StatelessWidget {
   const _TopBar({required this.activeTab, required this.onTabChanged});
@@ -430,7 +291,7 @@ class _MainTabButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = theme.colorScheme;
 
     return Material(
       color: selected
@@ -505,39 +366,36 @@ class _StatusDot extends StatelessWidget {
   }
 }
 
-// ─── Gestión de Mesas View ──────────────────────────────────────────────────
-
 class _GestionMesasView extends StatelessWidget {
   const _GestionMesasView({
     super.key,
+    required this.diningAreas,
+    required this.totalTables,
     required this.selectedSalonId,
     required this.onSalonChanged,
-    required this.filteredTables,
     required this.scrollController,
   });
 
+  final List<_DiningAreaViewData> diningAreas;
+  final int totalTables;
   final int? selectedSalonId;
   final ValueChanged<int?> onSalonChanged;
-  final List<_MockTable> filteredTables;
   final ScrollController scrollController;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final localizations = AppLocalizations.of(context)!;
-
-    // Group tables by salon
-    final groupedBySalon = <int, List<_MockTable>>{};
-    for (final table in filteredTables) {
-      groupedBySalon.putIfAbsent(table.salonId, () => []).add(table);
-    }
+    final accentColor = _diningAreaAccentColor(colorScheme);
+    final visibleDiningAreas = selectedSalonId == null
+        ? diningAreas
+        : diningAreas.where((area) => area.id == selectedSalonId).toList();
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 20, 8, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ── Salon filter tabs ──
           ScrollConfiguration(
             behavior: const MaterialScrollBehavior().copyWith(
               dragDevices: {
@@ -556,21 +414,19 @@ class _GestionMesasView extends StatelessWidget {
                   SalonTabChip(
                     label: localizations.table_management_all_salons,
                     iconData: Icons.home,
-                    count: _mockTables.length,
+                    count: totalTables,
                     selected: selectedSalonId == null,
                     onTap: () => onSalonChanged(null),
                   ),
                   const SizedBox(width: 8),
-                  for (final salon in _mockSalons) ...[
+                  for (final diningArea in diningAreas) ...[
                     SalonTabChip(
-                      label: _salonName(localizations, salon.id),
-                      iconData: salon.iconData,
-                      count: _mockTables
-                          .where((t) => t.salonId == salon.id)
-                          .length,
-                      selected: selectedSalonId == salon.id,
-                      accentColor: salon.accentColor,
-                      onTap: () => onSalonChanged(salon.id),
+                      label: diningArea.name,
+                      iconData: _diningAreaIconData,
+                      count: diningArea.totalTables,
+                      selected: selectedSalonId == diningArea.id,
+                      accentColor: accentColor,
+                      onTap: () => onSalonChanged(diningArea.id),
                     ),
                     const SizedBox(width: 8),
                   ],
@@ -579,7 +435,6 @@ class _GestionMesasView extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          // ── Tables content ──
           Expanded(
             child: RawScrollbar(
               controller: scrollController,
@@ -598,11 +453,8 @@ class _GestionMesasView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    for (final salonId in groupedBySalon.keys) ...[
-                      _SalonSection(
-                        salon: _mockSalons.firstWhere((s) => s.id == salonId),
-                        tables: groupedBySalon[salonId]!,
-                      ),
+                    for (final diningArea in visibleDiningAreas) ...[
+                      _SalonSection(salon: diningArea),
                       const SizedBox(height: 28),
                     ],
                   ],
@@ -616,35 +468,29 @@ class _GestionMesasView extends StatelessWidget {
   }
 }
 
-// ─── Salon Section (Gestión de Mesas) ───────────────────────────────────────
-
 class _SalonSection extends StatelessWidget {
-  const _SalonSection({required this.salon, required this.tables});
+  const _SalonSection({required this.salon});
 
-  final _MockSalon salon;
-  final List<_MockTable> tables;
+  final _DiningAreaViewData salon;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = theme.colorScheme;
     final localizations = AppLocalizations.of(context)!;
-    final available = tables
-        .where((t) => t.status == TableStatus.disponible)
-        .length;
+    final accentColor = _diningAreaAccentColor(colorScheme);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Salon header
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4),
           child: Row(
             children: [
-              Icon(salon.iconData, size: 22, color: salon.accentColor),
+              Icon(_diningAreaIconData, size: 22, color: accentColor),
               const SizedBox(width: 10),
               Text(
-                _salonName(localizations, salon.id),
+                salon.name,
                 style: theme.textTheme.headlineSmall?.copyWith(
                   color: colorScheme.baseWhite,
                   fontSize: 18,
@@ -662,7 +508,7 @@ class _SalonSection extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
-                  localizations.table_management_tables_count(tables.length),
+                  localizations.table_management_tables_count(salon.totalTables),
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: colorScheme.textMuted,
                     fontSize: 12,
@@ -672,7 +518,9 @@ class _SalonSection extends StatelessWidget {
               ),
               const Spacer(),
               Text(
-                localizations.table_management_available_count(available),
+                localizations.table_management_available_count(
+                  salon.availableCount,
+                ),
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: colorScheme.textMuted,
                   fontSize: 13,
@@ -682,7 +530,6 @@ class _SalonSection extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        // Tables grid
         LayoutBuilder(
           builder: (context, constraints) {
             final maxWidth = constraints.maxWidth;
@@ -698,14 +545,12 @@ class _SalonSection extends StatelessWidget {
               spacing: 14,
               runSpacing: 14,
               children: [
-                for (final table in tables)
+                for (final table in salon.tables)
                   SizedBox(
                     width:
                         (maxWidth - (crossAxisCount - 1) * 14) / crossAxisCount,
                     child: TableCard(
-                      name: localizations.table_management_table_name(
-                        table.number,
-                      ),
+                      name: table.displayName(localizations),
                       capacity: table.capacity,
                       status: table.status,
                       onEdit: () {
@@ -725,17 +570,19 @@ class _SalonSection extends StatelessWidget {
   }
 }
 
-// ─── Salones View ───────────────────────────────────────────────────────────
-
 class _SalonesView extends StatelessWidget {
-  const _SalonesView({super.key, required this.scrollController});
+  const _SalonesView({
+    super.key,
+    required this.diningAreas,
+    required this.scrollController,
+  });
 
+  final List<_DiningAreaViewData> diningAreas;
   final ScrollController scrollController;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final localizations = AppLocalizations.of(context)!;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 0, 8, 24),
@@ -760,12 +607,14 @@ class _SalonesView extends StatelessWidget {
               final itemWidth =
                   (maxWidth - (crossAxisCount - 1) * 16) / crossAxisCount;
 
-              final salonCards = <Widget>[
-                for (final salon in _mockSalons)
-                  _buildSalonCard(localizations, salon, itemWidth),
-              ];
-
-              return Wrap(spacing: 16, runSpacing: 16, children: salonCards);
+              return Wrap(
+                spacing: 16,
+                runSpacing: 16,
+                children: [
+                  for (final diningArea in diningAreas)
+                    _buildSalonCard(context, diningArea, itemWidth),
+                ],
+              );
             },
           ),
         ),
@@ -774,27 +623,22 @@ class _SalonesView extends StatelessWidget {
   }
 
   Widget _buildSalonCard(
-    AppLocalizations localizations,
-    _MockSalon salon,
+    BuildContext context,
+    _DiningAreaViewData diningArea,
     double width,
   ) {
-    final salonTables = _mockTables
-        .where((t) => t.salonId == salon.id)
-        .toList();
-    final occupied = salonTables
-        .where((t) => t.status == TableStatus.ocupada)
-        .length;
+    final accentColor = _diningAreaAccentColor(Theme.of(context).colorScheme);
 
     return SizedBox(
       width: width,
       child: SalonCard(
-        name: _salonName(localizations, salon.id),
-        iconData: salon.iconData,
-        accentColor: salon.accentColor,
-        totalTables: salonTables.length,
-        occupiedTables: occupied,
-        tableNumbers: salonTables.map((t) => t.number).toList(),
-        tableStatuses: salonTables.map((t) => t.status).toList(),
+        name: diningArea.name,
+        iconData: _diningAreaIconData,
+        accentColor: accentColor,
+        totalTables: diningArea.totalTables,
+        occupiedTables: diningArea.occupiedCount,
+        tableNumbers: diningArea.tables.map((table) => table.number).toList(),
+        tableStatuses: diningArea.tables.map((table) => table.status).toList(),
         onEdit: () {
           // TODO: implement edit
         },
@@ -804,4 +648,99 @@ class _SalonesView extends StatelessWidget {
       ),
     );
   }
+}
+
+class _DiningAreaViewData {
+  const _DiningAreaViewData({
+    required this.id,
+    required this.name,
+    required this.totalTables,
+    required this.availableCount,
+    required this.occupiedCount,
+    required this.tables,
+  });
+
+  final int id;
+  final String name;
+  final int totalTables;
+  final int availableCount;
+  final int occupiedCount;
+  final List<_TableViewData> tables;
+}
+
+class _TableViewData {
+  const _TableViewData({
+    required this.id,
+    required this.name,
+    required this.number,
+    required this.hasExtractedNumber,
+    required this.capacity,
+    required this.status,
+  });
+
+  final int id;
+  final String name;
+  final int number;
+  final bool hasExtractedNumber;
+  final int capacity;
+  final TableStatus status;
+
+  String displayName(AppLocalizations localizations) {
+    if (hasExtractedNumber || name.trim().isEmpty) {
+      return localizations.table_management_table_name(number);
+    }
+    return name;
+  }
+}
+
+List<_DiningAreaViewData> _mapDiningAreas(List<DiningAreaEntity> diningAreas) {
+  return diningAreas.map(_mapDiningArea).toList(growable: false);
+}
+
+_DiningAreaViewData _mapDiningArea(DiningAreaEntity diningArea) {
+  return _DiningAreaViewData(
+    id: diningArea.id,
+    name: diningArea.name,
+    totalTables: diningArea.tablesCount,
+    availableCount: diningArea.availableCount,
+    occupiedCount: diningArea.occupiedCount,
+    tables: diningArea.tables.map(_mapTable).toList(growable: false),
+  );
+}
+
+_TableViewData _mapTable(TableEntity table) {
+  final extractedNumber = _extractTableNumber(table.name);
+
+  return _TableViewData(
+    id: table.id,
+    name: table.name,
+    number: extractedNumber ?? table.id,
+    hasExtractedNumber: extractedNumber != null,
+    capacity: table.seats ?? 0,
+    status: _mapTableStatus(table.status),
+  );
+}
+
+int? _extractTableNumber(String value) {
+  final matches = RegExp(r'\d+').allMatches(value).toList(growable: false);
+  if (matches.isEmpty) {
+    return null;
+  }
+
+  return int.tryParse(matches.last.group(0) ?? '');
+}
+
+TableStatus _mapTableStatus(String status) {
+  final normalized = status.trim().toLowerCase();
+  const availableKeywords = {'available', 'disponible', 'free', 'open'};
+
+  if (availableKeywords.any(normalized.contains)) {
+    return TableStatus.disponible;
+  }
+
+  return TableStatus.ocupada;
+}
+
+Color _diningAreaAccentColor(ColorScheme colorScheme) {
+  return colorScheme.accentPrimary;
 }
