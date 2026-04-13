@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:nativus_pos_desktop/features/tables/domain/entities/dining_area_entity.dart';
-import 'package:nativus_pos_desktop/features/tables/domain/entities/table_summary_entity.dart';
+import 'package:nativus_pos_desktop/features/tables/domain/entities/dining_areas_summary_entity.dart';
 
-class TablesResponseEntity extends Equatable {
-  final TableSummaryEntity summary;
+class DiningAreasResponseEntity extends Equatable {
+  final DiningAreasSummaryEntity summary;
   final List<DiningAreaEntity> diningAreas;
 
-  const TablesResponseEntity({
+  const DiningAreasResponseEntity({
     required this.summary,
     required this.diningAreas,
   });
@@ -17,11 +17,11 @@ class TablesResponseEntity extends Equatable {
         diningAreas,
       ];
 
-  TablesResponseEntity copyWith({
-    TableSummaryEntity? summary,
+  DiningAreasResponseEntity copyWith({
+    DiningAreasSummaryEntity? summary,
     List<DiningAreaEntity>? diningAreas,
   }) {
-    return TablesResponseEntity(
+    return DiningAreasResponseEntity(
       summary: summary ?? this.summary,
       diningAreas: diningAreas ?? this.diningAreas,
     );

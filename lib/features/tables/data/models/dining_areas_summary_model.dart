@@ -1,39 +1,39 @@
 import 'package:nativus_pos_desktop/core/utils/helpers/json_parsing_helper.dart';
-import 'package:nativus_pos_desktop/features/tables/domain/entities/table_summary_entity.dart';
+import 'package:nativus_pos_desktop/features/tables/domain/entities/dining_areas_summary_entity.dart';
 
-class TableSummaryModel {
+class DiningAreasSummaryModel {
   final int totalTables;
   final int availableTables;
   final int occupiedTables;
 
-  TableSummaryModel({
+  DiningAreasSummaryModel({
     required this.totalTables,
     required this.availableTables,
     required this.occupiedTables,
   });
 
-  factory TableSummaryModel.fromJson(Map<String, dynamic> json) {
-    return TableSummaryModel(
+  factory DiningAreasSummaryModel.fromJson(Map<String, dynamic> json) {
+    return DiningAreasSummaryModel(
       totalTables: JsonParsingHelper.asInt(json['totalTables']),
       availableTables: JsonParsingHelper.asInt(json['availableTables']),
       occupiedTables: JsonParsingHelper.asInt(json['occupiedTables']),
     );
   }
 
-  TableSummaryModel copyWith({
+  DiningAreasSummaryModel copyWith({
     int? totalTables,
     int? availableTables,
     int? occupiedTables,
   }) {
-    return TableSummaryModel(
+    return DiningAreasSummaryModel(
       totalTables: totalTables ?? this.totalTables,
       availableTables: availableTables ?? this.availableTables,
       occupiedTables: occupiedTables ?? this.occupiedTables,
     );
   }
 
-  factory TableSummaryModel.fromEntity(TableSummaryEntity entity) {
-    return TableSummaryModel(
+  factory DiningAreasSummaryModel.fromEntity(DiningAreasSummaryEntity entity) {
+    return DiningAreasSummaryModel(
       totalTables: entity.totalTables,
       availableTables: entity.availableTables,
       occupiedTables: entity.occupiedTables,

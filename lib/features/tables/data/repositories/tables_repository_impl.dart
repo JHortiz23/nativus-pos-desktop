@@ -1,6 +1,6 @@
 import 'package:nativus_pos_desktop/features/tables/data/datasources/remote/tables_remote_datasource.dart';
-import 'package:nativus_pos_desktop/features/tables/data/mappers/tables_response_mapper.dart';
-import 'package:nativus_pos_desktop/features/tables/domain/entities/tables_response_entity.dart';
+import 'package:nativus_pos_desktop/features/tables/data/mappers/dining_areas_response_mapper.dart';
+import 'package:nativus_pos_desktop/features/tables/domain/entities/dining_areas_response_entity.dart';
 import 'package:nativus_pos_desktop/features/tables/domain/repositories/tables_repository.dart';
 
 class TablesRepositoryImpl implements TablesRepository {
@@ -50,10 +50,10 @@ class TablesRepositoryImpl implements TablesRepository {
   // }
 
   @override
-  Future<TablesResponseEntity> getDiningAreas() async {
+  Future<DiningAreasResponseEntity> getDiningAreas() async {
     final response = await remoteDataSource.getDiningAreas();
 
-    return TablesResponseMapper.toEntity(response);
+    return DiningAreasResponseMapper.toEntity(response);
   }
 
   // @override

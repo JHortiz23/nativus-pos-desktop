@@ -4,7 +4,7 @@ import 'package:nativus_pos_desktop/core/enums/requests_anums.dart';
 import 'package:nativus_pos_desktop/core/shared/data/models/paginated_response.dart';
 import 'package:nativus_pos_desktop/features/products/domain/entities/products_entity.dart';
 import 'package:nativus_pos_desktop/features/tables/domain/entities/dining_area_entity.dart';
-import 'package:nativus_pos_desktop/features/tables/domain/entities/table_summary_entity.dart';
+import 'package:nativus_pos_desktop/features/tables/domain/entities/dining_areas_summary_entity.dart';
 import 'package:nativus_pos_desktop/features/tables/domain/use_cases/get_dining_areas_use_case.dart';
 
 part 'tables_event.dart';

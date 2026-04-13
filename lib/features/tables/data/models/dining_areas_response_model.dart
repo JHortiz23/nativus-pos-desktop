@@ -1,19 +1,19 @@
 import 'package:nativus_pos_desktop/features/tables/data/models/dining_area_model.dart';
-import 'package:nativus_pos_desktop/features/tables/data/models/table_summary_model.dart';
-import 'package:nativus_pos_desktop/features/tables/domain/entities/tables_response_entity.dart';
+import 'package:nativus_pos_desktop/features/tables/data/models/dining_areas_summary_model.dart';
+import 'package:nativus_pos_desktop/features/tables/domain/entities/dining_areas_response_entity.dart';
 
-class TablesResponseModel {
-  final TableSummaryModel summary;
+class DiningAreasResponseModel {
+  final DiningAreasSummaryModel summary;
   final List<DiningAreaModel> diningAreas;
 
-  TablesResponseModel({
+  DiningAreasResponseModel({
     required this.summary,
     required this.diningAreas,
   });
 
-  factory TablesResponseModel.fromJson(Map<String, dynamic> json) {
-    return TablesResponseModel(
-      summary: TableSummaryModel.fromJson(json['summary'] ?? {}),
+  factory DiningAreasResponseModel.fromJson(Map<String, dynamic> json) {
+    return DiningAreasResponseModel(
+      summary: DiningAreasSummaryModel.fromJson(json['summary'] ?? {}),
       diningAreas: (json['diningAreas'] as List<dynamic>?)
               ?.map((e) => DiningAreaModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -21,9 +21,9 @@ class TablesResponseModel {
     );
   }
 
-  factory TablesResponseModel.fromEntity(TablesResponseEntity entity) {
-    return TablesResponseModel(
-      summary: TableSummaryModel.fromEntity(entity.summary),
+  factory DiningAreasResponseModel.fromEntity(DiningAreasResponseEntity entity) {
+    return DiningAreasResponseModel(
+      summary: DiningAreasSummaryModel.fromEntity(entity.summary),
       diningAreas: entity.diningAreas
           .map((area) => DiningAreaModel.fromEntity(area))
           .toList(),

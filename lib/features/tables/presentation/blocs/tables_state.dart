@@ -3,7 +3,7 @@ part of 'tables_bloc.dart';
 class TablesState extends Equatable {
   // final PaginatedResponse<ProductsEntity>? products;
   final List<DiningAreaEntity>? diningAreas;
-  final TableSummaryEntity? summary;
+  final DiningAreasSummaryEntity? summary;
   final bool isLoading;
   final String errorMessage;
   final int page;
@@ -22,7 +22,7 @@ class TablesState extends Equatable {
   TablesState copyWith({
     PaginatedResponse<ProductsEntity>? products,
     List<DiningAreaEntity>? diningAreas,
-    TableSummaryEntity? summary,
+    DiningAreasSummaryEntity? summary,
     RequestsEnum? getProductsRequest,
     bool? isLoading,
     String? errorMessage,

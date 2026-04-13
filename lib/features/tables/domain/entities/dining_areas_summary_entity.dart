@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
 
-class TableSummaryEntity extends Equatable {
+class DiningAreasSummaryEntity extends Equatable {
   final int totalTables;
   final int availableTables;
   final int occupiedTables;
 
-  const TableSummaryEntity({
+  const DiningAreasSummaryEntity({
     required this.totalTables,
     required this.availableTables,
     required this.occupiedTables,
@@ -18,12 +18,12 @@ class TableSummaryEntity extends Equatable {
         occupiedTables,
       ];
 
-  TableSummaryEntity copyWith({
+  DiningAreasSummaryEntity copyWith({
     int? totalTables,
     int? availableTables,
     int? occupiedTables,
   }) {
-    return TableSummaryEntity(
+    return DiningAreasSummaryEntity(
       totalTables: totalTables ?? this.totalTables,
       availableTables: availableTables ?? this.availableTables,
       occupiedTables: occupiedTables ?? this.occupiedTables,

@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:nativus_pos_desktop/application/constants/tables_api_endpoints.dart';
 import 'package:nativus_pos_desktop/core/utils/helpers/auth_token_storage.dart';
 import 'package:nativus_pos_desktop/core/utils/helpers/http_helper.dart';
-import 'package:nativus_pos_desktop/features/tables/data/models/tables_response_model.dart';
+import 'package:nativus_pos_desktop/features/tables/data/models/dining_areas_response_model.dart';
 
 abstract class TablesRemoteDataSource {
   // Future<AddedProductModel> addProduct({
@@ -12,7 +12,7 @@ abstract class TablesRemoteDataSource {
   //   required double price,
   //   required bool isActive,
   // });
-  Future<TablesResponseModel> getDiningAreas();
+  Future<DiningAreasResponseModel> getDiningAreas();
 
   // Future<List<ProductCategoriesModel>> getProductCategories();
 
@@ -129,7 +129,7 @@ class TablesRemoteDataSourceImpl implements TablesRemoteDataSource {
   // }
 
   @override
-  Future<TablesResponseModel> getDiningAreas() async {
+  Future<DiningAreasResponseModel> getDiningAreas() async {
     try {
       final accessToken = _tokenStorage.getAccessToken();
       if (accessToken == null || accessToken.isEmpty) {
@@ -167,7 +167,7 @@ class TablesRemoteDataSourceImpl implements TablesRemoteDataSource {
         );
       }
 
-      return TablesResponseModel.fromJson(decoded);
+      return DiningAreasResponseModel.fromJson(decoded);
     } catch (e) {
       throw Exception('Error getting dining areas: $e');
     }
