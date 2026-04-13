@@ -89,7 +89,7 @@
   "table_management_salon_main": "Main Dining Room",
   "table_management_salon_vip": "VIP Dining Room",
   "table_management_salon_terrace": "Terrace",
-  "table_management_tables_count": "{count, plural, =1{# table} other{# tables}}",
+  "table_management_tables_count": "{count, plural, =1{{count} table} other{{count} tables}}",
   "@table_management_tables_count": {
     "placeholders": {
       "count": {
@@ -97,7 +97,7 @@
       }
     }
   },
-  "table_management_available_count": "{count, plural, =1{# available} other{# available}}",
+  "table_management_available_count": "{count, plural, =1{{count} available} other{{count} available}}",
   "@table_management_available_count": {
     "placeholders": {
       "count": {
@@ -105,7 +105,7 @@
       }
     }
   },
-  "table_management_people_count": "{count, plural, =1{# person} other{# people}}",
+  "table_management_people_count": "{count, plural, =1{{count} person} other{{count} people}}",
   "@table_management_people_count": {
     "placeholders": {
       "count": {

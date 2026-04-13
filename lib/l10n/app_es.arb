@@ -89,7 +89,7 @@
   "table_management_salon_main": "Salón Principal",
   "table_management_salon_vip": "Salón VIP",
   "table_management_salon_terrace": "Terraza",
-  "table_management_tables_count": "{count, plural, =1{# mesa} other{# mesas}}",
+  "table_management_tables_count": "{count, plural, =1{{count} mesa} other{{count} mesas}}",
   "@table_management_tables_count": {
     "placeholders": {
       "count": {
@@ -97,7 +97,7 @@
       }
     }
   },
-  "table_management_available_count": "{count, plural, =1{# disponible} other{# disponibles}}",
+  "table_management_available_count": "{count, plural, =1{{count} disponible} other{{count} disponibles}}",
   "@table_management_available_count": {
     "placeholders": {
       "count": {
@@ -105,7 +105,7 @@
       }
     }
   },
-  "table_management_people_count": "{count, plural, =1{# persona} other{# personas}}",
+  "table_management_people_count": "{count, plural, =1{{count} persona} other{{count} personas}}",
   "@table_management_people_count": {
     "placeholders": {
       "count": {

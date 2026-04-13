@@ -54,14 +54,20 @@ class _TableManagementPageState extends State<TableManagementPage> {
     return BlocBuilder<TablesBloc, TablesState>(
       builder: (context, state) {
         final diningAreas = _mapDiningAreas(state.diningAreas ?? const []);
-        final totalTables =
-            state.summary?.totalTables ??
-            diningAreas.fold<int>(0, (sum, area) => sum + area.totalTables);
-        final effectiveSelectedSalonId = diningAreas.any(
-          (area) => area.id == _selectedSalonId,
-        )
+        final effectiveSelectedSalonId =
+            diningAreas.any((area) => area.id == _selectedSalonId)
             ? _selectedSalonId
             : null;
+
+        final totalTables = effectiveSelectedSalonId == null
+            ? (state.summary?.totalTables ??
+                  diningAreas.fold<int>(
+                    0,
+                    (sum, area) => sum + area.totalTables,
+                  ))
+            : diningAreas
+                  .firstWhere((area) => area.id == effectiveSelectedSalonId)
+                  .totalTables;
 
         return Container(
           decoration: BoxDecoration(
@@ -99,13 +105,17 @@ class _TableManagementPageState extends State<TableManagementPage> {
                       ],
                     );
                     final actionBlock = Flex(
-                      direction: isCompactHeader ? Axis.vertical : Axis.horizontal,
+                      direction: isCompactHeader
+                          ? Axis.vertical
+                          : Axis.horizontal,
                       crossAxisAlignment: isCompactHeader
                           ? CrossAxisAlignment.start
                           : CrossAxisAlignment.center,
                       children: [
                         Text(
-                          localizations.table_management_tables_count(totalTables),
+                          localizations.table_management_tables_count(
+                            totalTables,
+                          ),
                           style: theme.textTheme.bodyLarge?.copyWith(
                             color: colorScheme.textSoft,
                             fontSize: 15,
@@ -185,7 +195,12 @@ class _TableManagementPageState extends State<TableManagementPage> {
                       ? _GestionMesasView(
                           key: const ValueKey('gestion-mesas'),
                           diningAreas: diningAreas,
-                          totalTables: totalTables,
+                          totalTables:
+                              state.summary?.totalTables ??
+                              diningAreas.fold<int>(
+                                0,
+                                (sum, area) => sum + area.totalTables,
+                              ),
                           selectedSalonId: effectiveSelectedSalonId,
                           onSalonChanged: (id) =>
                               setState(() => _selectedSalonId = id),
@@ -508,7 +523,9 @@ class _SalonSection extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
-                  localizations.table_management_tables_count(salon.totalTables),
+                  localizations.table_management_tables_count(
+                    salon.totalTables,
+                  ),
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: colorScheme.textMuted,
                     fontSize: 12,

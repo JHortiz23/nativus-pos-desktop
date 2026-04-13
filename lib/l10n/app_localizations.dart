@@ -614,19 +614,19 @@ abstract class AppLocalizations {
   /// No description provided for @table_management_tables_count.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =1{# table} other{# tables}}'**
+  /// **'{count, plural, =1{{count} table} other{{count} tables}}'**
   String table_management_tables_count(int count);
 
   /// No description provided for @table_management_available_count.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =1{# available} other{# available}}'**
+  /// **'{count, plural, =1{{count} available} other{{count} available}}'**
   String table_management_available_count(int count);
 
   /// No description provided for @table_management_people_count.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =1{# person} other{# people}}'**
+  /// **'{count, plural, =1{{count} person} other{{count} people}}'**
   String table_management_people_count(int count);
 
   /// No description provided for @table_management_table_name.
