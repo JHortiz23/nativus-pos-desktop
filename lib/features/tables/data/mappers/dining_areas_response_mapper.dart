@@ -1,5 +1,5 @@
 import 'package:nativus_pos_desktop/features/tables/data/mappers/dining_area_mapper.dart';
-import 'package:nativus_pos_desktop/features/tables/data/mappers/dining_areas_summary_mapper.dart';
+import 'package:nativus_pos_desktop/features/tables/data/mappers/table_summary_mapper.dart';
 import 'package:nativus_pos_desktop/features/tables/data/models/dining_areas_response_model.dart';
 import 'package:nativus_pos_desktop/features/tables/domain/entities/dining_areas_response_entity.dart';
 

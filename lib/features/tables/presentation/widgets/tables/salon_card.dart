@@ -7,7 +7,7 @@ class SalonCard extends StatefulWidget {
   const SalonCard({
     super.key,
     required this.name,
-    required this.icon,
+    required this.iconData,
     required this.accentColor,
     required this.totalTables,
     required this.occupiedTables,
@@ -18,7 +18,7 @@ class SalonCard extends StatefulWidget {
   });
 
   final String name;
-  final String icon;
+  final IconData iconData;
   final Color accentColor;
   final int totalTables;
   final int occupiedTables;
@@ -92,9 +92,10 @@ class _SalonCardState extends State<SalonCard> {
                           borderRadius: BorderRadius.circular(14),
                         ),
                         child: Center(
-                          child: Text(
-                            widget.icon,
-                            style: const TextStyle(fontSize: 24),
+                          child: Icon(
+                            widget.iconData,
+                            size: 24,
+                            color: widget.accentColor,
                           ),
                         ),
                       ),
@@ -137,8 +138,9 @@ class _SalonCardState extends State<SalonCard> {
                       _SalonActionButton(
                         icon: Icons.delete_outline_rounded,
                         color: colorScheme.redOrange,
-                        background:
-                            colorScheme.redOrange.withValues(alpha: 0.12),
+                        background: colorScheme.redOrange.withValues(
+                          alpha: 0.12,
+                        ),
                         onTap: widget.onDelete,
                       ),
                     ],
@@ -259,10 +261,7 @@ class _NewSalonCardState extends State<NewSalonCard> {
 }
 
 class _TableNumberBadge extends StatelessWidget {
-  const _TableNumberBadge({
-    required this.number,
-    required this.status,
-  });
+  const _TableNumberBadge({required this.number, required this.status});
 
   final int number;
   final TableStatus status;
@@ -314,8 +313,8 @@ class _SalonActionButtonState extends State<_SalonActionButton> {
     final emphasis = _isPressed
         ? 0.26
         : _isHovered
-            ? 0.18
-            : 0.0;
+        ? 0.18
+        : 0.0;
     final backgroundColor = Color.lerp(
       widget.background,
       widget.color,
@@ -327,8 +326,8 @@ class _SalonActionButtonState extends State<_SalonActionButton> {
       _isPressed
           ? 0.72
           : _isHovered
-              ? 0.55
-              : 0.0,
+          ? 0.55
+          : 0.0,
     )!;
     final iconColor = Color.lerp(
       widget.color,
@@ -336,20 +335,20 @@ class _SalonActionButtonState extends State<_SalonActionButton> {
       _isPressed
           ? 0.34
           : _isHovered
-              ? 0.2
-              : 0.0,
+          ? 0.2
+          : 0.0,
     )!;
     final scale = _isPressed
         ? 0.96
         : _isHovered
-            ? 1.05
-            : 1.0;
-    final glowColor =
-        widget.color.withValues(alpha: _isHovered ? 0.16 : 0.0);
+        ? 1.05
+        : 1.0;
+    final glowColor = widget.color.withValues(alpha: _isHovered ? 0.16 : 0.0);
 
     return MouseRegion(
-      cursor:
-          isInteractive ? SystemMouseCursors.click : SystemMouseCursors.basic,
+      cursor: isInteractive
+          ? SystemMouseCursors.click
+          : SystemMouseCursors.basic,
       child: AnimatedScale(
         scale: scale,
         duration: const Duration(milliseconds: 140),

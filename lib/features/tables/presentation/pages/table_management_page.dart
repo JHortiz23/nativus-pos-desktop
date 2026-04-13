@@ -29,19 +29,31 @@ class _MockTable {
 class _MockSalon {
   const _MockSalon({
     required this.id,
-    required this.icon,
+    required this.iconData,
     required this.accentColor,
   });
 
   final int id;
-  final String icon;
+  final IconData iconData;
   final Color accentColor;
 }
 
 const _mockSalons = <_MockSalon>[
-  _MockSalon(id: 1, icon: '🏠', accentColor: Color(0xFFF0A45F)),
-  _MockSalon(id: 2, icon: '⭐', accentColor: Color(0xFF65C466)),
-  _MockSalon(id: 3, icon: '🌿', accentColor: Color(0xFF5B8DEF)),
+  _MockSalon(
+    id: 1,
+    iconData: Icons.home_rounded,
+    accentColor: Color(0xFFF0A45F),
+  ),
+  _MockSalon(
+    id: 2,
+    iconData: Icons.star_rounded,
+    accentColor: Color(0xFF65C466),
+  ),
+  _MockSalon(
+    id: 3,
+    iconData: Icons.deck_rounded,
+    accentColor: Color(0xFF5B8DEF),
+  ),
 ];
 
 const _mockTables = <_MockTable>[
@@ -355,14 +367,14 @@ class _TopBar extends StatelessWidget {
             children: [
               _MainTabButton(
                 label: localizations.table_management_tables_tab,
-                icon: '🏠',
+                iconData: Icons.table_bar,
                 selected: activeTab == _MainTab.gestionMesas,
                 onTap: () => onTabChanged(_MainTab.gestionMesas),
               ),
               const SizedBox(width: 8),
               _MainTabButton(
                 label: localizations.table_management_salons_tab,
-                icon: '🏘️',
+                iconData: Icons.home,
                 selected: activeTab == _MainTab.salones,
                 onTap: () => onTabChanged(_MainTab.salones),
               ),
@@ -405,13 +417,13 @@ class _TopBar extends StatelessWidget {
 class _MainTabButton extends StatelessWidget {
   const _MainTabButton({
     required this.label,
-    required this.icon,
+    required this.iconData,
     required this.selected,
     required this.onTap,
   });
 
   final String label;
-  final String icon;
+  final IconData iconData;
   final bool selected;
   final VoidCallback onTap;
 
@@ -435,7 +447,13 @@ class _MainTabButton extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(icon, style: const TextStyle(fontSize: 16)),
+              Icon(
+                iconData,
+                size: 18,
+                color: selected
+                    ? colorScheme.accentPrimary
+                    : colorScheme.textSoft,
+              ),
               const SizedBox(width: 8),
               Text(
                 label,
@@ -537,7 +555,7 @@ class _GestionMesasView extends StatelessWidget {
                 children: [
                   SalonTabChip(
                     label: localizations.table_management_all_salons,
-                    icon: '🏠',
+                    iconData: Icons.home,
                     count: _mockTables.length,
                     selected: selectedSalonId == null,
                     onTap: () => onSalonChanged(null),
@@ -546,7 +564,7 @@ class _GestionMesasView extends StatelessWidget {
                   for (final salon in _mockSalons) ...[
                     SalonTabChip(
                       label: _salonName(localizations, salon.id),
-                      icon: salon.icon,
+                      iconData: salon.iconData,
                       count: _mockTables
                           .where((t) => t.salonId == salon.id)
                           .length,
@@ -623,7 +641,7 @@ class _SalonSection extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 4),
           child: Row(
             children: [
-              Text(salon.icon, style: const TextStyle(fontSize: 22)),
+              Icon(salon.iconData, size: 22, color: salon.accentColor),
               const SizedBox(width: 10),
               Text(
                 _salonName(localizations, salon.id),
@@ -771,7 +789,7 @@ class _SalonesView extends StatelessWidget {
       width: width,
       child: SalonCard(
         name: _salonName(localizations, salon.id),
-        icon: salon.icon,
+        iconData: salon.iconData,
         accentColor: salon.accentColor,
         totalTables: salonTables.length,
         occupiedTables: occupied,

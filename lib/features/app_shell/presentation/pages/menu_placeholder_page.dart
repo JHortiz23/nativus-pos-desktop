@@ -124,7 +124,7 @@ class MenuPlaceholderPage extends StatelessWidget {
       case MenuSection.pointOfSale:
         return Icons.attach_money_rounded;
       case MenuSection.tableManagement:
-        return Icons.table_restaurant_outlined;
+        return Icons.table_bar_outlined;
       case MenuSection.products:
         return Icons.inventory_2_outlined;
       case MenuSection.reports:

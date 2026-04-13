@@ -5,7 +5,7 @@ class SalonTabChip extends StatelessWidget {
   const SalonTabChip({
     super.key,
     required this.label,
-    required this.icon,
+    required this.iconData,
     required this.count,
     required this.selected,
     required this.onTap,
@@ -13,7 +13,7 @@ class SalonTabChip extends StatelessWidget {
   });
 
   final String label;
-  final String icon;
+  final IconData iconData;
   final int count;
   final bool selected;
   final VoidCallback onTap;
@@ -45,27 +45,23 @@ class SalonTabChip extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                icon,
-                style: const TextStyle(fontSize: 16),
+              Icon(
+                iconData,
+                size: 18,
+                color: selected ? effectiveAccent : colorScheme.textSoft,
               ),
               const SizedBox(width: 8),
               Text(
                 label,
                 style: theme.textTheme.bodyLarge?.copyWith(
-                  color: selected
-                      ? effectiveAccent
-                      : colorScheme.textSoft,
+                  color: selected ? effectiveAccent : colorScheme.textSoft,
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                 ),
               ),
               const SizedBox(width: 8),
               Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8,
-                  vertical: 3,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
                   color: selected
                       ? effectiveAccent.withValues(alpha: 0.18)
@@ -75,9 +71,7 @@ class SalonTabChip extends StatelessWidget {
                 child: Text(
                   '$count',
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    color: selected
-                        ? effectiveAccent
-                        : colorScheme.textMuted,
+                    color: selected ? effectiveAccent : colorScheme.textMuted,
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
                   ),

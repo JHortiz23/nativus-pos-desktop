@@ -43,7 +43,7 @@ class AppRouter {
       section: MenuSection.tableManagement,
       routeName: RouteNames.tableManagement,
       path: RoutePaths.tableManagement,
-      icon: Icons.table_restaurant_outlined,
+      icon: Icons.table_bar_outlined,
       label: (localizations) => localizations.sidebarTableManagement,
       builder: (_, _) => const TableManagementPage(),
     ),
