@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
-import 'package:nativus_pos_desktop/features/tables/presentation/widgets/tables/table_card.dart';
+import 'package:nativus_pos_desktop/core/enums/status_enums.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
 
-class SalonCard extends StatefulWidget {
-  const SalonCard({
+class DiningAreaCard extends StatefulWidget {
+  const DiningAreaCard({
     super.key,
     required this.name,
     required this.iconData,
@@ -28,10 +28,10 @@ class SalonCard extends StatefulWidget {
   final VoidCallback? onDelete;
 
   @override
-  State<SalonCard> createState() => _SalonCardState();
+  State<DiningAreaCard> createState() => _DiningAreaCardState();
 }
 
-class _SalonCardState extends State<SalonCard> {
+class _DiningAreaCardState extends State<DiningAreaCard> {
   bool _isHovered = false;
 
   @override
@@ -128,14 +128,14 @@ class _SalonCardState extends State<SalonCard> {
                         ),
                       ),
                       // Action buttons
-                      _SalonActionButton(
+                      _DiningAreaActionButton(
                         icon: Icons.edit_outlined,
                         color: colorScheme.textSoft,
                         background: colorScheme.darkSurface,
                         onTap: widget.onEdit,
                       ),
                       const SizedBox(width: 8),
-                      _SalonActionButton(
+                      _DiningAreaActionButton( 
                         icon: Icons.delete_outline_rounded,
                         color: colorScheme.redOrange,
                         background: colorScheme.redOrange.withValues(
@@ -168,97 +168,6 @@ class _SalonCardState extends State<SalonCard> {
   }
 }
 
-class NewSalonCard extends StatefulWidget {
-  const NewSalonCard({super.key, this.onTap});
-
-  final VoidCallback? onTap;
-
-  @override
-  State<NewSalonCard> createState() => _NewSalonCardState();
-}
-
-class _NewSalonCardState extends State<NewSalonCard> {
-  bool _isHovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
-    final localizations = AppLocalizations.of(context)!;
-
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: widget.onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeOutCubic,
-          decoration: BoxDecoration(
-            color: colorScheme.darkSurfaceAlt.withValues(alpha: 0.5),
-            borderRadius: BorderRadius.circular(18),
-            border: Border.all(
-              color: _isHovered
-                  ? colorScheme.accentPrimary.withValues(alpha: 0.4)
-                  : colorScheme.softBorder.withValues(alpha: 0.5),
-              width: 1.5,
-            ),
-            boxShadow: _isHovered
-                ? [
-                    BoxShadow(
-                      color: colorScheme.accentPrimary.withValues(alpha: 0.06),
-                      blurRadius: 20,
-                      spreadRadius: 1,
-                    ),
-                  ]
-                : [],
-          ),
-          child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 52,
-                  height: 52,
-                  decoration: BoxDecoration(
-                    color: colorScheme.accentPrimary.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: colorScheme.accentPrimary.withValues(alpha: 0.25),
-                    ),
-                  ),
-                  child: Icon(
-                    Icons.add_rounded,
-                    color: colorScheme.accentPrimary,
-                    size: 28,
-                  ),
-                ),
-                const SizedBox(height: 14),
-                Text(
-                  localizations.table_management_new_salon,
-                  style: theme.textTheme.headlineSmall?.copyWith(
-                    color: colorScheme.baseWhite,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  localizations.table_management_new_salon_description,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: colorScheme.textMuted,
-                    fontSize: 13,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class _TableNumberBadge extends StatelessWidget {
   const _TableNumberBadge({required this.number, required this.status});
@@ -285,8 +194,8 @@ class _TableNumberBadge extends StatelessWidget {
   }
 }
 
-class _SalonActionButton extends StatefulWidget {
-  const _SalonActionButton({
+class _DiningAreaActionButton extends StatefulWidget {
+  const _DiningAreaActionButton({
     required this.icon,
     required this.color,
     required this.background,
@@ -299,10 +208,10 @@ class _SalonActionButton extends StatefulWidget {
   final VoidCallback? onTap;
 
   @override
-  State<_SalonActionButton> createState() => _SalonActionButtonState();
+  State<_DiningAreaActionButton> createState() => _DiningAreaActionButtonState();
 }
 
-class _SalonActionButtonState extends State<_SalonActionButton> {
+class _DiningAreaActionButtonState extends State<_DiningAreaActionButton> {
   bool _isHovered = false;
   bool _isPressed = false;
 

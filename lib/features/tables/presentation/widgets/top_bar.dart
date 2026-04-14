@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
-import 'package:nativus_pos_desktop/features/tables/presentation/widgets/table_management/main_tab_button.dart';
-import 'package:nativus_pos_desktop/features/tables/presentation/widgets/table_management/status_dot.dart';
+import 'package:nativus_pos_desktop/core/enums/tabs_enums.dart';
+import 'package:nativus_pos_desktop/features/tables/presentation/widgets/buttons/main_tab_button.dart';
+import 'package:nativus_pos_desktop/features/tables/presentation/widgets/status_dot.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
-
-enum TableManagementTab { gestionMesas, salones }
 
 class TopBar extends StatelessWidget {
   const TopBar({

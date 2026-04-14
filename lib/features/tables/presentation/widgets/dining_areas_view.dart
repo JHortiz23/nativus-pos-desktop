@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
-import 'package:nativus_pos_desktop/features/tables/presentation/widgets/table_management/table_management_models.dart';
-import 'package:nativus_pos_desktop/features/tables/presentation/widgets/tables/salon_card.dart';
+import 'package:nativus_pos_desktop/features/tables/domain/entities/dining_area_entity.dart';
+import 'package:nativus_pos_desktop/features/tables/presentation/helpers/table_management_helpers.dart';
+import 'package:nativus_pos_desktop/features/tables/presentation/widgets/cards/dining_area_card.dart';
 
 class DiningAreasView extends StatelessWidget {
   const DiningAreasView({
@@ -10,7 +11,7 @@ class DiningAreasView extends StatelessWidget {
     required this.scrollController,
   });
 
-  final List<DiningAreaViewData> diningAreas;
+  final List<DiningAreaEntity> diningAreas;
   final ScrollController scrollController;
 
   @override
@@ -59,7 +60,7 @@ class DiningAreasView extends StatelessWidget {
 class _DiningAreaCard extends StatelessWidget {
   const _DiningAreaCard({required this.diningArea, required this.width});
 
-  final DiningAreaViewData diningArea;
+  final DiningAreaEntity diningArea;
   final double width;
 
   @override
@@ -68,14 +69,14 @@ class _DiningAreaCard extends StatelessWidget {
 
     return SizedBox(
       width: width,
-      child: SalonCard(
+      child: DiningAreaCard(
         name: diningArea.name,
         iconData: Icons.deck,
         accentColor: accentColor,
-        totalTables: diningArea.totalTables,
+        totalTables: diningArea.tablesCount,
         occupiedTables: diningArea.occupiedCount,
-        tableNumbers: diningArea.tables.map((table) => table.number).toList(),
-        tableStatuses: diningArea.tables.map((table) => table.status).toList(),
+        tableNumbers: diningArea.tables.map(tableNumber).toList(),
+        tableStatuses: diningArea.tables.map(tableStatus).toList(),
         onEdit: () {
           // TODO: implement edit
         },

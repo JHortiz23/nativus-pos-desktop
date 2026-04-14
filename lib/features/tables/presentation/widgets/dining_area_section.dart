@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
-import 'package:nativus_pos_desktop/features/tables/presentation/widgets/table_management/table_management_models.dart';
-import 'package:nativus_pos_desktop/features/tables/presentation/widgets/tables/table_card.dart';
+import 'package:nativus_pos_desktop/features/tables/domain/entities/dining_area_entity.dart';
+import 'package:nativus_pos_desktop/features/tables/presentation/helpers/table_management_helpers.dart';
+import 'package:nativus_pos_desktop/features/tables/presentation/widgets/cards/table_card.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
 
 class DiningAreaSection extends StatelessWidget {
   const DiningAreaSection({super.key, required this.diningArea});
 
-  final DiningAreaViewData diningArea;
+  final DiningAreaEntity diningArea;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +46,7 @@ class DiningAreaSection extends StatelessWidget {
                 ),
                 child: Text(
                   localizations.table_management_tables_count(
-                    diningArea.totalTables,
+                    diningArea.tablesCount,
                   ),
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: colorScheme.textMuted,
@@ -88,9 +89,9 @@ class DiningAreaSection extends StatelessWidget {
                     width:
                         (maxWidth - (crossAxisCount - 1) * 14) / crossAxisCount,
                     child: TableCard(
-                      name: table.displayName(localizations),
-                      capacity: table.capacity,
-                      status: table.status,
+                      name: displayTableName(table, localizations),
+                      capacity: table.seats ?? 0,
+                      status: tableStatus(table),
                       onEdit: () {
                         // TODO: implement edit
                       },

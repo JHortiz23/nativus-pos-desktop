@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
+import 'package:nativus_pos_desktop/core/enums/status_enums.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
-
-enum TableStatus { disponible, ocupada }
 
 class TableCard extends StatefulWidget {
   const TableCard({

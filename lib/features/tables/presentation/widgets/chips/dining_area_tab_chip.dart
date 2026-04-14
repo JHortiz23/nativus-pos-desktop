@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
 
-class SalonTabChip extends StatelessWidget {
-  const SalonTabChip({
+class DiningAreaTabChip extends StatelessWidget {
+  const DiningAreaTabChip({
     super.key,
     required this.label,
     required this.iconData,

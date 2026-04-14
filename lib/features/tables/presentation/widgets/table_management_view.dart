@@ -1,9 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
-import 'package:nativus_pos_desktop/features/tables/presentation/widgets/table_management/dining_area_section.dart';
-import 'package:nativus_pos_desktop/features/tables/presentation/widgets/table_management/table_management_models.dart';
-import 'package:nativus_pos_desktop/features/tables/presentation/widgets/tables/salon_tab_chip.dart';
+import 'package:nativus_pos_desktop/features/tables/domain/entities/dining_area_entity.dart';
+import 'package:nativus_pos_desktop/features/tables/presentation/widgets/dining_area_section.dart';
+import 'package:nativus_pos_desktop/features/tables/presentation/helpers/table_management_helpers.dart';
+import 'package:nativus_pos_desktop/features/tables/presentation/widgets/chips/dining_area_tab_chip.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
 
 class TableManagementView extends StatelessWidget {
@@ -16,7 +17,7 @@ class TableManagementView extends StatelessWidget {
     required this.scrollController,
   });
 
-  final List<DiningAreaViewData> diningAreas;
+  final List<DiningAreaEntity> diningAreas;
   final int totalTables;
   final int? selectedSalonId;
   final ValueChanged<int?> onSalonChanged;
@@ -51,7 +52,7 @@ class TableManagementView extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 10),
               child: Row(
                 children: [
-                  SalonTabChip(
+                  DiningAreaTabChip(
                     label: localizations.table_management_all_salons,
                     iconData: Icons.home,
                     count: totalTables,
@@ -60,10 +61,10 @@ class TableManagementView extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   for (final diningArea in diningAreas) ...[
-                    SalonTabChip(
+                    DiningAreaTabChip(
                       label: diningArea.name,
                       iconData: Icons.deck,
-                      count: diningArea.totalTables,
+                      count: diningArea.tablesCount,
                       selected: selectedSalonId == diningArea.id,
                       accentColor: accentColor,
                       onTap: () => onSalonChanged(diningArea.id),

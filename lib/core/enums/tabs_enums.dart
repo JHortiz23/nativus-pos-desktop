@@ -1,0 +1,1 @@
+enum TableManagementTab { gestionMesas, salones }

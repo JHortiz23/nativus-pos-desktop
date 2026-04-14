@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
+import 'package:nativus_pos_desktop/core/enums/tabs_enums.dart';
+import 'package:nativus_pos_desktop/features/tables/domain/entities/dining_area_entity.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/blocs/tables_bloc.dart';
-import 'package:nativus_pos_desktop/features/tables/presentation/widgets/table_management/dining_areas_view.dart';
-import 'package:nativus_pos_desktop/features/tables/presentation/widgets/table_management/table_management_models.dart';
-import 'package:nativus_pos_desktop/features/tables/presentation/widgets/table_management/table_management_view.dart';
-import 'package:nativus_pos_desktop/features/tables/presentation/widgets/table_management/top_bar.dart';
+import 'package:nativus_pos_desktop/features/tables/presentation/widgets/dining_areas_view.dart';
+import 'package:nativus_pos_desktop/features/tables/presentation/widgets/table_management_view.dart';
+import 'package:nativus_pos_desktop/features/tables/presentation/widgets/top_bar.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
 
 class TableManagementPage extends StatefulWidget {
@@ -46,7 +47,7 @@ class _TableManagementPageState extends State<TableManagementPage> {
 
     return BlocBuilder<TablesBloc, TablesState>(
       builder: (context, state) {
-        final diningAreas = mapDiningAreas(state.diningAreas ?? const []);
+        final diningAreas = state.diningAreas ?? const <DiningAreaEntity>[];
         final effectiveSelectedSalonId =
             diningAreas.any((area) => area.id == _selectedSalonId)
             ? _selectedSalonId
@@ -56,11 +57,11 @@ class _TableManagementPageState extends State<TableManagementPage> {
             ? (state.summary?.totalTables ??
                   diningAreas.fold<int>(
                     0,
-                    (sum, area) => sum + area.totalTables,
+                    (sum, area) => sum + area.tablesCount,
                   ))
             : diningAreas
                   .firstWhere((area) => area.id == effectiveSelectedSalonId)
-                  .totalTables;
+                  .tablesCount;
 
         return Container(
           decoration: BoxDecoration(
@@ -192,7 +193,7 @@ class _TableManagementPageState extends State<TableManagementPage> {
                               state.summary?.totalTables ??
                               diningAreas.fold<int>(
                                 0,
-                                (sum, area) => sum + area.totalTables,
+                                (sum, area) => sum + area.tablesCount,
                               ),
                           selectedSalonId: effectiveSelectedSalonId,
                           onSalonChanged: (id) =>
