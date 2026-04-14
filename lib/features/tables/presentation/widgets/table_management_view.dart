@@ -14,6 +14,7 @@ class TableManagementView extends StatelessWidget {
     required this.totalTables,
     required this.selectedSalonId,
     required this.onSalonChanged,
+    required this.tabsScrollController,
     required this.scrollController,
   });
 
@@ -21,6 +22,7 @@ class TableManagementView extends StatelessWidget {
   final int totalTables;
   final int? selectedSalonId;
   final ValueChanged<int?> onSalonChanged;
+  final ScrollController tabsScrollController;
   final ScrollController scrollController;
 
   @override
@@ -47,31 +49,47 @@ class TableManagementView extends StatelessWidget {
                 PointerDeviceKind.unknown,
               },
             ),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Row(
-                children: [
-                  DiningAreaTabChip(
-                    label: localizations.table_management_all_salons,
-                    iconData: Icons.home,
-                    count: totalTables,
-                    selected: selectedSalonId == null,
-                    onTap: () => onSalonChanged(null),
-                  ),
-                  const SizedBox(width: 8),
-                  for (final diningArea in diningAreas) ...[
+            child: RawScrollbar(
+              controller: tabsScrollController,
+              thumbVisibility: true,
+              trackVisibility: true,
+              thumbColor: colorScheme.textSoft.withValues(alpha: 0.3),
+              trackColor: colorScheme.textSoft.withValues(alpha: 0.08),
+              trackBorderColor: colorScheme.transparent,
+              radius: const Radius.circular(999),
+              trackRadius: const Radius.circular(999),
+              thickness: 6,
+              crossAxisMargin: 2,
+              minThumbLength: 56,
+              notificationPredicate: (notification) =>
+                  notification.metrics.axis == Axis.horizontal,
+              child: SingleChildScrollView(
+                controller: tabsScrollController,
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.only(bottom: 14),
+                child: Row(
+                  children: [
                     DiningAreaTabChip(
-                      label: diningArea.name,
-                      iconData: Icons.deck,
-                      count: diningArea.tablesCount,
-                      selected: selectedSalonId == diningArea.id,
-                      accentColor: accentColor,
-                      onTap: () => onSalonChanged(diningArea.id),
+                      label: localizations.table_management_all_salons,
+                      iconData: Icons.home,
+                      count: totalTables,
+                      selected: selectedSalonId == null,
+                      onTap: () => onSalonChanged(null),
                     ),
                     const SizedBox(width: 8),
+                    for (final diningArea in diningAreas) ...[
+                      DiningAreaTabChip(
+                        label: diningArea.name,
+                        iconData: Icons.deck,
+                        count: diningArea.tablesCount,
+                        selected: selectedSalonId == diningArea.id,
+                        accentColor: accentColor,
+                        onTap: () => onSalonChanged(diningArea.id),
+                      ),
+                      const SizedBox(width: 8),
+                    ],
                   ],
-                ],
+                ),
               ),
             ),
           ),

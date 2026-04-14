@@ -165,30 +165,14 @@ class _ProductsPageState extends State<ProductsPage> {
                             width: isCompactHeader ? 0 : 18,
                             height: isCompactHeader ? 14 : 0,
                           ),
-                          FilledButton.icon(
+                          PrimaryCreateButton(
+                            label: localizations.new_product,
                             onPressed: () {
                               showDialog(
                                 context: context,
                                 builder: (context) => const AddProductDialog(),
                               );
                             },
-                            style: FilledButton.styleFrom(
-                              backgroundColor: colorScheme.accentPrimary,
-                              foregroundColor: colorScheme.black,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 22,
-                                vertical: 18,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              textStyle: theme.textTheme.bodyLarge?.copyWith(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                            icon: const Icon(Icons.add_rounded),
-                            label: Text(localizations.new_product),
                           ),
                         ],
                       );

@@ -8,6 +8,7 @@ import 'package:nativus_pos_desktop/features/tables/presentation/widgets/dining_
 import 'package:nativus_pos_desktop/features/tables/presentation/widgets/table_management_view.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/widgets/top_bar.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
+import 'package:nativus_pos_desktop/shared/shared.dart';
 
 class TableManagementPage extends StatefulWidget {
   const TableManagementPage({super.key});
@@ -20,12 +21,14 @@ class _TableManagementPageState extends State<TableManagementPage> {
   TableManagementTab _activeTab = TableManagementTab.gestionMesas;
   int? _selectedSalonId; // null = "Todos los Salones"
   late final TablesBloc _bloc;
+  late final ScrollController _diningAreaTabsScrollController;
   late final ScrollController _mesasScrollController;
   late final ScrollController _salonesScrollController;
 
   @override
   void initState() {
     super.initState();
+    _diningAreaTabsScrollController = ScrollController();
     _mesasScrollController = ScrollController();
     _salonesScrollController = ScrollController();
     _bloc = context.read<TablesBloc>();
@@ -34,6 +37,7 @@ class _TableManagementPageState extends State<TableManagementPage> {
 
   @override
   void dispose() {
+    _diningAreaTabsScrollController.dispose();
     _mesasScrollController.dispose();
     _salonesScrollController.dispose();
     super.dispose();
@@ -120,31 +124,13 @@ class _TableManagementPageState extends State<TableManagementPage> {
                           width: isCompactHeader ? 0 : 18,
                           height: isCompactHeader ? 14 : 0,
                         ),
-                        FilledButton.icon(
+                        PrimaryCreateButton(
+                          label: _activeTab == TableManagementTab.gestionMesas
+                              ? localizations.table_management_new_table
+                              : localizations.table_management_new_salon,
                           onPressed: () {
                             // TODO: implement new table
                           },
-                          style: FilledButton.styleFrom(
-                            backgroundColor: colorScheme.accentPrimary,
-                            foregroundColor: colorScheme.black,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 22,
-                              vertical: 18,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            textStyle: theme.textTheme.bodyLarge?.copyWith(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                          icon: const Icon(Icons.add_rounded),
-                          label: Text(
-                            _activeTab == TableManagementTab.gestionMesas
-                                ? localizations.table_management_new_table
-                                : localizations.table_management_new_salon,
-                          ),
                         ),
                       ],
                     );
@@ -198,6 +184,7 @@ class _TableManagementPageState extends State<TableManagementPage> {
                           selectedSalonId: effectiveSelectedSalonId,
                           onSalonChanged: (id) =>
                               setState(() => _selectedSalonId = id),
+                          tabsScrollController: _diningAreaTabsScrollController,
                           scrollController: _mesasScrollController,
                         )
                       : DiningAreasView(
