@@ -3,6 +3,7 @@ import 'package:nativus_pos_desktop/application/theme/theme.dart';
 import 'package:nativus_pos_desktop/features/tables/domain/entities/dining_area_entity.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/helpers/table_management_helpers.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/widgets/cards/table_card.dart';
+import 'package:nativus_pos_desktop/features/tables/presentation/widgets/dialogs/add_table_dialog.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
 
 class DiningAreaSection extends StatelessWidget {
@@ -94,6 +95,10 @@ class DiningAreaSection extends StatelessWidget {
                       status: tableStatus(table),
                       onEdit: () {
                         // TODO: implement edit
+                        showDialog(
+                          context: context,
+                          builder: (context) => const AddTableDialog(),
+                        );
                       },
                       onDelete: () {
                         // TODO: implement delete

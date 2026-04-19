@@ -4,6 +4,7 @@ import 'package:nativus_pos_desktop/application/theme/theme.dart';
 import 'package:nativus_pos_desktop/core/enums/tabs_enums.dart';
 import 'package:nativus_pos_desktop/features/tables/domain/entities/dining_area_entity.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/blocs/tables_bloc.dart';
+import 'package:nativus_pos_desktop/features/tables/presentation/widgets/dialogs/add_table_dialog.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/widgets/dining_areas_view.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/widgets/table_management_view.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/widgets/top_bar.dart';
@@ -129,7 +130,13 @@ class _TableManagementPageState extends State<TableManagementPage> {
                               ? localizations.table_management_new_table
                               : localizations.table_management_new_salon,
                           onPressed: () {
-                            // TODO: implement new table
+                            _activeTab == TableManagementTab.gestionMesas
+                                ? showDialog(
+                                    context: context,
+                                    builder: (context) =>
+                                        const AddTableDialog(),
+                                  )
+                                : null; // TODO: Implementar creación de Salón
                           },
                         ),
                       ],

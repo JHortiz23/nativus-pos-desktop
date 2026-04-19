@@ -320,4 +320,25 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0 · $_temp1';
   }
+
+  @override
+  String get edit_table => 'Edit Table';
+
+  @override
+  String get dining_area => 'Dining Area';
+
+  @override
+  String get seats => 'Seats';
+
+  @override
+  String get add_table_name_hint => 'E.g.: VIP Table';
+
+  @override
+  String get table_management_active_label => 'Active Table';
+
+  @override
+  String get table_management_create_label => 'Create Table';
+
+  @override
+  String get cancel_label => 'Cancel';
 }

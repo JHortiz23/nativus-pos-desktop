@@ -5,6 +5,7 @@ class TableMapper {
   static TableEntity toEntity(TableModel model) {
     return TableEntity(
       id: model.id,
+      diningAreaId: model.diningAreaId,
       name: model.name,
       status: model.status,
       seats: model.seats,

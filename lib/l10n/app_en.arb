@@ -131,6 +131,13 @@
         "type": "int"
       }
     }
-  }
+  },
+  "edit_table": "Edit Table",
+  "dining_area": "Dining Area",
+  "seats": "Seats",
+  "add_table_name_hint": "E.g.: VIP Table",
+  "table_management_active_label": "Active Table",
+  "table_management_create_label": "Create Table",
+  "cancel_label": "Cancel"
 }
 

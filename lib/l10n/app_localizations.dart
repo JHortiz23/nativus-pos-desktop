@@ -640,6 +640,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{totalTables, plural, =1{# table} other{# tables}} · {occupiedTables, plural, =1{# occupied} other{# occupied}}'**
   String table_management_salon_summary(int totalTables, int occupiedTables);
+
+  /// No description provided for @edit_table.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Table'**
+  String get edit_table;
+
+  /// No description provided for @dining_area.
+  ///
+  /// In en, this message translates to:
+  /// **'Dining Area'**
+  String get dining_area;
+
+  /// No description provided for @seats.
+  ///
+  /// In en, this message translates to:
+  /// **'Seats'**
+  String get seats;
+
+  /// No description provided for @add_table_name_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'E.g.: VIP Table'**
+  String get add_table_name_hint;
+
+  /// No description provided for @table_management_active_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Table'**
+  String get table_management_active_label;
+
+  /// No description provided for @table_management_create_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Table'**
+  String get table_management_create_label;
+
+  /// No description provided for @cancel_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel_label;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

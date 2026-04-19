@@ -3,12 +3,14 @@ import 'package:nativus_pos_desktop/features/tables/domain/entities/table_entity
 
 class TableModel {
   final int id;
+  final int diningAreaId;
   final String name;
   final String status;
   final int? seats;
 
   TableModel({
     required this.id,
+    required this.diningAreaId,
     required this.name,
     required this.status,
     this.seats,
@@ -17,6 +19,7 @@ class TableModel {
   factory TableModel.fromJson(Map<String, dynamic> json) {
     return TableModel(
       id: JsonParsingHelper.asInt(json['id']),
+      diningAreaId: JsonParsingHelper.asInt(json['diningAreaId']),
       name: JsonParsingHelper.asString(json['name']),
       status: JsonParsingHelper.asString(json['status']),
       seats: json['seats'] != null ? JsonParsingHelper.asInt(json['seats']) : null,
@@ -26,6 +29,7 @@ class TableModel {
   factory TableModel.fromEntity(TableEntity entity) {
     return TableModel(
       id: entity.id,
+      diningAreaId: entity.diningAreaId,
       name: entity.name,
       status: entity.status,
       seats: entity.seats,
@@ -35,6 +39,7 @@ class TableModel {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'diningAreaId': diningAreaId,
       'name': name,
       'status': status,
       'seats': seats,
