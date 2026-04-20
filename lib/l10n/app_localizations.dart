@@ -527,6 +527,18 @@ abstract class AppLocalizations {
   /// **'Product Deleted Successfully'**
   String get message_product_deleted;
 
+  /// No description provided for @message_table_deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Table Deleted Successfully'**
+  String get message_table_deleted;
+
+  /// No description provided for @empty_table_in_salon.
+  ///
+  /// In en, this message translates to:
+  /// **'There are no tables in this salon yet.'**
+  String get empty_table_in_salon;
+
   /// No description provided for @delete_action.
   ///
   /// In en, this message translates to:

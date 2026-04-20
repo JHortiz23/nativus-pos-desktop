@@ -114,6 +114,30 @@ class TableManagementView extends StatelessWidget {
                   children: [
                     for (final diningArea in visibleDiningAreas) ...[
                       DiningAreaSection(diningArea: diningArea),
+                      if (selectedSalonId != null &&
+                          diningArea.tables.isEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 40),
+                          child: Center(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.deck_outlined,
+                                  size: 64,
+                                  color: colorScheme.textMuted.withValues(alpha: 0.5),
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  localizations.empty_table_in_salon,
+                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                        color: colorScheme.textMuted,
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       const SizedBox(height: 28),
                     ],
                   ],

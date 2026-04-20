@@ -225,6 +225,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get message_product_deleted => 'Producto Eliminado Correctamente';
 
   @override
+  String get message_table_deleted => 'Mesa Eliminada Correctamente';
+
+  @override
+  String get empty_table_in_salon => 'Aún no hay mesas en este salón.';
+
+  @override
   String get delete_action => 'Eliminar';
 
   @override

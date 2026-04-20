@@ -50,9 +50,28 @@ class _TableManagementPageState extends State<TableManagementPage> {
     final colorScheme = theme.colorScheme;
     final localizations = AppLocalizations.of(context)!;
 
-    return BlocBuilder<TablesBloc, TablesState>(
-      builder: (context, state) {
-        final diningAreas = state.diningAreas ?? const <DiningAreaEntity>[];
+    return BlocListener<TablesBloc, TablesState>(
+      listenWhen: (previous, current) =>
+          current is TableDeleted ||
+          (previous is DeletingTable && current is TableError),
+      listener: (context, state) {
+        if (state is TableDeleted) {
+          AppToast.show(
+            context,
+            message: localizations.message_table_deleted,
+            borderColor: colorScheme.baseGreen,
+          );
+        } else if (state is TableError) {
+          AppToast.show(
+            context,
+            message: state.errorMessage,
+            borderColor: colorScheme.error,
+          );
+        }
+      },
+      child: BlocBuilder<TablesBloc, TablesState>(
+        builder: (context, state) {
+          final diningAreas = state.diningAreas ?? const <DiningAreaEntity>[];
         final effectiveSelectedSalonId =
             diningAreas.any((area) => area.id == _selectedSalonId)
             ? _selectedSalonId
@@ -205,6 +224,6 @@ class _TableManagementPageState extends State<TableManagementPage> {
           ),
         );
       },
-    );
+    ));
   }
 }
