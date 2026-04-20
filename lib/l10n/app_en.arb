@@ -76,7 +76,7 @@
   "message_table_updated": "Table Updated Successfully",
   "message_product_deleted": "Product Deleted Successfully",
   "message_table_deleted": "Table Deleted Successfully",
-  "empty_table_in_salon": "There are no tables in this salon yet.",
+  "empty_table_in_salon": "There are no tables in this dining area yet.",
   "delete_action": "Delete",
   "delete_product_dialog_title": "Delete Product",
   "delete_table_dialog_title": "Delete Table",

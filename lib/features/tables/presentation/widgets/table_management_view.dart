@@ -6,6 +6,7 @@ import 'package:nativus_pos_desktop/features/tables/presentation/widgets/dining_
 import 'package:nativus_pos_desktop/features/tables/presentation/helpers/table_management_helpers.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/widgets/chips/dining_area_tab_chip.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
+import 'package:nativus_pos_desktop/shared/widgets/empty_state_placeholder.dart';
 
 class TableManagementView extends StatelessWidget {
   const TableManagementView({
@@ -114,29 +115,10 @@ class TableManagementView extends StatelessWidget {
                   children: [
                     for (final diningArea in visibleDiningAreas) ...[
                       DiningAreaSection(diningArea: diningArea),
-                      if (selectedSalonId != null &&
-                          diningArea.tables.isEmpty)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 40),
-                          child: Center(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.deck_outlined,
-                                  size: 64,
-                                  color: colorScheme.textMuted.withValues(alpha: 0.5),
-                                ),
-                                const SizedBox(height: 16),
-                                Text(
-                                  localizations.empty_table_in_salon,
-                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                        color: colorScheme.textMuted,
-                                      ),
-                                ),
-                              ],
-                            ),
-                          ),
+                      if (diningArea.tables.isEmpty)
+                        EmptyStatePlaceholder(
+                          icon: Icons.deck_outlined,
+                          message: localizations.empty_table_in_salon,
                         ),
                       const SizedBox(height: 28),
                     ],

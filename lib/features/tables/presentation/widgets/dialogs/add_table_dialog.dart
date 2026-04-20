@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
-import 'package:nativus_pos_desktop/features/products/presentation/blocs/products_bloc.dart';
 import 'package:nativus_pos_desktop/features/tables/domain/entities/table_entity.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/blocs/tables_bloc.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
