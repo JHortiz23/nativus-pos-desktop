@@ -27,28 +27,6 @@ class TablesRepositoryImpl implements TablesRepository {
     return TableMapper.toEntity(model);
   }
 
-  // @override
-  // Future<PaginatedResponse<ProductsEntity>> getProducts({
-  //   int page = 1,
-  //   int pageSize = 100,
-  // }) async {
-  //   final userReviewModels = await remoteDataSource.getProducts(
-  //     page: page,
-  //     pageSize: pageSize,
-  //   );
-
-  //   final mappedItems = userReviewModels.items
-  //       .map((model) => ProductsMapper.toEntity(model))
-  //       .toList(growable: false);
-
-  //   return PaginatedResponse<ProductsEntity>(
-  //     items: mappedItems,
-  //     pageInfo: userReviewModels.pageInfo,
-  //     filters: userReviewModels.filters,
-  //     detectedItemsKey: userReviewModels.detectedItemsKey,
-  //   );
-  // }
-
   @override
   Future<DiningAreasResponseEntity> getDiningAreas() async {
     final response = await remoteDataSource.getDiningAreas();
@@ -56,31 +34,29 @@ class TablesRepositoryImpl implements TablesRepository {
     return DiningAreasResponseMapper.toEntity(response);
   }
 
-  // @override
-  // Future<ProductsEntity> updateProduct({
-  //   required int id,
-  //   required int categoryId,
-  //   required String name,
-  //   required String description,
-  //   required double price,
-  //   required bool isActive,
-  // }) async {
-  //   final model = await remoteDataSource.updateProduct(
-  //     id: id,
-  //     categoryId: categoryId,
-  //     name: name,
-  //     description: description,
-  //     price: price,
-  //     isActive: isActive,
-  //   );
+  @override
+  Future<TableEntity> updateTable({
+    required int id,
+    required String name,
+    required int seats,
+    required int diningAreaId,
+    required bool isActive,
+  }) async {
+    final model = await remoteDataSource.updateTable(
+      id: id,
+      name: name,
+      seats: seats,
+      diningAreaId: diningAreaId,
+      isActive: isActive,
+    );
 
-  //   return ProductsMapper.toEntity(model);
-  // }
+    return TableMapper.toEntity(model);
+  }
 
-  // @override
-  // Future<ProductsEntity> deleteProduct({required int id}) async {
-  //   final model = await remoteDataSource.deleteProduct(id: id);
+  @override
+  Future<TableEntity> deleteTable({required int id}) async {
+    final model = await remoteDataSource.deleteTable(id: id);
 
-  //   return ProductsMapper.toEntity(model);
-  // }
+    return TableMapper.toEntity(model);
+  }
 }

@@ -14,18 +14,15 @@ abstract class TablesRemoteDataSource {
   });
   Future<DiningAreasResponseModel> getDiningAreas();
 
-  // Future<List<ProductCategoriesModel>> getProductCategories();
+  Future<TableModel> updateTable({
+    required int id,
+    required String name,
+    required int seats,
+    required int diningAreaId,
+    required bool isActive,
+  });
 
-  // Future<ProductModel> updateProduct({
-  //   required int id,
-  //   required int categoryId,
-  //   required String name,
-  //   required String description,
-  //   required double price,
-  //   required bool isActive,
-  // });
-
-  // Future<ProductModel> deleteProduct({required int id});
+  Future<TableModel> deleteTable({required int id});
 }
 
 class TablesRemoteDataSourceImpl implements TablesRemoteDataSource {
@@ -90,47 +87,6 @@ class TablesRemoteDataSourceImpl implements TablesRemoteDataSource {
     }
   }
 
-  // @override
-  // Future<List<DiningAreaModel>> getDiningAreas({
-  //   required int page,
-  //   required int pageSize,
-  // }) async {
-  //   try {
-  //     final accessToken = _tokenStorage.getAccessToken();
-  //     if (accessToken == null || accessToken.isEmpty) {
-  //       throw StateError('Missing access token for products request.');
-  //     }
-
-  //     final uri = ProductsApiEndpoints.getProducts(page: page, items: pageSize);
-
-  //     final headers = HttpHelper.jsonHeaders(accessToken: accessToken);
-  //     final response = await _client.get(uri, headers: headers);
-
-  //     if (response.statusCode < 200 || response.statusCode >= 300) {
-  //       await HttpHelper.clearSessionIfUnauthorized(
-  //         statusCode: response.statusCode,
-  //         storage: _tokenStorage,
-  //       );
-  //       throw Exception('Failed to load products: HTTP ${response.statusCode}');
-  //     }
-
-  //     final decoded = json.decode(response.body);
-
-  //     if (decoded is! Map<String, dynamic>) {
-  //       throw const FormatException(
-  //         'Unexpected products payload. Expected a JSON object.',
-  //       );
-  //     }
-  //     return PaginatedResponse<DiningAreaModel>.fromJson(
-  //       decoded,
-  //       (json) => DiningAreaModel.fromJson(json),
-  //       itemsKey: 'diningAreas',
-  //     ).items;
-  //   } catch (e) {
-  //     throw Exception('Error getting products: $e');
-  //   }
-  // }
-
   @override
   Future<DiningAreasResponseModel> getDiningAreas() async {
     try {
@@ -178,92 +134,106 @@ class TablesRemoteDataSourceImpl implements TablesRemoteDataSource {
     }
   }
 
-  // @override
-  // Future<ProductModel> updateProduct({
-  //   required int id,
-  //   required int categoryId,
-  //   required String name,
-  //   required String description,
-  //   required double price,
-  //   required bool isActive,
-  // }) async {
-  //   try {
-  //     final accessToken = _tokenStorage.getAccessToken();
-  //     if (accessToken == null || accessToken.isEmpty) {
-  //       throw StateError('Missing access token for update product request.');
-  //     }
+  @override
+  Future<TableModel> updateTable({
+    required int id,
+    required String name,
+    required int seats,
+    required int diningAreaId,
+    required bool isActive,
+  }) async {
+    try {
+      final accessToken = _tokenStorage.getAccessToken();
+      if (accessToken == null || accessToken.isEmpty) {
+        throw StateError('Missing access token for update table request.');
+      }
 
-  //     final uri = ProductsApiEndpoints.updateProduct(id: id);
+      final uri = TablesApiEndpoints.updateTable(id: id);
 
-  //     final headers = HttpHelper.jsonHeaders(accessToken: accessToken);
-  //     final body = json.encode({
-  //       'name': name,
-  //       'price': price,
-  //       'categoryId': categoryId,
-  //       'description': description,
-  //       'isActive': isActive,
-  //     });
+      final headers = HttpHelper.jsonHeaders(accessToken: accessToken);
+      final body = {
+        'name': name,
+        'seats': seats,
+        'diningAreaId': diningAreaId,
+        'isActive': isActive,
+      };
 
-  //     final response = await _client.put(uri, headers: headers, body: body);
+      final response = await _client.put(
+        uri.toString(), 
+        options: Options(
+          headers: headers,
+          validateStatus: (status) => true,
+        ),
+        data: body,
+      );
 
-  //     if (response.statusCode < 200 || response.statusCode >= 300) {
-  //       await HttpHelper.clearSessionIfUnauthorized(
-  //         statusCode: response.statusCode,
-  //         storage: _tokenStorage,
-  //       );
-  //       throw Exception(
-  //         'Failed to update product: HTTP ${response.statusCode}',
-  //       );
-  //     }
+      if ((response.statusCode ?? 500) < 200 || (response.statusCode ?? 500) >= 300) {
+        await HttpHelper.clearSessionIfUnauthorized(
+          statusCode: response.statusCode ?? 500,
+          storage: _tokenStorage,
+        );
+        throw Exception(
+          'Failed to update table: HTTP ${response.statusCode}',
+        );
+      }
 
-  //     final decoded = json.decode(response.body);
+      final decoded = response.data;
 
-  //     if (decoded is! Map<String, dynamic>) {
-  //       throw const FormatException(
-  //         'Unexpected update product response. Expected a JSON object.',
-  //       );
-  //     }
+      if (decoded is! Map<String, dynamic>) {
+        throw const FormatException(
+          'Unexpected update table response. Expected a JSON object.',
+        );
+      }
 
-  //     return ProductModel.fromJson(decoded);
-  //   } catch (e) {
-  //     throw Exception('Error updating product: $e');
-  //   }
-  // }
+      return TableModel.fromJson(decoded);
+    } catch (e) {
+      throw Exception('Error updating table: $e');
+    }
+  }
 
-  // @override
-  // Future<ProductModel> deleteProduct({required int id}) async {
-  //   try {
-  //     final accessToken = _tokenStorage.getAccessToken();
-  //     if (accessToken == null || accessToken.isEmpty) {
-  //       throw StateError('Missing access token for delete product request.');
-  //     }
+  @override
+  Future<TableModel> deleteTable({required int id}) async {
+    try {
+      final accessToken = _tokenStorage.getAccessToken();
+      if (accessToken == null || accessToken.isEmpty) {
+        throw StateError('Missing access token for delete table request.');
+      }
 
-  //     final uri = ProductsApiEndpoints.deleteProduct(id: id);
+      final uri = TablesApiEndpoints.deleteTable(id: id);
 
-  //     final headers = HttpHelper.jsonHeaders(accessToken: accessToken);
-  //     final response = await _client.delete(uri, headers: headers);
+      final headers = HttpHelper.jsonHeaders(accessToken: accessToken);
+      
+      final response = await _client.delete(
+        uri.toString(), 
+        options: Options(
+          headers: headers,
+          validateStatus: (status) => true,
+        ),
+      );
 
-  //     if (response.statusCode < 200 || response.statusCode >= 300) {
-  //       await HttpHelper.clearSessionIfUnauthorized(
-  //         statusCode: response.statusCode,
-  //         storage: _tokenStorage,
-  //       );
-  //       throw Exception(
-  //         'Failed to delete product: HTTP ${response.statusCode}',
-  //       );
-  //     }
+      if ((response.statusCode ?? 500) < 200 || (response.statusCode ?? 500) >= 300) {
+        await HttpHelper.clearSessionIfUnauthorized(
+          statusCode: response.statusCode ?? 500,
+          storage: _tokenStorage,
+        );
+        throw Exception(
+          'Failed to delete table: HTTP ${response.statusCode}',
+        );
+      }
 
-  //     final decoded = json.decode(response.body);
+      final decoded = response.data;
 
-  //     if (decoded is! Map<String, dynamic>) {
-  //       throw const FormatException(
-  //         'Unexpected delete product response. Expected a JSON object.',
-  //       );
-  //     }
+      if (decoded is! Map<String, dynamic>) {
+        throw const FormatException(
+          'Unexpected delete table response. Expected a JSON object.',
+        );
+      }
 
-  //     return ProductModel.fromJson(decoded);
-  //   } catch (e) {
-  //     throw Exception('Error deleting product: $e');
-  //   }
-  // }
+      return TableModel.fromJson(decoded);
+    } catch (e) {
+      throw Exception('Error deleting table: $e');
+    }
+  }
+
+
 }

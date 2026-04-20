@@ -12,23 +12,20 @@ part 'tables_state.dart';
 
 class TablesBloc extends Bloc<TablesEvent, TablesState> {
   final AddTableUseCase addTableUseCase;
-  // final GetProductsUseCase getProductsUseCase;
   final GetDiningAreasUseCase getDiningAreasUseCase;
-  // final UpdateProductUseCase updateProductUseCase;
-  // final DeleteProductUseCase deleteProductUseCase;
+  final UpdateTableUseCase updateTableUseCase;
+  final DeleteTableUseCase deleteTableUseCase;
 
   TablesBloc({
     required this.addTableUseCase,
-    // required this.getProductsUseCase,
     required this.getDiningAreasUseCase,
-    // required this.updateProductUseCase,
-    // required this.deleteProductUseCase,
+    required this.updateTableUseCase,
+    required this.deleteTableUseCase,
   }) : super(const TablesState()) {
     on<AddTableEvent>(_onAddTable);
-    // on<GetTablesEvent>(_onGetTables);
     on<GetDiningAreasEvent>(_onGetDiningAreas);
-    // on<UpdateProductEvent>(_onUpdateProduct);
-    // on<DeleteProductEvent>(_onDeleteProduct);
+    on<UpdateTableEvent>(_onUpdateTable);
+    on<DeleteTableEvent>(_onDeleteTable);
   }
 
   Future<void> _onAddTable(
@@ -80,49 +77,6 @@ class TablesBloc extends Bloc<TablesEvent, TablesState> {
     }
   }
 
-  // Future<void> _onGetProducts(
-  //   GetProductsEvent event,
-  //   Emitter<ProductsState> emit,
-  // ) async {
-  //   emit(
-  //     state.copyWith(
-  //       isLoading: true,
-  //       errorMessage: '',
-  //       getProductsRequest: RequestsEnum.loading,
-  //     ),
-  //   );
-
-  //   // Determine values to use (prefer event arguments, fallback to state defaults/current)
-  //   final pageSize = event.pageSize > 0 ? event.pageSize : state.pageSize;
-  //   final page = event.page > 0 ? event.page : state.page;
-
-  //   try {
-  //     final productsResponse = await getProductsUseCase(
-  //       page: page,
-  //       pageSize: pageSize,
-  //     );
-
-  //     emit(
-  //       state.copyWith(
-  //         products: productsResponse,
-  //         page: page,
-  //         pageSize: pageSize,
-  //         getProductsRequest: RequestsEnum.success,
-  //         isLoading: false,
-  //         errorMessage: '',
-  //       ),
-  //     );
-  //   } catch (e) {
-  //     emit(
-  //       state.copyWith(
-  //         errorMessage: e.toString(),
-  //         isLoading: false,
-  //         getProductsRequest: RequestsEnum.failure,
-  //       ),
-  //     );
-  //   }
-  // }
-
   Future<void> _onGetDiningAreas(
     GetDiningAreasEvent event,
     Emitter<TablesState> emit,
@@ -165,87 +119,96 @@ class TablesBloc extends Bloc<TablesEvent, TablesState> {
     }
   }
 
-  // Future<void> _onUpdateProduct(
-  //   UpdateProductEvent event,
-  //   Emitter<ProductsState> emit,
-  // ) async {
-  //   emit(
-  //     UpdatingProduct(
-  //       products: state.products,
-  //       productCategories: state.productCategories,
-  //       page: state.page,
-  //       pageSize: state.pageSize,
-  //     ),
-  //   );
+  Future<void> _onUpdateTable(
+    UpdateTableEvent event,
+    Emitter<TablesState> emit,
+  ) async {
+    emit(
+      UpdatingTable(
+        diningAreas: state.diningAreas,
+        summary: state.summary,
+        isLoading: true,
+        errorMessage: '',
+        page: state.page,
+        pageSize: state.pageSize,
+      ),
+    );
 
-  //   try {
-  //     await updateProductUseCase(
-  //       id: event.id,
-  //       categoryId: event.categoryId,
-  //       name: event.name,
-  //       description: event.description,
-  //       price: event.price,
-  //       isActive: event.isActive,
-  //     );
+    try {
+      await updateTableUseCase(
+        id: event.id,
+        name: event.name,
+        seats: event.seats,
+        diningAreaId: event.diningAreaId,
+        isActive: event.isActive,
+      );
 
-  //     emit(
-  //       ProductUpdated(
-  //         products: state.products,
-  //         productCategories: state.productCategories,
-  //         page: state.page,
-  //         pageSize: state.pageSize,
-  //       ),
-  //     );
-  //     // emit a state to trigger products refresh after updating a product
-  //     add(GetProductsEvent(page: state.page, pageSize: state.pageSize));
-  //   } catch (e) {
-  //     emit(
-  //       ProductError(
-  //         errorMessage: e.toString(),
-  //         products: state.products,
-  //         productCategories: state.productCategories,
-  //         page: state.page,
-  //         pageSize: state.pageSize,
-  //       ),
-  //     );
-  //   }
-  // }
+      emit(
+        TableUpdated(
+          diningAreas: state.diningAreas,
+          summary: state.summary,
+          isLoading: false,
+          errorMessage: '',
+          page: state.page,
+          pageSize: state.pageSize,
+        ),
+      );
+      // emit a state to trigger dining areas refresh after updating a table
+      add(GetDiningAreasEvent());
+    } catch (e) {
+      emit(
+        TableError(
+          errorMessage: e.toString(),
+          diningAreas: state.diningAreas,
+          summary: state.summary,
+          isLoading: false,
+          page: state.page,
+          pageSize: state.pageSize,
+        ),
+      );
+    }
+  }
 
-  // Future<void> _onDeleteProduct(
-  //   DeleteProductEvent event,
-  //   Emitter<ProductsState> emit,
-  // ) async {
-  //   emit(
-  //     DeletingProduct(
-  //       products: state.products,
-  //       productCategories: state.productCategories,
-  //       page: state.page,
-  //       pageSize: state.pageSize,
-  //     ),
-  //   );
+  Future<void> _onDeleteTable(
+    DeleteTableEvent event,
+    Emitter<TablesState> emit,
+  ) async {
+    emit(
+      DeletingTable(
+        diningAreas: state.diningAreas,
+        summary: state.summary,
+        isLoading: true,
+        errorMessage: '',
+        page: state.page,
+        pageSize: state.pageSize,
+      ),
+    );
 
-  //   try {
-  //     await deleteProductUseCase(id: event.id);
-  //     emit(
-  //       ProductDeleted(
-  //         products: state.products,
-  //         productCategories: state.productCategories,
-  //         page: state.page,
-  //         pageSize: state.pageSize,
-  //       ),
-  //     );
-  //     // emit a state to trigger products refresh after deleting a product
-  //     add(GetProductsEvent(page: state.page, pageSize: state.pageSize));
-  //   } catch (e) {
-  //     emit(
-  //       ProductError(
-  //         errorMessage: e.toString(),
-  //         products: state.products,
-  //         productCategories: state.productCategories,
-  //         page: state.page,
-  //         pageSize: state.pageSize,
-  //       ),
-  //     );
-  //   }
-  // }
+    try {
+      await deleteTableUseCase(id: event.id);
+      emit(
+        TableDeleted(
+          diningAreas: state.diningAreas,
+          summary: state.summary,
+          isLoading: false,
+          errorMessage: '',
+          page: state.page,
+          pageSize: state.pageSize,
+        ),
+      );
+      // emit a state to trigger dining areas refresh after deleting a table
+      add(GetDiningAreasEvent());
+    } catch (e) {
+      emit(
+        TableError(
+          errorMessage: e.toString(),
+          diningAreas: state.diningAreas,
+          summary: state.summary,
+          isLoading: false,
+          page: state.page,
+          pageSize: state.pageSize,
+        ),
+      );
+    }
+  }
 }

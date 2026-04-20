@@ -485,6 +485,12 @@ abstract class AppLocalizations {
   /// **'Product Added Successfully'**
   String get message_product_added;
 
+  /// No description provided for @message_table_added.
+  ///
+  /// In en, this message translates to:
+  /// **'Table Added Successfully'**
+  String get message_table_added;
+
   /// No description provided for @no_description.
   ///
   /// In en, this message translates to:
@@ -509,6 +515,12 @@ abstract class AppLocalizations {
   /// **'Product Updated Successfully'**
   String get message_product_updated;
 
+  /// No description provided for @message_table_updated.
+  ///
+  /// In en, this message translates to:
+  /// **'Table Updated Successfully'**
+  String get message_table_updated;
+
   /// No description provided for @message_product_deleted.
   ///
   /// In en, this message translates to:
@@ -527,11 +539,23 @@ abstract class AppLocalizations {
   /// **'Delete Product'**
   String get delete_product_dialog_title;
 
+  /// No description provided for @delete_table_dialog_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Table'**
+  String get delete_table_dialog_title;
+
   /// No description provided for @delete_product_dialog_message.
   ///
   /// In en, this message translates to:
   /// **'Delete this product? This action cannot be undone.'**
   String get delete_product_dialog_message;
+
+  /// No description provided for @delete_table_dialog_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this table? This action cannot be undone.'**
+  String get delete_table_dialog_message;
 
   /// No description provided for @table_management.
   ///

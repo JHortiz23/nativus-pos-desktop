@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
 import 'package:nativus_pos_desktop/features/tables/domain/entities/dining_area_entity.dart';
+import 'package:nativus_pos_desktop/features/tables/domain/entities/table_entity.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/blocs/tables_bloc.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/helpers/table_management_helpers.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/widgets/cards/table_card.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/widgets/dialogs/add_table_dialog.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
+import 'package:nativus_pos_desktop/shared/widgets/dialogs/app_confirmation_dialog.dart';
 
 class DiningAreaSection extends StatelessWidget {
   const DiningAreaSection({super.key, required this.diningArea});
@@ -104,14 +106,9 @@ class DiningAreaSection extends StatelessWidget {
                             child: AddTableDialog(table: table),
                           ),
                         );
-                        // TODO: implement edit
-                        // showDialog(
-                        //   context: context,
-                        //   builder: (context) => const AddTableDialog(table: table,),
-                        // );
                       },
                       onDelete: () {
-                        // TODO: implement delete
+                        _confirmDeleteTable(context, table);
                       },
                     ),
                   ),
@@ -121,5 +118,24 @@ class DiningAreaSection extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Future<void> _confirmDeleteTable(
+    BuildContext context,
+    TableEntity table,
+  ) async {
+    final localizations = AppLocalizations.of(context)!;
+    final shouldDelete = await showAppConfirmationDialog(
+      context: context,
+      title: localizations.delete_table_dialog_title,
+      message: localizations.delete_table_dialog_message,
+      confirmLabel: localizations.delete_action,
+    );
+
+    if (shouldDelete != true || !context.mounted) {
+      return;
+    }
+
+    context.read<TablesBloc>().add(DeleteTableEvent(id: table.id));
   }
 }

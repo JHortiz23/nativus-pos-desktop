@@ -13,4 +13,13 @@ class TablesApiEndpoints {
     return Uri.parse('$baseUrl/tables');
   }
 
+  // ** Update Table **
+  static Uri updateTable({required int id}) {
+    return Uri.parse('$baseUrl/tables/$id');
+  }
+
+  // ** Delete Table **
+  static Uri deleteTable({required int id}) {
+    return Uri.parse('$baseUrl/tables/$id');
+  }
 }

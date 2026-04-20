@@ -1,7 +1,6 @@
 part of 'tables_bloc.dart';
 
 class TablesState extends Equatable {
-  // final PaginatedResponse<ProductsEntity>? products;
   final List<DiningAreaEntity>? diningAreas;
   final DiningAreasSummaryEntity? summary;
   final bool isLoading;
@@ -10,7 +9,6 @@ class TablesState extends Equatable {
   final int pageSize;
 
   const TablesState({
-    // this.products,
     this.diningAreas,
     this.summary,
     this.isLoading = false,
@@ -30,7 +28,6 @@ class TablesState extends Equatable {
     int? pageSize,
   }) {
     return TablesState(
-      // products: products ?? this.products,
       diningAreas: diningAreas ?? this.diningAreas,
       summary: summary ?? this.summary,
       isLoading: isLoading ?? this.isLoading,
@@ -42,10 +39,8 @@ class TablesState extends Equatable {
 
   @override
   List<Object?> get props => [
-    // products,
     diningAreas,
     summary,
-    // getProductsRequest,
     isLoading,
     errorMessage,
     pageSize,
@@ -108,50 +103,46 @@ class TableAdded extends TablesState {
   });
 }
 
-// class UpdatingProduct extends TablesState {
-//   const UpdatingProduct({
-//     // super.products,
-//     super.diningAreas,
-//     // super.getProductsRequest = RequestsEnum.loading,
-//     super.isLoading = true,
-//     super.errorMessage = '',
-//     super.page,
-//     super.pageSize,
-//   });
-// }
+class UpdatingTable extends TablesState {
+  const UpdatingTable({
+    super.diningAreas,
+    super.summary,
+    super.isLoading = true,
+    super.errorMessage = '',
+    super.page,
+    super.pageSize,
+  });
+}
 
-// class ProductUpdated extends TablesState {
-//   const ProductUpdated({
-//     // super.products,
-//     super.diningAreas,
-//     // super.getProductsRequest = RequestsEnum.success,
-//     super.isLoading = false,
-//     super.errorMessage = '',
-//     super.page,
-//     super.pageSize,
-//   });
-// }
+class TableUpdated extends TablesState {
+  const TableUpdated({
+    super.diningAreas,
+    super.summary,
+    super.isLoading = false,
+    super.errorMessage = '',
+    super.page,
+    super.pageSize,
+  });
+}
 
-// class DeletingProduct extends TablesState {
-//   const DeletingProduct({
-//     // super.products,
-//     super.diningAreas,
-//     // super.getProductsRequest = RequestsEnum.loading,
-//     super.isLoading = true,
-//     super.errorMessage = '',
-//     super.page,
-//     super.pageSize,
-//   });
-// }
+class DeletingTable extends TablesState {
+  const DeletingTable({
+    super.diningAreas,
+    super.summary,
+    super.isLoading = true,
+    super.errorMessage = '',
+    super.page,
+    super.pageSize,
+  });
+}
 
-// class ProductDeleted extends TablesState {
-//   const ProductDeleted({
-//     // super.products,
-//     super.diningAreas,
-//     // super.getProductsRequest = RequestsEnum.success,
-//     super.isLoading = false,
-//     super.errorMessage = '',
-//     super.page,
-//     super.pageSize,
-//   });
-// }
+class TableDeleted extends TablesState {
+  const TableDeleted({
+    super.diningAreas,
+    super.summary,
+    super.isLoading = false,
+    super.errorMessage = '',
+    super.page,
+    super.pageSize,
+  });
+}

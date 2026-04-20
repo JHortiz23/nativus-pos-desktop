@@ -51,6 +51,15 @@ class _AddTableDialogState extends State<AddTableDialog> {
 
     if (_isEditing) {
       //Update existing table
+      context.read<TablesBloc>().add(
+        UpdateTableEvent(
+          id: widget.table!.id,
+          name: _nameCtrl.text.trim(),
+          seats: int.parse(_seatsCtrl.text.trim()),
+          diningAreaId: _selectedDiningAreaId!,
+          isActive: _isActive,
+        ),
+      );
     } else {
       // Add new table
       context.read<TablesBloc>().add(
@@ -77,16 +86,16 @@ class _AddTableDialogState extends State<AddTableDialog> {
           // Show success message
           AppToast.show(
             context,
-            message: l10n.message_product_added,
+            message: l10n.message_table_added,
             borderColor: colorScheme.baseGreen,
           );
 
           Navigator.of(context).pop();
-        } else if (state is ProductUpdated) {
+        } else if (state is TableUpdated) {
           // Show success message
           AppToast.show(
             context,
-            message: l10n.message_product_updated,
+            message: l10n.message_table_updated,
             borderColor: colorScheme.baseGreen,
           );
 
@@ -147,7 +156,10 @@ class _AddTableDialogState extends State<AddTableDialog> {
                         child: TextFormField(
                           controller: _nameCtrl,
                           style: TextStyle(color: colorScheme.baseWhite),
-                          decoration: CustomInputDecoration.decor(context, l10n.add_table_name_hint),
+                          decoration: CustomInputDecoration.decor(
+                            context,
+                            l10n.add_table_name_hint,
+                          ),
                           validator: (v) => v!.trim().isEmpty ? '' : null,
                         ),
                       ),
@@ -273,4 +285,3 @@ class _AddTableDialogState extends State<AddTableDialog> {
     );
   }
 }
-

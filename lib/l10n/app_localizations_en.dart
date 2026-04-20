@@ -204,6 +204,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get message_product_added => 'Product Added Successfully';
 
   @override
+  String get message_table_added => 'Table Added Successfully';
+
+  @override
   String get no_description => 'No description';
 
   @override
@@ -216,6 +219,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get message_product_updated => 'Product Updated Successfully';
 
   @override
+  String get message_table_updated => 'Table Updated Successfully';
+
+  @override
   String get message_product_deleted => 'Product Deleted Successfully';
 
   @override
@@ -225,7 +231,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get delete_product_dialog_title => 'Delete Product';
 
   @override
+  String get delete_table_dialog_title => 'Delete Table';
+
+  @override
   String get delete_product_dialog_message => 'Delete this product? This action cannot be undone.';
+
+  @override
+  String get delete_table_dialog_message => 'Delete this table? This action cannot be undone.';
 
   @override
   String get table_management => 'Table Maganement';

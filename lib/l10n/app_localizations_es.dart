@@ -204,6 +204,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get message_product_added => 'Producto Agregado Correctamente';
 
   @override
+  String get message_table_added => 'Mesa Agregada Correctamente';
+
+  @override
   String get no_description => 'Sin descripción';
 
   @override
@@ -216,6 +219,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get message_product_updated => 'Producto Actualizado Correctamente';
 
   @override
+  String get message_table_updated => 'Mesa Actualizada Correctamente';
+
+  @override
   String get message_product_deleted => 'Producto Eliminado Correctamente';
 
   @override
@@ -225,7 +231,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get delete_product_dialog_title => 'Eliminar Producto';
 
   @override
+  String get delete_table_dialog_title => 'Eliminar Mesa';
+
+  @override
   String get delete_product_dialog_message => '¿Eliminar este producto? Esta acción no se puede deshacer.';
+
+  @override
+  String get delete_table_dialog_message => '¿Eliminar esta mesa? Esta acción no se puede deshacer.';
 
   @override
   String get table_management => 'Gestión de Mesas';

@@ -8,19 +8,14 @@ abstract class TablesRepository {
     required int diningAreaId,
     required bool isActive,
   });
-  // Future<PaginatedResponse<ProductsEntity>> getProducts({
-  //   int page = 1,
-  //   int pageSize = 100,
-  // });
 
   Future<DiningAreasResponseEntity> getDiningAreas();
-  // Future<ProductsEntity> updateProduct({
-  //   required int id,
-  //   required int categoryId,
-  //   required String name,
-  //   required String description,
-  //   required double price,
-  //   required bool isActive,
-  // });
-  // Future<ProductsEntity> deleteProduct({required int id});
+  Future<TableEntity> updateTable({
+    required int id,
+    required String name,
+    required int seats,
+    required int diningAreaId,
+    required bool isActive,
+  });
+  Future<TableEntity> deleteTable({required int id});
 }
