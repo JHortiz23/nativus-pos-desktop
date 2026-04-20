@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
 import 'package:nativus_pos_desktop/features/products/domain/entities/products_entity.dart';
@@ -7,6 +6,9 @@ import 'package:nativus_pos_desktop/features/products/presentation/blocs/product
 import 'package:nativus_pos_desktop/features/products/presentation/helpers/product_price_helper.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
 import 'package:nativus_pos_desktop/shared/widgets/toasts/app_toast.dart';
+import 'package:nativus_pos_desktop/shared/widgets/inputs/custom_field.dart';
+import 'package:nativus_pos_desktop/shared/widgets/inputs/custom_number_field.dart';
+import 'package:nativus_pos_desktop/shared/widgets/inputs/custom_input_decoration.dart';
 
 class AddProductDialog extends StatefulWidget {
   final ProductsEntity? product;
@@ -152,12 +154,12 @@ class _AddProductDialogState extends State<AddProductDialog> {
                 Row(
                   children: [
                     Expanded(
-                      child: _Field(
+                      child: CustomField(
                         label: l10n.add_product_name_label,
                         child: TextFormField(
                           controller: _nameCtrl,
                           style: TextStyle(color: colorScheme.baseWhite),
-                          decoration: _decor(
+                          decoration: CustomInputDecoration.decor(
                             context,
                             l10n.add_product_name_hint,
                           ),
@@ -167,30 +169,11 @@ class _AddProductDialogState extends State<AddProductDialog> {
                     ),
                     const SizedBox(width: 20),
                     Expanded(
-                      child: _Field(
+                      child: CustomNumberField(
                         label: l10n.add_product_price_label,
-                        child: TextFormField(
-                          controller: _priceCtrl,
-                          style: TextStyle(color: colorScheme.baseWhite),
-                          keyboardType: const TextInputType.numberWithOptions(
-                            decimal: true,
-                          ),
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(
-                              RegExp(r'^\d*\.?\d*'),
-                            ),
-                          ],
-                          decoration: _decor(
-                            context,
-                            l10n.add_product_price_hint,
-                          ),
-                          validator: (v) =>
-                              (v == null ||
-                                  v.trim().isEmpty ||
-                                  double.tryParse(v) == null)
-                              ? ''
-                              : null,
-                        ),
+                        controller: _priceCtrl,
+                        hint: l10n.add_product_price_hint,
+                        allowDecimal: false, // Permite decimales
                       ),
                     ),
                   ],
@@ -205,7 +188,7 @@ class _AddProductDialogState extends State<AddProductDialog> {
                       _selectedCategoryId = categories.first.id;
                     }
 
-                    return _Field(
+                    return CustomField(
                       label: l10n.add_product_category_label,
                       child: DropdownButtonFormField<int>(
                         initialValue: _selectedCategoryId,
@@ -215,7 +198,7 @@ class _AddProductDialogState extends State<AddProductDialog> {
                           color: colorScheme.baseWhite,
                           fontSize: 16,
                         ),
-                        decoration: _decor(context, ''),
+                        decoration: CustomInputDecoration.decor(context, ''),
                         items: categories
                             .map(
                               (c) => DropdownMenuItem(
@@ -232,13 +215,13 @@ class _AddProductDialogState extends State<AddProductDialog> {
                 ),
                 const SizedBox(height: 20),
 
-                _Field(
+                CustomField(
                   label: l10n.add_product_description_label,
                   child: TextFormField(
                     controller: _descCtrl,
                     maxLines: 4,
                     style: TextStyle(color: colorScheme.baseWhite),
-                    decoration: _decor(
+                    decoration: CustomInputDecoration.decor(
                       context,
                       l10n.add_product_description_hint,
                     ),
@@ -314,63 +297,6 @@ class _AddProductDialogState extends State<AddProductDialog> {
           ),
         ),
       ),
-    );
-  }
-
-  InputDecoration _decor(BuildContext context, String hint) {
-    final cs = Theme.of(context).colorScheme;
-    final border = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12),
-      borderSide: BorderSide(color: cs.softBorder),
-    );
-    final errorBorder = border.copyWith(
-      borderSide: BorderSide(color: cs.error),
-    );
-    return InputDecoration(
-      hintText: hint,
-      hintStyle: TextStyle(color: cs.textMuted.withValues(alpha: 0.5)),
-      filled: true,
-      fillColor: cs.darkSurfaceAlt,
-      contentPadding: const EdgeInsets.all(16),
-      border: border,
-      enabledBorder: border,
-      focusedBorder: border.copyWith(
-        borderSide: BorderSide(color: cs.accentPrimary),
-      ),
-      errorBorder: errorBorder,
-      focusedErrorBorder: errorBorder,
-      errorStyle: const TextStyle(
-        height: 0,
-        fontSize: 0,
-        color: Colors.transparent,
-      ),
-    );
-  }
-}
-
-class _Field extends StatelessWidget {
-  final String label;
-  final Widget child;
-  const _Field({required this.label, required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            color: cs.textMuted,
-            fontSize: 12,
-            fontWeight: FontWeight.w800,
-            letterSpacing: 1.2,
-          ),
-        ),
-        const SizedBox(height: 8),
-        child,
-      ],
     );
   }
 }
