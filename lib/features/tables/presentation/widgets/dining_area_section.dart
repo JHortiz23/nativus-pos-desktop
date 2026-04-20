@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
 import 'package:nativus_pos_desktop/features/tables/domain/entities/dining_area_entity.dart';
+import 'package:nativus_pos_desktop/features/tables/presentation/blocs/tables_bloc.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/helpers/table_management_helpers.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/widgets/cards/table_card.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/widgets/dialogs/add_table_dialog.dart';
@@ -90,15 +92,23 @@ class DiningAreaSection extends StatelessWidget {
                     width:
                         (maxWidth - (crossAxisCount - 1) * 14) / crossAxisCount,
                     child: TableCard(
-                      name: displayTableName(table, localizations),
+                      name: table.name,
                       capacity: table.seats,
                       status: tableStatus(table),
                       onEdit: () {
-                        // TODO: implement edit
                         showDialog(
                           context: context,
-                          builder: (context) => const AddTableDialog(),
+                          barrierDismissible: false,
+                          builder: (_) => BlocProvider.value(
+                            value: context.read<TablesBloc>(),
+                            child: AddTableDialog(table: table),
+                          ),
                         );
+                        // TODO: implement edit
+                        // showDialog(
+                        //   context: context,
+                        //   builder: (context) => const AddTableDialog(table: table,),
+                        // );
                       },
                       onDelete: () {
                         // TODO: implement delete

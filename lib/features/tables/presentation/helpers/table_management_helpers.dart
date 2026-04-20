@@ -2,18 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
 import 'package:nativus_pos_desktop/core/enums/status_enums.dart';
 import 'package:nativus_pos_desktop/features/tables/domain/entities/table_entity.dart';
-import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
-
-String displayTableName(TableEntity table, AppLocalizations localizations) {
-  final extractedNumber = _extractTableNumber(table.name);
-  if (extractedNumber != null || table.name.trim().isEmpty) {
-    return localizations.table_management_table_name(
-      extractedNumber ?? table.id,
-    );
-  }
-
-  return table.name;
-}
 
 int tableNumber(TableEntity table) {
   return _extractTableNumber(table.name) ?? table.id;
