@@ -7,25 +7,23 @@ abstract class TablesEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-/// Event to add a new product
-// class AddProductEvent extends TablesEvent {
-//   final int categoryId;
-//   final String name;
-//   final String description;
-//   final double price;
-//   final bool isActive;
+/// Event to add a new table
+class AddTableEvent extends TablesEvent {
+  final String name;
+  final int seats;
+  final int diningAreaId;
+  final bool isActive;
 
-//   const AddProductEvent({
-//     required this.categoryId,
-//     required this.name,
-//     required this.description,
-//     required this.price,
-//     required this.isActive,
-//   });
+  const AddTableEvent({
+    required this.name,
+    required this.seats,
+    required this.diningAreaId,
+    required this.isActive,
+  });
 
-//   @override
-//   List<Object?> get props => [categoryId, name, description, price, isActive];
-// }
+  @override
+  List<Object?> get props => [name, seats, diningAreaId, isActive];
+}
 
 /// Event to get products with optional filters and pagination
 // class GetProductsEvent extends TablesEvent {

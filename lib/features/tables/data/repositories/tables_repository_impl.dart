@@ -1,6 +1,8 @@
 import 'package:nativus_pos_desktop/features/tables/data/datasources/remote/tables_remote_datasource.dart';
 import 'package:nativus_pos_desktop/features/tables/data/mappers/dining_areas_response_mapper.dart';
+import 'package:nativus_pos_desktop/features/tables/data/mappers/table_mapper.dart';
 import 'package:nativus_pos_desktop/features/tables/domain/entities/dining_areas_response_entity.dart';
+import 'package:nativus_pos_desktop/features/tables/domain/entities/table_entity.dart';
 import 'package:nativus_pos_desktop/features/tables/domain/repositories/tables_repository.dart';
 
 class TablesRepositoryImpl implements TablesRepository {
@@ -8,24 +10,22 @@ class TablesRepositoryImpl implements TablesRepository {
 
   TablesRepositoryImpl({required this.remoteDataSource});
 
-  // @override
-  // Future<AddedProductEntity> addProduct({
-  //   required int categoryId,
-  //   required String name,
-  //   required String description,
-  //   required double price,
-  //   required bool isActive,
-  // }) async {
-  //   final model = await remoteDataSource.addProduct(
-  //     categoryId: categoryId,
-  //     name: name,
-  //     description: description,
-  //     price: price,
-  //     isActive: isActive,
-  //   );
+  @override
+  Future<TableEntity> addTable({
+    required String name,
+    required int seats,
+    required int diningAreaId,
+    required bool isActive,
+  }) async {
+    final model = await remoteDataSource.addTable(
+      name: name,
+      seats: seats,
+      diningAreaId: diningAreaId,
+      isActive: isActive,
+    );
 
-  //   return AddedProductMapper.toEntity(model);
-  // }
+    return TableMapper.toEntity(model);
+  }
 
   // @override
   // Future<PaginatedResponse<ProductsEntity>> getProducts({

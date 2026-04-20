@@ -5,76 +5,80 @@ import 'package:nativus_pos_desktop/core/shared/data/models/paginated_response.d
 import 'package:nativus_pos_desktop/features/products/domain/entities/products_entity.dart';
 import 'package:nativus_pos_desktop/features/tables/domain/entities/dining_area_entity.dart';
 import 'package:nativus_pos_desktop/features/tables/domain/entities/dining_areas_summary_entity.dart';
-import 'package:nativus_pos_desktop/features/tables/domain/use_cases/get_dining_areas_use_case.dart';
+import 'package:nativus_pos_desktop/features/tables/domain/use_cases/tables_use_cases_export.dart';
 
 part 'tables_event.dart';
 part 'tables_state.dart';
 
 class TablesBloc extends Bloc<TablesEvent, TablesState> {
-  // final AddProductUseCase addProductUseCase;
+  final AddTableUseCase addTableUseCase;
   // final GetProductsUseCase getProductsUseCase;
   final GetDiningAreasUseCase getDiningAreasUseCase;
   // final UpdateProductUseCase updateProductUseCase;
   // final DeleteProductUseCase deleteProductUseCase;
 
   TablesBloc({
-    // required this.addProductUseCase,
+    required this.addTableUseCase,
     // required this.getProductsUseCase,
     required this.getDiningAreasUseCase,
     // required this.updateProductUseCase,
     // required this.deleteProductUseCase,
   }) : super(const TablesState()) {
-    // on<AddProductEvent>(_onAddProduct);
-    // on<GetProductsEvent>(_onGetProducts);
+    on<AddTableEvent>(_onAddTable);
+    // on<GetTablesEvent>(_onGetTables);
     on<GetDiningAreasEvent>(_onGetDiningAreas);
     // on<UpdateProductEvent>(_onUpdateProduct);
     // on<DeleteProductEvent>(_onDeleteProduct);
   }
 
-  // Future<void> _onAddProduct(
-  //   AddProductEvent event,
-  //   Emitter<ProductsState> emit,
-  // ) async {
-  //   emit(
-  //     AddingProduct(
-  //       products: state.products,
-  //       productCategories: state.productCategories,
-  //       page: state.page,
-  //       pageSize: state.pageSize,
-  //     ),
-  //   );
+  Future<void> _onAddTable(
+    AddTableEvent event,
+    Emitter<TablesState> emit,
+  ) async {
+    emit(
+      AddingTable(
+        diningAreas: state.diningAreas,
+        summary: state.summary,
+        isLoading: true,
+        errorMessage: '',
+        page: state.page,
+        pageSize: state.pageSize,
+      ),
+    );
 
-  //   try {
-  //     await addProductUseCase(
-  //       categoryId: event.categoryId,
-  //       name: event.name,
-  //       description: event.description,
-  //       price: event.price,
-  //       isActive: event.isActive,
-  //     );
+    try {
+      await addTableUseCase(
+        name: event.name,
+        seats: event.seats,
+        diningAreaId: event.diningAreaId,
+        isActive: event.isActive,
+      );
 
-  //     emit(
-  //       ProductAdded(
-  //         products: state.products,
-  //         productCategories: state.productCategories,
-  //         page: state.page,
-  //         pageSize: state.pageSize,
-  //       ),
-  //     );
-  //     // emit a state to trigger products refresh after adding a product
-  //     add(GetProductsEvent(page: state.page, pageSize: state.pageSize));
-  //   } catch (e) {
-  //     emit(
-  //       ProductError(
-  //         errorMessage: e.toString(),
-  //         products: state.products,
-  //         productCategories: state.productCategories,
-  //         page: state.page,
-  //         pageSize: state.pageSize,
-  //       ),
-  //     );
-  //   }
-  // }
+      emit(
+        TableAdded(
+          diningAreas: state.diningAreas,
+          summary: state.summary,
+          isLoading: false,
+          errorMessage: '',
+          page: state.page,
+          pageSize: state.pageSize,
+        ),
+      );
+      // emit a state to trigger dining areas refresh after adding a table
+      add(GetDiningAreasEvent());
+    } catch (e) {
+      emit(
+        TableError(
+          errorMessage: e.toString(),
+          diningAreas: state.diningAreas,
+          summary: state.summary,
+          isLoading: false,
+          page: state.page,
+          pageSize: state.pageSize,
+        ),
+      );
+    }
+  }
 
   // Future<void> _onGetProducts(
   //   GetProductsEvent event,
@@ -149,7 +153,7 @@ class TablesBloc extends Bloc<TablesEvent, TablesState> {
       );
     } catch (e) {
       emit(
-        TablesError(
+        TableError(
           errorMessage: e.toString(),
           diningAreas: state.diningAreas,
           summary: state.summary,

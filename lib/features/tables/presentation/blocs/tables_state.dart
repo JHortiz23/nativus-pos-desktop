@@ -53,13 +53,11 @@ class TablesState extends Equatable {
   ];
 }
 
-class TablesError extends TablesState {
-  const TablesError({
+class TableError extends TablesState {
+  const TableError({
     required super.errorMessage,
-    // super.products,
     super.diningAreas,
     super.summary,
-    // super.getProductsRequest = RequestsEnum.failure,
     super.isLoading = false,
     super.page,
     super.pageSize,
@@ -68,10 +66,8 @@ class TablesError extends TablesState {
 
 class LoadingDiningAreas extends TablesState {
   const LoadingDiningAreas({
-    // super.products,
     super.diningAreas,
     super.summary,
-    // super.getProductsRequest = RequestsEnum.loading,
     super.isLoading = true,
     super.errorMessage = '',
     super.page,
@@ -81,10 +77,8 @@ class LoadingDiningAreas extends TablesState {
 
 class DiningAreasLoaded extends TablesState {
   const DiningAreasLoaded({
-    // super.products,
     super.diningAreas,
     super.summary,
-    // super.getProductsRequest = RequestsEnum.success,
     super.isLoading = false,
     super.errorMessage = '',
     super.page,
@@ -92,29 +86,27 @@ class DiningAreasLoaded extends TablesState {
   });
 }
 
-// class AddingProduct extends TablesState {
-//   const AddingProduct({
-//     // super.products,
-//     super.diningAreas,
-//     // super.getProductsRequest = RequestsEnum.loading,
-//     super.isLoading = true,
-//     super.errorMessage = '',
-//     super.page,
-//     super.pageSize,
-//   });
-// }
+class AddingTable extends TablesState {
+  const AddingTable({
+    super.diningAreas,
+    super.summary,
+    super.isLoading = true,
+    super.errorMessage = '',
+    super.page,
+    super.pageSize,
+  });
+}
 
-// class ProductAdded extends TablesState {
-//   const ProductAdded({
-//     // super.products,
-//     super.diningAreas,
-//     // super.getProductsRequest = RequestsEnum.success,
-//     super.isLoading = false,
-//     super.errorMessage = '',
-//     super.page,
-//     super.pageSize,
-//   });
-// }
+class TableAdded extends TablesState {
+  const TableAdded({
+    super.diningAreas,
+    super.summary,
+    super.isLoading = false,
+    super.errorMessage = '',
+    super.page,
+    super.pageSize,
+  });
+}
 
 // class UpdatingProduct extends TablesState {
 //   const UpdatingProduct({

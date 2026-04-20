@@ -91,7 +91,7 @@ class DiningAreaSection extends StatelessWidget {
                         (maxWidth - (crossAxisCount - 1) * 14) / crossAxisCount,
                     child: TableCard(
                       name: displayTableName(table, localizations),
-                      capacity: table.seats ?? 0,
+                      capacity: table.seats,
                       status: tableStatus(table),
                       onEdit: () {
                         // TODO: implement edit

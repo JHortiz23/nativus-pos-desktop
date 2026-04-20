@@ -6,6 +6,7 @@ class TableMapper {
     return TableEntity(
       id: model.id,
       diningAreaId: model.diningAreaId,
+      isActive: model.isActive,
       name: model.name,
       status: model.status,
       seats: model.seats,

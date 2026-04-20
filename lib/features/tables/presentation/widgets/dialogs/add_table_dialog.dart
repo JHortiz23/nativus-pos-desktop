@@ -22,7 +22,7 @@ class _AddTableDialogState extends State<AddTableDialog> {
   late final TextEditingController _nameCtrl;
   late final TextEditingController _seatsCtrl;
   bool get _isEditing => widget.table != null;
-  bool _isActive = true;
+  late bool _isActive;
   int? _selectedDiningAreaId;
 
   @override
@@ -30,9 +30,8 @@ class _AddTableDialogState extends State<AddTableDialog> {
     super.initState();
     final t = widget.table;
     _nameCtrl = TextEditingController(text: t?.name ?? '');
-    _seatsCtrl = TextEditingController(text: t?.seats?.toString() ?? '');
-    // _isActive = t?.isActive ?? true;
-    _isActive = true;
+    _seatsCtrl = TextEditingController(text: t?.seats.toString() ?? '');
+    _isActive = t?.isActive ?? true;
     _selectedDiningAreaId = t?.diningAreaId;
   }
 
@@ -40,7 +39,6 @@ class _AddTableDialogState extends State<AddTableDialog> {
   void dispose() {
     _nameCtrl.dispose();
     _seatsCtrl.dispose();
-    // _descCtrl.dispose();
     super.dispose();
   }
 
@@ -53,6 +51,14 @@ class _AddTableDialogState extends State<AddTableDialog> {
       //Update existing table
     } else {
       // Add new table
+      context.read<TablesBloc>().add(
+        AddTableEvent(
+          name: _nameCtrl.text.trim(),
+          seats: int.parse(_seatsCtrl.text.trim()),
+          diningAreaId: _selectedDiningAreaId!,
+          isActive: _isActive,
+        ),
+      );
     }
   }
 
@@ -61,11 +67,11 @@ class _AddTableDialogState extends State<AddTableDialog> {
     final colorScheme = Theme.of(context).colorScheme;
     final l10n = AppLocalizations.of(context)!;
 
-    return BlocListener<ProductsBloc, ProductsState>(
+    return BlocListener<TablesBloc, TablesState>(
       listenWhen: (previous, current) =>
           previous.isLoading && !current.isLoading,
       listener: (context, state) {
-        if (state is ProductAdded) {
+        if (state is TableAdded) {
           // Show success message
           AppToast.show(
             context,
@@ -83,7 +89,7 @@ class _AddTableDialogState extends State<AddTableDialog> {
           );
 
           Navigator.of(context).pop();
-        } else if (state is ProductError) {
+        } else if (state is TableError) {
           AppToast.show(
             context,
             message: state.errorMessage,
@@ -108,7 +114,9 @@ class _AddTableDialogState extends State<AddTableDialog> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      _isEditing ? l10n.edit_table : l10n.table_management_new_table,
+                      _isEditing
+                          ? l10n.edit_table
+                          : l10n.table_management_new_table,
                       style: TextStyle(
                         color: colorScheme.baseWhite,
                         fontSize: 24,
@@ -137,10 +145,7 @@ class _AddTableDialogState extends State<AddTableDialog> {
                         child: TextFormField(
                           controller: _nameCtrl,
                           style: TextStyle(color: colorScheme.baseWhite),
-                          decoration: _decor(
-                            context,
-                            l10n.add_table_name_hint,
-                          ),
+                          decoration: _decor(context, l10n.add_table_name_hint),
                           validator: (v) => v!.trim().isEmpty ? '' : null,
                         ),
                       ),

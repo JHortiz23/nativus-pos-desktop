@@ -8,4 +8,9 @@ class TablesApiEndpoints {
     return Uri.parse('$baseUrl/tables/diningareas');
   }
 
+  // ** Add Table **
+  static Uri addTable() {
+    return Uri.parse('$baseUrl/tables');
+  }
+
 }

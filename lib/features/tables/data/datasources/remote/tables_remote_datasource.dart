@@ -3,15 +3,15 @@ import 'package:nativus_pos_desktop/application/constants/tables_api_endpoints.d
 import 'package:nativus_pos_desktop/core/utils/helpers/auth_token_storage.dart';
 import 'package:nativus_pos_desktop/core/utils/helpers/http_helper.dart';
 import 'package:nativus_pos_desktop/features/tables/data/models/dining_areas_response_model.dart';
+import 'package:nativus_pos_desktop/features/tables/data/models/table_model.dart';
 
 abstract class TablesRemoteDataSource {
-  // Future<AddedProductModel> addProduct({
-  //   required int categoryId,
-  //   required String name,
-  //   required String description,
-  //   required double price,
-  //   required bool isActive,
-  // });
+  Future<TableModel> addTable({
+    required String name,
+    required int seats,
+    required int diningAreaId,
+    required bool isActive,
+  });
   Future<DiningAreasResponseModel> getDiningAreas();
 
   // Future<List<ProductCategoriesModel>> getProductCategories();
@@ -38,54 +38,57 @@ class TablesRemoteDataSourceImpl implements TablesRemoteDataSource {
   }) : _client = client,
        _tokenStorage = tokenStorage;
 
-  // @override
-  // Future<AddedProductModel> addProduct({
-  //   required int categoryId,
-  //   required String name,
-  //   required String description,
-  //   required double price,
-  //   required bool isActive,
-  // }) async {
-  //   try {
-  //     final accessToken = _tokenStorage.getAccessToken();
-  //     if (accessToken == null || accessToken.isEmpty) {
-  //       throw StateError('Missing access token for add product request.');
-  //     }
+  @override
+  Future<TableModel> addTable({
+    required String name,
+    required int seats,
+    required int diningAreaId,
+    required bool isActive,
+  }) async {
+    try {
+      final accessToken = _tokenStorage.getAccessToken();
+      if (accessToken == null || accessToken.isEmpty) {
+        throw StateError('Missing access token for add table request.');
+      }
 
-  //     final uri = ProductsApiEndpoints.addProduct();
+      final uri = TablesApiEndpoints.addTable();
 
-  //     final headers = HttpHelper.jsonHeaders(accessToken: accessToken);
-  //     final body = json.encode({
-  //       'name': name,
-  //       'price': price,
-  //       'categoryId': categoryId,
-  //       'description': description,
-  //       'isActive': isActive,
-  //     });
+      final headers = HttpHelper.jsonHeaders(accessToken: accessToken);
+      final body = {
+        'name': name,
+        'seats': seats,
+        'diningAreaId': diningAreaId,
+        'isActive': isActive,
+      };
 
-  //     final response = await _client.post(uri, headers: headers, body: body);
+      final response = await _client.post(
+        uri.toString(),
+        options: Options(headers: headers, validateStatus: (status) => true),
+        data: body,
+      );
 
-  //     if (response.statusCode < 200 || response.statusCode >= 300) {
-  //       await HttpHelper.clearSessionIfUnauthorized(
-  //         statusCode: response.statusCode,
-  //         storage: _tokenStorage,
-  //       );
-  //       throw Exception('Failed to add product: HTTP ${response.statusCode}');
-  //     }
+      if ((response.statusCode ?? 500) < 200 ||
+          (response.statusCode ?? 500) >= 300) {
+        await HttpHelper.clearSessionIfUnauthorized(
+          statusCode: response.statusCode ?? 500,
+          storage: _tokenStorage,
+        );
+        throw Exception('Failed to add table: HTTP ${response.statusCode}');
+      }
 
-  //     final decoded = json.decode(response.body);
+      final decoded = response.data;
 
-  //     if (decoded is! Map<String, dynamic>) {
-  //       throw const FormatException(
-  //         'Unexpected add product response. Expected a JSON object.',
-  //       );
-  //     }
+      if (decoded is! Map<String, dynamic>) {
+        throw const FormatException(
+          'Unexpected add table response. Expected a JSON object.',
+        );
+      }
 
-  //     return AddedProductModel.fromJson(decoded);
-  //   } catch (e) {
-  //     throw Exception('Error adding product: $e');
-  //   }
-  // }
+      return TableModel.fromJson(decoded);
+    } catch (e) {
+      throw Exception('Error adding table: $e');
+    }
+  }
 
   // @override
   // Future<List<DiningAreaModel>> getDiningAreas({
@@ -139,16 +142,18 @@ class TablesRemoteDataSourceImpl implements TablesRemoteDataSource {
       final uri = TablesApiEndpoints.getDiningAreas();
 
       final headers = HttpHelper.jsonHeaders(accessToken: accessToken);
-      
+
       final response = await _client.get(
-        uri.toString(), 
+        uri.toString(),
         options: Options(
           headers: headers,
-          validateStatus: (status) => true, // Conservamos la validación manual antigua
+          validateStatus: (status) =>
+              true, // Conservamos la validación manual antigua
         ),
       );
 
-      if ((response.statusCode ?? 500) < 200 || (response.statusCode ?? 500) >= 300) {
+      if ((response.statusCode ?? 500) < 200 ||
+          (response.statusCode ?? 500) >= 300) {
         await HttpHelper.clearSessionIfUnauthorized(
           statusCode: response.statusCode ?? 500,
           storage: _tokenStorage,

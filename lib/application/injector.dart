@@ -111,6 +111,10 @@ Future<void> initInjector() async {
     () => GetDiningAreasUseCase(tablesRepository: sl<TablesRepository>()),
   );
 
+  sl.registerLazySingleton<AddTableUseCase>(
+    () => AddTableUseCase(tablesRepository: sl<TablesRepository>()),
+  );
+
   // ** Cubits **
   /// AUTHENTICATION
   sl.registerFactory<LoginCubit>(
@@ -133,6 +137,7 @@ Future<void> initInjector() async {
   sl.registerFactory<TablesBloc>(
     () => TablesBloc(
       getDiningAreasUseCase: sl(),
+      addTableUseCase: sl(),
     ),
   );
 }
