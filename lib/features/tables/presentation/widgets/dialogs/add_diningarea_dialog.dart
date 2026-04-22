@@ -21,23 +21,25 @@ class AddDiningAreaDialog extends StatefulWidget {
 class _AddDiningAreaDialogState extends State<AddDiningAreaDialog> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _nameCtrl;
-  late final TextEditingController _tabletsCtrl;
+  late final TextEditingController _tablesCtrl;
   bool get _isEditing => widget.diningArea != null;
   late bool _isActive;
- 
+
   @override
   void initState() {
-    super.initState(); 
+    super.initState();
     final diningArea = widget.diningArea;
     _nameCtrl = TextEditingController(text: diningArea?.name ?? '');
-    _tabletsCtrl = TextEditingController(text: diningArea?.tablesCount.toString() ?? '');
+    _tablesCtrl = TextEditingController(
+      text: diningArea?.tablesCount.toString() ?? '',
+    );
     _isActive = diningArea?.isActive ?? true;
   }
 
   @override
   void dispose() {
     _nameCtrl.dispose();
-    _tabletsCtrl.dispose();
+    _tablesCtrl.dispose();
     super.dispose();
   }
 
@@ -52,21 +54,21 @@ class _AddDiningAreaDialogState extends State<AddDiningAreaDialog> {
       //   UpdateTableEvent(
       //     id: widget.diningArea!.id,
       //     name: _nameCtrl.text.trim(),
-      //     seats: int.parse(_tabletsCtrl.text.trim()),
+      //     seats: int.parse(_tablesCtrl.text.trim()),
       //     // diningAreaId: _selectedDiningAreaId!,
       //     isActive: _isActive,
       //   ),
       // );
     } else {
-      // Add new table
-      // context.read<TablesBloc>().add(
-      //   AddTableEvent(
-      //     name: _nameCtrl.text.trim(),
-      //     seats: int.parse(_tabletsCtrl.text.trim()),
-      //     diningAreaId: _selectedDiningAreaId!,
-      //     isActive: _isActive,
-      //   ),
-      // );
+      // Add new dining area
+      context.read<TablesBloc>().add(
+        AddDiningAreaEvent(
+          name: _nameCtrl.text.trim(),
+          isActive: _isActive,
+          tables: int.parse(_tablesCtrl.text.trim()),
+          tableName: _nameCtrl.text.trim(),
+        ),
+      );
     }
   }
 
@@ -79,14 +81,13 @@ class _AddDiningAreaDialogState extends State<AddDiningAreaDialog> {
       listenWhen: (previous, current) =>
           previous.isLoading && !current.isLoading,
       listener: (context, state) {
-        if (state is TableAdded) {
+        if (state is DiningAreaAdded) {
           // Show success message
           AppToast.show(
             context,
-            message: l10n.message_table_added,
+            message: l10n.message_salon_added,
             borderColor: colorScheme.baseGreen,
           );
-
           Navigator.of(context).pop();
         } else if (state is TableUpdated) {
           // Show success message
@@ -164,8 +165,8 @@ class _AddDiningAreaDialogState extends State<AddDiningAreaDialog> {
                     const SizedBox(width: 20),
                     Expanded(
                       child: CustomNumberField(
-                        label: l10n.tablets_label.toUpperCase(),
-                        controller: _tabletsCtrl,
+                        label: l10n.tables_label.toUpperCase(),
+                        controller: _tablesCtrl,
                         hint: l10n.add_product_price_hint,
                         allowDecimal: false, // Si es false, solo enteros
                       ),

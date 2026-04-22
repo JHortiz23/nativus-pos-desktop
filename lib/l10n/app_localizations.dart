@@ -491,6 +491,12 @@ abstract class AppLocalizations {
   /// **'Table Added Successfully'**
   String get message_table_added;
 
+  /// No description provided for @message_salon_added.
+  ///
+  /// In en, this message translates to:
+  /// **'Dining Area Added Successfully'**
+  String get message_salon_added;
+
   /// No description provided for @no_description.
   ///
   /// In en, this message translates to:
@@ -743,11 +749,11 @@ abstract class AppLocalizations {
   /// **'Create'**
   String get create_label;
 
-  /// No description provided for @tablets_label.
+  /// No description provided for @tables_label.
   ///
   /// In en, this message translates to:
-  /// **'Tablets'**
-  String get tablets_label;
+  /// **'Tables'**
+  String get tables_label;
 
   /// No description provided for @add_salon_name_hint.
   ///

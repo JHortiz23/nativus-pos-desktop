@@ -22,4 +22,9 @@ class TablesApiEndpoints {
   static Uri deleteTable({required int id}) {
     return Uri.parse('$baseUrl/tables/$id');
   }
+
+  // ** Add Dining Area **
+  static Uri addDiningArea() {
+    return Uri.parse('$baseUrl/tables/diningarea');
+  }
 }

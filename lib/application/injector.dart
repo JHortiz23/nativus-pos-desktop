@@ -123,6 +123,10 @@ Future<void> initInjector() async {
     () => DeleteTableUseCase(tablesRepository: sl<TablesRepository>()),
   );
 
+  sl.registerLazySingleton<AddDiningAreaUseCase>(
+    () => AddDiningAreaUseCase(tablesRepository: sl<TablesRepository>()),
+  );
+
   // ** Cubits **
   /// AUTHENTICATION
   sl.registerFactory<LoginCubit>(
@@ -148,6 +152,7 @@ Future<void> initInjector() async {
       addTableUseCase: sl(),
       updateTableUseCase: sl(),
       deleteTableUseCase: sl(),
+      addDiningAreaUseCase: sl(),
     ),
   );
 }

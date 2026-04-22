@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:nativus_pos_desktop/application/constants/tables_api_endpoints.dart';
 import 'package:nativus_pos_desktop/core/utils/helpers/auth_token_storage.dart';
 import 'package:nativus_pos_desktop/core/utils/helpers/http_helper.dart';
+import 'package:nativus_pos_desktop/features/tables/data/models/dining_area_model.dart';
 import 'package:nativus_pos_desktop/features/tables/data/models/dining_areas_response_model.dart';
 import 'package:nativus_pos_desktop/features/tables/data/models/table_model.dart';
 
@@ -23,6 +24,12 @@ abstract class TablesRemoteDataSource {
   });
 
   Future<TableModel> deleteTable({required int id});
+  Future<DiningAreaModel> addDiningArea({
+    required String name,
+    required bool isActive,
+    required int tables,
+    required String tableName,
+  });
 }
 
 class TablesRemoteDataSourceImpl implements TablesRemoteDataSource {
@@ -159,22 +166,18 @@ class TablesRemoteDataSourceImpl implements TablesRemoteDataSource {
       };
 
       final response = await _client.put(
-        uri.toString(), 
-        options: Options(
-          headers: headers,
-          validateStatus: (status) => true,
-        ),
+        uri.toString(),
+        options: Options(headers: headers, validateStatus: (status) => true),
         data: body,
       );
 
-      if ((response.statusCode ?? 500) < 200 || (response.statusCode ?? 500) >= 300) {
+      if ((response.statusCode ?? 500) < 200 ||
+          (response.statusCode ?? 500) >= 300) {
         await HttpHelper.clearSessionIfUnauthorized(
           statusCode: response.statusCode ?? 500,
           storage: _tokenStorage,
         );
-        throw Exception(
-          'Failed to update table: HTTP ${response.statusCode}',
-        );
+        throw Exception('Failed to update table: HTTP ${response.statusCode}');
       }
 
       final decoded = response.data;
@@ -202,23 +205,19 @@ class TablesRemoteDataSourceImpl implements TablesRemoteDataSource {
       final uri = TablesApiEndpoints.deleteTable(id: id);
 
       final headers = HttpHelper.jsonHeaders(accessToken: accessToken);
-      
+
       final response = await _client.delete(
-        uri.toString(), 
-        options: Options(
-          headers: headers,
-          validateStatus: (status) => true,
-        ),
+        uri.toString(),
+        options: Options(headers: headers, validateStatus: (status) => true),
       );
 
-      if ((response.statusCode ?? 500) < 200 || (response.statusCode ?? 500) >= 300) {
+      if ((response.statusCode ?? 500) < 200 ||
+          (response.statusCode ?? 500) >= 300) {
         await HttpHelper.clearSessionIfUnauthorized(
           statusCode: response.statusCode ?? 500,
           storage: _tokenStorage,
         );
-        throw Exception(
-          'Failed to delete table: HTTP ${response.statusCode}',
-        );
+        throw Exception('Failed to delete table: HTTP ${response.statusCode}');
       }
 
       final decoded = response.data;
@@ -235,5 +234,57 @@ class TablesRemoteDataSourceImpl implements TablesRemoteDataSource {
     }
   }
 
+  @override
+  Future<DiningAreaModel> addDiningArea({
+    required String name,
+    required bool isActive,
+    required int tables,
+    required String tableName,
+  }) async {
+    try {
+      final accessToken = _tokenStorage.getAccessToken();
+      if (accessToken == null || accessToken.isEmpty) {
+        throw StateError('Missing access token for add dining area request.');
+      }
 
+      final uri = TablesApiEndpoints.addDiningArea();
+
+      final headers = HttpHelper.jsonHeaders(accessToken: accessToken);
+      final body = {
+        'name': name,
+        'isActive': isActive,
+        'tables': tables,
+        'tableName': tableName,
+      };
+
+      final response = await _client.post(
+        uri.toString(),
+        options: Options(headers: headers, validateStatus: (status) => true),
+        data: body,
+      );
+
+      if ((response.statusCode ?? 500) < 200 ||
+          (response.statusCode ?? 500) >= 300) {
+        await HttpHelper.clearSessionIfUnauthorized(
+          statusCode: response.statusCode ?? 500,
+          storage: _tokenStorage,
+        );
+        throw Exception(
+          'Failed to add dining area: HTTP ${response.statusCode}',
+        );
+      }
+
+      final decoded = response.data;
+
+      if (decoded is! Map<String, dynamic>) {
+        throw const FormatException(
+          'Unexpected add dining area response. Expected a JSON object.',
+        );
+      }
+
+      return DiningAreaModel.fromJson(decoded);
+    } catch (e) {
+      throw Exception('Error adding dining area: $e');
+    }
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:nativus_pos_desktop/features/tables/domain/entities/dining_area_entity.dart';
 import 'package:nativus_pos_desktop/features/tables/domain/entities/dining_areas_response_entity.dart';
 import 'package:nativus_pos_desktop/features/tables/domain/entities/table_entity.dart';
 
@@ -18,4 +19,10 @@ abstract class TablesRepository {
     required bool isActive,
   });
   Future<TableEntity> deleteTable({required int id});
+  Future<DiningAreaEntity> addDiningArea({
+    required String name,
+    required bool isActive,
+    required int tables,
+    required String tableName,
+  });
 }

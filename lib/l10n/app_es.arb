@@ -69,6 +69,7 @@
   "add_product_submit_button": "Crear Producto",
   "message_product_added": "Producto Agregado Correctamente",
   "message_table_added": "Mesa Agregada Correctamente",
+  "message_salon_added": "Salón Agregado Correctamente",
   "no_description": "Sin descripción",
   "message_save_changes": "Guardar Cambios",
   "edit_product": "Editar Producto",
@@ -149,6 +150,6 @@
   "table_management_new_dining_area": "Nuevo Salón",
   "active_dining_area_label": "Activar Salón",
   "create_label": "Crear",
-  "tablets_label": "Mesas",
+  "tables_label": "Mesas",
   "add_salon_name_hint": "E.g.: Salón VIP"
 }

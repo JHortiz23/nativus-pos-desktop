@@ -69,6 +69,7 @@
   "add_product_submit_button": "Create Product",
   "message_product_added": "Product Added Successfully",
   "message_table_added": "Table Added Successfully",
+  "message_salon_added": "Dining Area Added Successfully",
   "no_description": "No description",
   "message_save_changes": "Save Changes",
   "edit_product": "Edit Product",
@@ -149,7 +150,7 @@
   "table_management_new_dining_area": "New Dining Area",
   "active_dining_area_label": "Active Dining Area",
   "create_label": "Create",
-  "tablets_label": "Tablets",
+  "tables_label": "Tables",
   "add_salon_name_hint": "E.g.: VIP Area"
 }
 

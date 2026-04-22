@@ -207,6 +207,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get message_table_added => 'Table Added Successfully';
 
   @override
+  String get message_salon_added => 'Dining Area Added Successfully';
+
+  @override
   String get no_description => 'No description';
 
   @override
@@ -373,7 +376,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get create_label => 'Create';
 
   @override
-  String get tablets_label => 'Tablets';
+  String get tables_label => 'Tables';
 
   @override
   String get add_salon_name_hint => 'E.g.: VIP Area';

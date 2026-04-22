@@ -146,3 +146,25 @@ class TableDeleted extends TablesState {
     super.pageSize,
   });
 }
+
+class AddingDiningArea extends TablesState {
+  const AddingDiningArea({
+    super.diningAreas,
+    super.summary,
+    super.isLoading = true,
+    super.errorMessage = '',
+    super.page,
+    super.pageSize,
+  });
+}
+
+class DiningAreaAdded extends TablesState {
+  const DiningAreaAdded({
+    super.diningAreas,
+    super.summary,
+    super.isLoading = false,
+    super.errorMessage = '',
+    super.page,
+    super.pageSize,
+  });
+}
