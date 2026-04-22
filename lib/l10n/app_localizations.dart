@@ -536,7 +536,7 @@ abstract class AppLocalizations {
   /// No description provided for @empty_table_in_salon.
   ///
   /// In en, this message translates to:
-  /// **'There are no tables in this salon yet.'**
+  /// **'There are no tables in this dining area yet.'**
   String get empty_table_in_salon;
 
   /// No description provided for @delete_action.
@@ -718,6 +718,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel'**
   String get cancel_label;
+
+  /// No description provided for @edit_dining_area.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Dining Area'**
+  String get edit_dining_area;
+
+  /// No description provided for @table_management_new_dining_area.
+  ///
+  /// In en, this message translates to:
+  /// **'New Dining Area'**
+  String get table_management_new_dining_area;
+
+  /// No description provided for @active_dining_area_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Dining Area'**
+  String get active_dining_area_label;
+
+  /// No description provided for @create_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get create_label;
+
+  /// No description provided for @tablets_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Tablets'**
+  String get tablets_label;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

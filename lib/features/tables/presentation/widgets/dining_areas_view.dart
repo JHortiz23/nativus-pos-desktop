@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
 import 'package:nativus_pos_desktop/features/tables/domain/entities/dining_area_entity.dart';
+import 'package:nativus_pos_desktop/features/tables/presentation/blocs/tables_bloc.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/helpers/table_management_helpers.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/widgets/cards/dining_area_card.dart';
+import 'package:nativus_pos_desktop/features/tables/presentation/widgets/dialogs/add_diningarea_dialog.dart';
 
 class DiningAreasView extends StatelessWidget {
   const DiningAreasView({
@@ -78,7 +81,14 @@ class _DiningAreaCard extends StatelessWidget {
         tableNumbers: diningArea.tables.map(tableNumber).toList(),
         tableStatuses: diningArea.tables.map(tableStatus).toList(),
         onEdit: () {
-          // TODO: implement edit
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) => BlocProvider.value(
+              value: context.read<TablesBloc>(),
+              child: AddDiningAreaDialog(diningArea: diningArea),
+            ),
+          );
         },
         onDelete: () {
           // TODO: implement delete

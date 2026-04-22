@@ -359,4 +359,19 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get cancel_label => 'Cancelar';
+
+  @override
+  String get edit_dining_area => 'Editar Salón';
+
+  @override
+  String get table_management_new_dining_area => 'Nuevo Salón';
+
+  @override
+  String get active_dining_area_label => 'Activar Salón';
+
+  @override
+  String get create_label => 'Crear';
+
+  @override
+  String get tablets_label => 'Mesas';
 }

@@ -144,5 +144,10 @@
   "add_table_name_hint": "E.g.: Mesa VIP",
   "table_management_active_label": "Activar Mesa",
   "table_management_create_label": "Crear Mesa",
-  "cancel_label": "Cancelar"
+  "cancel_label": "Cancelar",
+  "edit_dining_area": "Editar Salón",
+  "table_management_new_dining_area": "Nuevo Salón",
+  "active_dining_area_label": "Activar Salón",
+  "create_label": "Crear",
+  "tablets_label": "Mesas"
 }

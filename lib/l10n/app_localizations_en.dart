@@ -228,7 +228,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get message_table_deleted => 'Table Deleted Successfully';
 
   @override
-  String get empty_table_in_salon => 'There are no tables in this salon yet.';
+  String get empty_table_in_salon => 'There are no tables in this dining area yet.';
 
   @override
   String get delete_action => 'Delete';
@@ -359,4 +359,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cancel_label => 'Cancel';
+
+  @override
+  String get edit_dining_area => 'Edit Dining Area';
+
+  @override
+  String get table_management_new_dining_area => 'New Dining Area';
+
+  @override
+  String get active_dining_area_label => 'Active Dining Area';
+
+  @override
+  String get create_label => 'Create';
+
+  @override
+  String get tablets_label => 'Tablets';
 }
