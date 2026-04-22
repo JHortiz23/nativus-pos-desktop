@@ -149,5 +149,6 @@
   "table_management_new_dining_area": "Nuevo Salón",
   "active_dining_area_label": "Activar Salón",
   "create_label": "Crear",
-  "tablets_label": "Mesas"
+  "tablets_label": "Mesas",
+  "add_salon_name_hint": "E.g.: Salón VIP"
 }

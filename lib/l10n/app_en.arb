@@ -149,6 +149,7 @@
   "table_management_new_dining_area": "New Dining Area",
   "active_dining_area_label": "Active Dining Area",
   "create_label": "Create",
-  "tablets_label": "Tablets"
+  "tablets_label": "Tablets",
+  "add_salon_name_hint": "E.g.: VIP Area"
 }
 

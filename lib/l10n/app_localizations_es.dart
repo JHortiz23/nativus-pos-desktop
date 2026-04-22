@@ -374,4 +374,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get tablets_label => 'Mesas';
+
+  @override
+  String get add_salon_name_hint => 'E.g.: Salón VIP';
 }

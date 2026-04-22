@@ -748,6 +748,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tablets'**
   String get tablets_label;
+
+  /// No description provided for @add_salon_name_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'E.g.: VIP Area'**
+  String get add_salon_name_hint;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

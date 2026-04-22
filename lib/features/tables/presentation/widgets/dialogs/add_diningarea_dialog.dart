@@ -155,7 +155,7 @@ class _AddDiningAreaDialogState extends State<AddDiningAreaDialog> {
                           style: TextStyle(color: colorScheme.baseWhite),
                           decoration: CustomInputDecoration.decor(
                             context,
-                            l10n.add_table_name_hint,
+                            l10n.add_salon_name_hint,
                           ),
                           validator: (v) => v!.trim().isEmpty ? '' : null,
                         ),
