@@ -22,8 +22,15 @@ class _AddDiningAreaDialogState extends State<AddDiningAreaDialog> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _nameCtrl;
   late final TextEditingController _tablesCtrl;
+  late AppLocalizations _l10n;
   bool get _isEditing => widget.diningArea != null;
   late bool _isActive;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _l10n = AppLocalizations.of(context)!;
+  }
 
   @override
   void initState() {
@@ -66,7 +73,7 @@ class _AddDiningAreaDialogState extends State<AddDiningAreaDialog> {
           name: _nameCtrl.text.trim(),
           isActive: _isActive,
           tables: int.parse(_tablesCtrl.text.trim()),
-          tableName: _nameCtrl.text.trim(),
+          tableName: _l10n.table_name_label,
         ),
       );
     }
@@ -75,7 +82,6 @@ class _AddDiningAreaDialogState extends State<AddDiningAreaDialog> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final l10n = AppLocalizations.of(context)!;
 
     return BlocListener<TablesBloc, TablesState>(
       listenWhen: (previous, current) =>
@@ -85,7 +91,7 @@ class _AddDiningAreaDialogState extends State<AddDiningAreaDialog> {
           // Show success message
           AppToast.show(
             context,
-            message: l10n.message_salon_added,
+            message: _l10n.message_salon_added,
             borderColor: colorScheme.baseGreen,
           );
           Navigator.of(context).pop();
@@ -93,7 +99,7 @@ class _AddDiningAreaDialogState extends State<AddDiningAreaDialog> {
           // Show success message
           AppToast.show(
             context,
-            message: l10n.message_table_updated,
+            message: _l10n.message_table_updated,
             borderColor: colorScheme.baseGreen,
           );
 
@@ -124,8 +130,8 @@ class _AddDiningAreaDialogState extends State<AddDiningAreaDialog> {
                   children: [
                     Text(
                       _isEditing
-                          ? l10n.edit_dining_area
-                          : l10n.table_management_new_dining_area,
+                          ? _l10n.edit_dining_area
+                          : _l10n.table_management_new_dining_area,
                       style: TextStyle(
                         color: colorScheme.baseWhite,
                         fontSize: 24,
@@ -150,13 +156,13 @@ class _AddDiningAreaDialogState extends State<AddDiningAreaDialog> {
                   children: [
                     Expanded(
                       child: CustomField(
-                        label: l10n.add_product_name_label,
+                        label: _l10n.add_product_name_label,
                         child: TextFormField(
                           controller: _nameCtrl,
                           style: TextStyle(color: colorScheme.baseWhite),
                           decoration: CustomInputDecoration.decor(
                             context,
-                            l10n.add_salon_name_hint,
+                            _l10n.add_salon_name_hint,
                           ),
                           validator: (v) => v!.trim().isEmpty ? '' : null,
                         ),
@@ -165,10 +171,11 @@ class _AddDiningAreaDialogState extends State<AddDiningAreaDialog> {
                     const SizedBox(width: 20),
                     Expanded(
                       child: CustomNumberField(
-                        label: l10n.tables_label.toUpperCase(),
+                        label: _l10n.tables_label.toUpperCase(),
                         controller: _tablesCtrl,
-                        hint: l10n.add_product_price_hint,
+                        hint: _l10n.add_product_price_hint,
                         allowDecimal: false, // Si es false, solo enteros
+                        readOnly: _isEditing,
                       ),
                     ),
                   ],
@@ -185,7 +192,7 @@ class _AddDiningAreaDialogState extends State<AddDiningAreaDialog> {
                     ),
                     const SizedBox(width: 12),
                     Text(
-                      l10n.active_dining_area_label,
+                      _l10n.active_dining_area_label,
                       style: TextStyle(
                         color: colorScheme.baseWhite,
                         fontSize: 16,
@@ -208,7 +215,7 @@ class _AddDiningAreaDialogState extends State<AddDiningAreaDialog> {
                         side: BorderSide(color: colorScheme.softBorder),
                       ),
                       child: Text(
-                        l10n.add_product_cancel_button,
+                        _l10n.add_product_cancel_button,
                         style: TextStyle(
                           color: colorScheme.baseWhite,
                           fontSize: 16,
@@ -228,8 +235,8 @@ class _AddDiningAreaDialogState extends State<AddDiningAreaDialog> {
                       ),
                       child: Text(
                         _isEditing
-                            ? l10n.message_save_changes
-                            : l10n.create_label,
+                            ? _l10n.message_save_changes
+                            : _l10n.create_label,
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,

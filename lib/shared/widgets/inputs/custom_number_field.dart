@@ -8,6 +8,7 @@ class CustomNumberField extends StatelessWidget {
   final TextEditingController controller;
   final String hint;
   final bool allowDecimal;
+  final bool readOnly;
 
   const CustomNumberField({
     super.key,
@@ -15,6 +16,7 @@ class CustomNumberField extends StatelessWidget {
     required this.controller,
     required this.hint,
     this.allowDecimal = false,
+    this.readOnly = false,
   });
 
   @override
@@ -38,7 +40,8 @@ class CustomNumberField extends StatelessWidget {
         const SizedBox(height: 8),
         TextFormField(
           controller: controller,
-          style: TextStyle(color: cs.baseWhite),
+          readOnly: readOnly,
+          style: TextStyle(color: readOnly ? cs.textMuted : cs.baseWhite),
           keyboardType: TextInputType.numberWithOptions(
             decimal: allowDecimal,
           ),

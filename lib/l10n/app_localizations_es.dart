@@ -380,4 +380,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get add_salon_name_hint => 'E.g.: Salón VIP';
+
+  @override
+  String get table_name_label => 'Mesa';
 }

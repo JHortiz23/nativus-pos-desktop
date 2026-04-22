@@ -760,6 +760,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'E.g.: VIP Area'**
   String get add_salon_name_hint;
+
+  /// No description provided for @table_name_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Table'**
+  String get table_name_label;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

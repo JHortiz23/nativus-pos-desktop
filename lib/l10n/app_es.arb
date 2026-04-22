@@ -151,5 +151,6 @@
   "active_dining_area_label": "Activar Salón",
   "create_label": "Crear",
   "tables_label": "Mesas",
-  "add_salon_name_hint": "E.g.: Salón VIP"
+  "add_salon_name_hint": "E.g.: Salón VIP",
+  "table_name_label": "Mesa"
 }
