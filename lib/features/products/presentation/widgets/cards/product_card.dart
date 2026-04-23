@@ -5,7 +5,7 @@ import 'package:nativus_pos_desktop/features/products/presentation/widgets/butto
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/badges/category_badge.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/cards/product_leading.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/badges/status_badge.dart';
-import 'package:nativus_pos_desktop/features/products/presentation/widgets/cards/tooltip_text.dart';
+import 'package:nativus_pos_desktop/shared/widgets/tooltip_text.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
 
 class ProductCard extends StatelessWidget {
