@@ -54,6 +54,7 @@ class _TableManagementPageState extends State<TableManagementPage> {
     return BlocListener<TablesBloc, TablesState>(
       listenWhen: (previous, current) =>
           current is TableDeleted ||
+          current is DiningAreaDeleted ||
           (previous is DeletingTable && current is TableError),
       listener: (context, state) {
         if (state is TableDeleted) {
