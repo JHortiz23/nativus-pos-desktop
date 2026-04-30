@@ -4,3 +4,5 @@ export 'add_table_use_case.dart';
 export 'update_table_use_case.dart';
 export 'delete_table_use_case.dart';
 export 'add_dining_area_use_case.dart';
+export 'update_dining_area_use_case.dart';
+export 'delete_dining_area_use_case.dart';

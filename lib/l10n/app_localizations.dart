@@ -527,6 +527,12 @@ abstract class AppLocalizations {
   /// **'Table Updated Successfully'**
   String get message_table_updated;
 
+  /// No description provided for @message_salon_updated.
+  ///
+  /// In en, this message translates to:
+  /// **'Dining Area Updated Successfully'**
+  String get message_salon_updated;
+
   /// No description provided for @message_product_deleted.
   ///
   /// In en, this message translates to:
@@ -538,6 +544,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Table Deleted Successfully'**
   String get message_table_deleted;
+
+  /// No description provided for @message_salon_deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Dining Area Deleted Successfully'**
+  String get message_salon_deleted;
 
   /// No description provided for @empty_table_in_salon.
   ///
@@ -563,6 +575,12 @@ abstract class AppLocalizations {
   /// **'Delete Table'**
   String get delete_table_dialog_title;
 
+  /// No description provided for @delete_salon_dialog_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Dining Area'**
+  String get delete_salon_dialog_title;
+
   /// No description provided for @delete_product_dialog_message.
   ///
   /// In en, this message translates to:
@@ -574,6 +592,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete this table? This action cannot be undone.'**
   String get delete_table_dialog_message;
+
+  /// No description provided for @delete_salon_dialog_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this dining area? This action cannot be undone.'**
+  String get delete_salon_dialog_message;
 
   /// No description provided for @table_management.
   ///

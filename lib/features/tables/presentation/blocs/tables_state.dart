@@ -168,3 +168,48 @@ class DiningAreaAdded extends TablesState {
     super.pageSize,
   });
 }
+
+
+class UpdatingDiningArea extends TablesState {
+  const UpdatingDiningArea({
+    super.diningAreas,
+    super.summary,
+    super.isLoading = true,
+    super.errorMessage = '',
+    super.page,
+    super.pageSize,
+  });
+}
+
+class DiningAreaUpdated extends TablesState {
+  const DiningAreaUpdated({
+    super.diningAreas,
+    super.summary,
+    super.isLoading = false,
+    super.errorMessage = '',
+    super.page,
+    super.pageSize,
+  });
+}
+
+class DeletingDiningArea extends TablesState {
+  const DeletingDiningArea({
+    super.diningAreas,
+    super.summary,
+    super.isLoading = true,
+    super.errorMessage = '',
+    super.page,
+    super.pageSize,
+  });
+}
+
+class DiningAreaDeleted extends TablesState {
+  const DiningAreaDeleted({
+    super.diningAreas,
+    super.summary,
+    super.isLoading = false,
+    super.errorMessage = '',
+    super.page,
+    super.pageSize,
+  });
+}

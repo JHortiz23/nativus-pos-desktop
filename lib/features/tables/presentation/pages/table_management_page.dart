@@ -62,6 +62,12 @@ class _TableManagementPageState extends State<TableManagementPage> {
             message: localizations.message_table_deleted,
             borderColor: colorScheme.baseGreen,
           );
+        } else if (state is DiningAreaDeleted) {
+          AppToast.show(
+            context,
+            message: localizations.message_salon_deleted,
+            borderColor: colorScheme.baseGreen,
+          );
         } else if (state is TableError) {
           AppToast.show(
             context,

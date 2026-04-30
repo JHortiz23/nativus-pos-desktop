@@ -6,6 +6,8 @@ import 'package:nativus_pos_desktop/features/tables/presentation/blocs/tables_bl
 import 'package:nativus_pos_desktop/features/tables/presentation/helpers/table_management_helpers.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/widgets/cards/dining_area_card.dart';
 import 'package:nativus_pos_desktop/features/tables/presentation/widgets/dialogs/add_diningarea_dialog.dart';
+import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
+import 'package:nativus_pos_desktop/shared/widgets/dialogs/app_confirmation_dialog.dart';
 
 class DiningAreasView extends StatelessWidget {
   const DiningAreasView({
@@ -91,9 +93,28 @@ class _DiningAreaCard extends StatelessWidget {
           );
         },
         onDelete: () {
-          // TODO: implement delete
+          _confirmDeleteDiningArea(context, diningArea.id);
         },
       ),
     );
+  }
+
+  Future<void> _confirmDeleteDiningArea(
+    BuildContext context,
+    int diningAreaId,
+  ) async {
+    final localizations = AppLocalizations.of(context)!;
+    final shouldDelete = await showAppConfirmationDialog(
+      context: context,
+      title: localizations.delete_salon_dialog_title,
+      message: localizations.delete_salon_dialog_message,
+      confirmLabel: localizations.delete_action,
+    );
+
+    if (shouldDelete != true || !context.mounted) {
+      return;
+    }
+
+    context.read<TablesBloc>().add(DeleteDiningAreaEvent(id: diningAreaId));
   }
 }

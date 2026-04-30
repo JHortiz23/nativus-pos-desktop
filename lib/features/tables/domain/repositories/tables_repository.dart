@@ -25,4 +25,10 @@ abstract class TablesRepository {
     required int tables,
     required String tableName,
   });
+  Future<DiningAreaEntity> updateDiningArea({
+    required int id,
+    required String name,
+    required bool isActive,
+  });
+  Future<DiningAreaEntity> deleteDiningArea({required int id});
 }

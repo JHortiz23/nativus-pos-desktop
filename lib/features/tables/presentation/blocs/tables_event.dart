@@ -80,3 +80,29 @@ class AddDiningAreaEvent extends TablesEvent {
   @override
   List<Object?> get props => [name, isActive, tables, tableName];
 }
+
+/// Event to update an existing dining area
+class UpdateDiningAreaEvent extends TablesEvent {
+  final int id;
+  final String name;
+  final bool isActive;
+
+  const UpdateDiningAreaEvent({
+    required this.id,
+    required this.name,
+    required this.isActive,
+  });
+
+  @override
+  List<Object?> get props => [id, name, isActive];
+}
+
+/// Event to delete a dining area
+class DeleteDiningAreaEvent extends TablesEvent {
+  final int id;
+
+  const DeleteDiningAreaEvent({required this.id});
+
+  @override
+  List<Object?> get props => [id];
+}

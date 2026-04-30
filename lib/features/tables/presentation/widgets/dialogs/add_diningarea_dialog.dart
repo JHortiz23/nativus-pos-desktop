@@ -56,16 +56,14 @@ class _AddDiningAreaDialogState extends State<AddDiningAreaDialog> {
     }
 
     if (_isEditing) {
-      //Update existing table
-      // context.read<TablesBloc>().add(
-      //   UpdateTableEvent(
-      //     id: widget.diningArea!.id,
-      //     name: _nameCtrl.text.trim(),
-      //     seats: int.parse(_tablesCtrl.text.trim()),
-      //     // diningAreaId: _selectedDiningAreaId!,
-      //     isActive: _isActive,
-      //   ),
-      // );
+      //Update existing dining area
+      context.read<TablesBloc>().add(
+        UpdateDiningAreaEvent(
+          id: widget.diningArea!.id,
+          name: _nameCtrl.text.trim(),
+          isActive: _isActive,
+        ),
+      );
     } else {
       // Add new dining area
       context.read<TablesBloc>().add(
@@ -95,11 +93,11 @@ class _AddDiningAreaDialogState extends State<AddDiningAreaDialog> {
             borderColor: colorScheme.baseGreen,
           );
           Navigator.of(context).pop();
-        } else if (state is TableUpdated) {
+        } else if (state is DiningAreaUpdated) {
           // Show success message
           AppToast.show(
             context,
-            message: _l10n.message_table_updated,
+            message: _l10n.message_salon_updated,
             borderColor: colorScheme.baseGreen,
           );
 

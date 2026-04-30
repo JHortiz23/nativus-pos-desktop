@@ -27,4 +27,14 @@ class TablesApiEndpoints {
   static Uri addDiningArea() {
     return Uri.parse('$baseUrl/tables/diningarea');
   }
+
+  // ** Update Dining Area **
+  static Uri updateDiningArea({required int id}) {
+    return Uri.parse('$baseUrl/tables/diningarea/$id');
+  }
+
+  // ** Delete Dining Area **
+  static Uri deleteDiningArea({required int id}) {
+    return Uri.parse('$baseUrl/tables/diningarea/$id');
+  }
 }

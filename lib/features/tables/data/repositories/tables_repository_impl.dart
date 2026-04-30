@@ -78,4 +78,26 @@ class TablesRepositoryImpl implements TablesRepository {
 
     return DiningAreaMapper.toEntity(model);
   }
+
+  @override
+  Future<DiningAreaEntity> updateDiningArea({
+    required int id,
+    required String name,
+    required bool isActive,
+  }) async {
+    final model = await remoteDataSource.updateDiningArea(
+      id: id,
+      name: name,
+      isActive: isActive,
+    );
+
+    return DiningAreaMapper.toEntity(model);
+  }
+
+  @override
+  Future<DiningAreaEntity> deleteDiningArea({required int id}) async {
+    final model = await remoteDataSource.deleteDiningArea(id: id);
+
+    return DiningAreaMapper.toEntity(model);
+  }
 }

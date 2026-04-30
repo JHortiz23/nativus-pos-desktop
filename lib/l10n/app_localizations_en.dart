@@ -225,10 +225,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get message_table_updated => 'Table Updated Successfully';
 
   @override
+  String get message_salon_updated => 'Dining Area Updated Successfully';
+
+  @override
   String get message_product_deleted => 'Product Deleted Successfully';
 
   @override
   String get message_table_deleted => 'Table Deleted Successfully';
+
+  @override
+  String get message_salon_deleted => 'Dining Area Deleted Successfully';
 
   @override
   String get empty_table_in_salon => 'There are no tables in this dining area yet.';
@@ -243,10 +249,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get delete_table_dialog_title => 'Delete Table';
 
   @override
+  String get delete_salon_dialog_title => 'Delete Dining Area';
+
+  @override
   String get delete_product_dialog_message => 'Delete this product? This action cannot be undone.';
 
   @override
   String get delete_table_dialog_message => 'Delete this table? This action cannot be undone.';
+
+  @override
+  String get delete_salon_dialog_message => 'Delete this dining area? This action cannot be undone.';
 
   @override
   String get table_management => 'Table Maganement';

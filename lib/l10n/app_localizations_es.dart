@@ -225,10 +225,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get message_table_updated => 'Mesa Actualizada Correctamente';
 
   @override
+  String get message_salon_updated => 'Salón Actualizado Correctamente';
+
+  @override
   String get message_product_deleted => 'Producto Eliminado Correctamente';
 
   @override
   String get message_table_deleted => 'Mesa Eliminada Correctamente';
+
+  @override
+  String get message_salon_deleted => 'Salón Eliminado Correctamente';
 
   @override
   String get empty_table_in_salon => 'Aún no hay mesas en este salón.';
@@ -243,10 +249,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get delete_table_dialog_title => 'Eliminar Mesa';
 
   @override
+  String get delete_salon_dialog_title => 'Eliminar Salón';
+
+  @override
   String get delete_product_dialog_message => '¿Eliminar este producto? Esta acción no se puede deshacer.';
 
   @override
   String get delete_table_dialog_message => '¿Eliminar esta mesa? Esta acción no se puede deshacer.';
+
+  @override
+  String get delete_salon_dialog_message => '¿Eliminar esta salón? Esta acción no se puede deshacer.';
 
   @override
   String get table_management => 'Gestión de Mesas';

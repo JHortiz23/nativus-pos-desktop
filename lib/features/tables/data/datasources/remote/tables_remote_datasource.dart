@@ -30,6 +30,14 @@ abstract class TablesRemoteDataSource {
     required int tables,
     required String tableName,
   });
+
+  Future<DiningAreaModel> updateDiningArea({
+    required int id,
+    required String name,
+    required bool isActive,
+  });
+
+  Future<DiningAreaModel> deleteDiningArea({required int id});
 }
 
 class TablesRemoteDataSourceImpl implements TablesRemoteDataSource {
@@ -285,6 +293,96 @@ class TablesRemoteDataSourceImpl implements TablesRemoteDataSource {
       return DiningAreaModel.fromJson(decoded);
     } catch (e) {
       throw Exception('Error adding dining area: $e');
+    }
+  }
+  // ** Update Dining Area ** //
+  @override
+  Future<DiningAreaModel> updateDiningArea({
+    required int id,
+    required String name,
+    required bool isActive,
+  }) async {
+    try {
+      final accessToken = _tokenStorage.getAccessToken();
+      if (accessToken == null || accessToken.isEmpty) {
+        throw StateError('Missing access token for update dining area request.');
+      }
+
+      final uri = TablesApiEndpoints.updateDiningArea(id: id);
+
+      final headers = HttpHelper.jsonHeaders(accessToken: accessToken);
+      final body = {
+        'name': name,
+        'isActive': isActive,
+      };
+
+      final response = await _client.put(
+        uri.toString(),
+        options: Options(headers: headers, validateStatus: (status) => true),
+        data: body,
+      );
+
+      if ((response.statusCode ?? 500) < 200 ||
+          (response.statusCode ?? 500) >= 300) {
+        await HttpHelper.clearSessionIfUnauthorized(
+          statusCode: response.statusCode ?? 500,
+          storage: _tokenStorage,
+        );
+        throw Exception('Failed to update dining area: HTTP ${response.statusCode}');
+      }
+
+      final decoded = response.data;
+
+      if (decoded is! Map<String, dynamic>) {
+        throw const FormatException(
+          'Unexpected update dining area response. Expected a JSON object.',
+        );
+      }
+
+      return DiningAreaModel.fromJson(decoded);
+    } catch (e) {
+      throw Exception('Error updating dining area: $e');
+    }
+  }
+
+  // ** Delete Dining Area ** //
+  @override
+  Future<DiningAreaModel> deleteDiningArea({required int id}) async {
+    try {
+      final accessToken = _tokenStorage.getAccessToken();
+      if (accessToken == null || accessToken.isEmpty) {
+        throw StateError('Missing access token for delete dining area request.');
+      }
+
+      final uri = TablesApiEndpoints.deleteDiningArea(id: id);
+
+      final headers = HttpHelper.jsonHeaders(accessToken: accessToken);
+
+      final response = await _client.delete(
+        uri.toString(),
+        options: Options(headers: headers, validateStatus: (status) => true),
+      );
+
+      if ((response.statusCode ?? 500) < 200 ||
+          (response.statusCode ?? 500) >= 300) {
+        await HttpHelper.clearSessionIfUnauthorized(
+          statusCode: response.statusCode ?? 500,
+          storage: _tokenStorage,
+        );
+        throw Exception('Failed to delete dining area: HTTP ${response.statusCode}');
+      }
+
+      final decoded = response.data;
+
+      if (decoded is! Map<String, dynamic>) {
+        throw const FormatException(
+          'Unexpected delete dining area response. Expected a JSON object.',
+        );
+      }
+
+      return DiningAreaModel.fromJson(decoded);
+    } catch (e) {
+      throw Exception('Error deleting dining area: $e');
     }
   }
 }

@@ -16,6 +16,8 @@ class TablesBloc extends Bloc<TablesEvent, TablesState> {
   final UpdateTableUseCase updateTableUseCase;
   final DeleteTableUseCase deleteTableUseCase;
   final AddDiningAreaUseCase addDiningAreaUseCase;
+  final UpdateDiningAreaUseCase updateDiningAreaUseCase;
+  final DeleteDiningAreaUseCase deleteDiningAreaUseCase;
 
   TablesBloc({
     required this.addTableUseCase,
@@ -23,12 +25,16 @@ class TablesBloc extends Bloc<TablesEvent, TablesState> {
     required this.updateTableUseCase,
     required this.deleteTableUseCase,
     required this.addDiningAreaUseCase,
+    required this.updateDiningAreaUseCase,
+    required this.deleteDiningAreaUseCase,
   }) : super(const TablesState()) {
     on<AddTableEvent>(_onAddTable);
     on<GetDiningAreasEvent>(_onGetDiningAreas);
     on<UpdateTableEvent>(_onUpdateTable);
     on<DeleteTableEvent>(_onDeleteTable);
     on<AddDiningAreaEvent>(_onAddDiningArea);
+    on<UpdateDiningAreaEvent>(_onUpdateDiningArea);
+    on<DeleteDiningAreaEvent>(_onDeleteDiningArea);
   }
 
   Future<void> _onAddTable(
@@ -249,6 +255,97 @@ class TablesBloc extends Bloc<TablesEvent, TablesState> {
         ),
       );
       // emit a state to trigger dining areas refresh after adding a dining area
+      add(GetDiningAreasEvent());
+    } catch (e) {
+      emit(
+        TableError(
+          errorMessage: e.toString(),
+          diningAreas: state.diningAreas,
+          summary: state.summary,
+          isLoading: false,
+          page: state.page,
+          pageSize: state.pageSize,
+        ),
+      );
+    }
+  }
+
+  Future<void> _onUpdateDiningArea(
+    UpdateDiningAreaEvent event,
+    Emitter<TablesState> emit,
+  ) async {
+    emit(
+      UpdatingDiningArea(
+        diningAreas: state.diningAreas,
+        summary: state.summary,
+        isLoading: true,
+        errorMessage: '',
+        page: state.page,
+        pageSize: state.pageSize,
+      ),
+    );
+
+    try {
+      await updateDiningAreaUseCase(
+        id: event.id,
+        name: event.name,
+        isActive: event.isActive,
+      );
+
+      emit(
+        DiningAreaUpdated(
+          diningAreas: state.diningAreas,
+          summary: state.summary,
+          isLoading: false,
+          errorMessage: '',
+          page: state.page,
+          pageSize: state.pageSize,
+        ),
+      );
+      // emit a state to trigger dining areas refresh after updating a dining area
+      add(GetDiningAreasEvent());
+    } catch (e) {
+      emit(
+        TableError(
+          errorMessage: e.toString(),
+          diningAreas: state.diningAreas,
+          summary: state.summary,
+          isLoading: false,
+          page: state.page,
+          pageSize: state.pageSize,
+        ),
+      );
+    }
+  }
+
+  Future<void> _onDeleteDiningArea(
+    DeleteDiningAreaEvent event,
+    Emitter<TablesState> emit,
+  ) async {
+    emit(
+      DeletingDiningArea(
+        diningAreas: state.diningAreas,
+        summary: state.summary,
+        isLoading: true,
+        errorMessage: '',
+        page: state.page,
+        pageSize: state.pageSize,
+      ),
+    );
+
+    try {
+      await deleteDiningAreaUseCase(id: event.id);
+      emit(
+        DiningAreaDeleted(
+          diningAreas: state.diningAreas,
+          summary: state.summary,
+          isLoading: false,
+          errorMessage: '',
+          page: state.page,
+          pageSize: state.pageSize,
+        ),
+      );
+      // emit a state to trigger dining areas refresh after deleting a dining area
       add(GetDiningAreasEvent());
     } catch (e) {
       emit(
