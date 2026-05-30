@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
 import 'package:nativus_pos_desktop/core/enums/status_enums.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
+import 'package:nativus_pos_desktop/shared/widgets/badges/inactive_badge.dart';
 
 class DiningAreaCard extends StatefulWidget {
   const DiningAreaCard({
@@ -13,6 +14,7 @@ class DiningAreaCard extends StatefulWidget {
     required this.occupiedTables,
     required this.tableNumbers,
     required this.tableStatuses,
+    required this.isActive,
     this.onEdit,
     this.onDelete,
   });
@@ -24,6 +26,7 @@ class DiningAreaCard extends StatefulWidget {
   final int occupiedTables;
   final List<int> tableNumbers;
   final List<TableStatus> tableStatuses;
+  final bool isActive;
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
 
@@ -50,7 +53,7 @@ class _DiningAreaCardState extends State<DiningAreaCard> {
           color: colorScheme.darkSurfaceAlt,
           borderRadius: BorderRadius.circular(18),
           border: Border.all(color: colorScheme.softBorder),
-          boxShadow: _isHovered
+          boxShadow: _isHovered && widget.isActive
               ? [
                   BoxShadow(
                     color: widget.accentColor.withValues(alpha: 0.08),
@@ -60,21 +63,23 @@ class _DiningAreaCardState extends State<DiningAreaCard> {
                 ]
               : [],
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Top accent bar
-            Container(
-              height: 3.5,
-              decoration: BoxDecoration(
-                color: widget.accentColor,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(18),
-                  topRight: Radius.circular(18),
+        child: Opacity(
+          opacity: widget.isActive ? 1.0 : 0.48,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Top accent bar
+              Container(
+                height: 3.5,
+                decoration: BoxDecoration(
+                  color: widget.isActive ? widget.accentColor : Colors.transparent,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(18),
+                    topRight: Radius.circular(18),
+                  ),
                 ),
               ),
-            ),
             Padding(
               padding: const EdgeInsets.fromLTRB(18, 16, 18, 18),
               child: Column(
@@ -88,14 +93,16 @@ class _DiningAreaCardState extends State<DiningAreaCard> {
                         width: 48,
                         height: 48,
                         decoration: BoxDecoration(
-                          color: widget.accentColor.withValues(alpha: 0.14),
+                          color: widget.isActive 
+                              ? widget.accentColor.withValues(alpha: 0.14)
+                              : colorScheme.textMuted.withValues(alpha: 0.14),
                           borderRadius: BorderRadius.circular(14),
                         ),
                         child: Center(
                           child: Icon(
                             widget.iconData,
                             size: 24,
-                            color: widget.accentColor,
+                            color: widget.isActive ? widget.accentColor : colorScheme.textMuted,
                           ),
                         ),
                       ),
@@ -148,17 +155,22 @@ class _DiningAreaCardState extends State<DiningAreaCard> {
                   const SizedBox(height: 16),
                   // Table number indicators
                   ConstrainedBox(
-                    constraints: const BoxConstraints(minHeight: 22),
-                    child: Wrap(
-                      spacing: 10,
-                      runSpacing: 8,
-                      children: [
-                        for (var i = 0; i < widget.tableNumbers.length; i++)
-                          _TableNumberBadge(
-                            number: i + 1,
-                            status: widget.tableStatuses[i],
-                          ),
-                      ],
+                    constraints: const BoxConstraints(minHeight: 28),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: widget.isActive
+                          ? Wrap(
+                              spacing: 10,
+                              runSpacing: 8,
+                              children: [
+                                for (var i = 0; i < widget.tableNumbers.length; i++)
+                                  _TableNumberBadge(
+                                    number: i + 1,
+                                    status: widget.tableStatuses[i],
+                                  ),
+                              ],
+                            )
+                          : const InactiveBadge(),
                     ),
                   ),
                 ],
@@ -167,7 +179,7 @@ class _DiningAreaCardState extends State<DiningAreaCard> {
           ],
         ),
       ),
-    );
+    ));
   }
 }
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nativus_pos_desktop/application/theme/theme.dart';
-import 'package:nativus_pos_desktop/shared/widgets/tooltip_text.dart';
+import 'package:nativus_pos_desktop/shared/widgets/tooltips/tooltip_text.dart';
 
 class ProductLeading extends StatelessWidget {
   const ProductLeading({

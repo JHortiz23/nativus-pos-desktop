@@ -82,6 +82,7 @@ class _DiningAreaCard extends StatelessWidget {
         occupiedTables: diningArea.occupiedCount,
         tableNumbers: diningArea.tables.map(tableNumber).toList(),
         tableStatuses: diningArea.tables.map(tableStatus).toList(),
+        isActive: diningArea.isActive,
         onEdit: () {
           showDialog(
             context: context,

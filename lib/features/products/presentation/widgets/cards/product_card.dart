@@ -5,8 +5,9 @@ import 'package:nativus_pos_desktop/features/products/presentation/widgets/butto
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/badges/category_badge.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/cards/product_leading.dart';
 import 'package:nativus_pos_desktop/features/products/presentation/widgets/badges/status_badge.dart';
-import 'package:nativus_pos_desktop/shared/widgets/tooltip_text.dart';
+import 'package:nativus_pos_desktop/shared/widgets/tooltips/tooltip_text.dart';
 import 'package:nativus_pos_desktop/l10n/app_localizations.dart';
+import 'package:nativus_pos_desktop/shared/widgets/badges/inactive_badge.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({
@@ -89,8 +90,7 @@ class _GridProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    final localizations = AppLocalizations.of(context)!;
-
+    
     return Container(
       decoration: BoxDecoration(
         color: colorScheme.darkSurface,
@@ -165,29 +165,10 @@ class _GridProductCard extends StatelessWidget {
             ),
           ),
           if (!isActive)
-            Positioned(
+            const Positioned(
               top: 16,
               right: 16,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 7,
-                ),
-                decoration: BoxDecoration(
-                  color: colorScheme.darkSurfaceAlt.withValues(alpha: 0.92),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: colorScheme.softBorder),
-                ),
-                child: Text(
-                  localizations.product_card_inactive_caps,
-                  style: theme.textTheme.bodyLarge?.copyWith(
-                    color: colorScheme.textMuted,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 0.5,
-                  ),
-                ),
-              ),
+              child: InactiveBadge(),
             ),
         ],
       ),
