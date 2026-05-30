@@ -138,20 +138,22 @@ class _TableManagementPageState extends State<TableManagementPage> {
                             ? CrossAxisAlignment.start
                             : CrossAxisAlignment.center,
                         children: [
-                          Text(
-                            localizations.table_management_tables_count(
-                              totalTables,
+                          if (_activeTab == TableManagementTab.gestionMesas)
+                            Text(
+                              localizations.table_management_tables_count(
+                                totalTables,
+                              ),
+                              style: theme.textTheme.bodyLarge?.copyWith(
+                                color: colorScheme.textSoft,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
-                            style: theme.textTheme.bodyLarge?.copyWith(
-                              color: colorScheme.textSoft,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
+                          if (_activeTab == TableManagementTab.gestionMesas)
+                            SizedBox(
+                              width: isCompactHeader ? 0 : 18,
+                              height: isCompactHeader ? 14 : 0,
                             ),
-                          ),
-                          SizedBox(
-                            width: isCompactHeader ? 0 : 18,
-                            height: isCompactHeader ? 14 : 0,
-                          ),
                           PrimaryCreateButton(
                             label: _activeTab == TableManagementTab.gestionMesas
                                 ? localizations.table_management_new_table

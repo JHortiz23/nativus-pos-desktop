@@ -147,16 +147,19 @@ class _DiningAreaCardState extends State<DiningAreaCard> {
                   ),
                   const SizedBox(height: 16),
                   // Table number indicators
-                  Wrap(
-                    spacing: 10,
-                    runSpacing: 8,
-                    children: [
-                      for (var i = 0; i < widget.tableNumbers.length; i++)
-                        _TableNumberBadge(
-                          number: widget.tableNumbers[i],
-                          status: widget.tableStatuses[i],
-                        ),
-                    ],
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(minHeight: 22),
+                    child: Wrap(
+                      spacing: 10,
+                      runSpacing: 8,
+                      children: [
+                        for (var i = 0; i < widget.tableNumbers.length; i++)
+                          _TableNumberBadge(
+                            number: i + 1,
+                            status: widget.tableStatuses[i],
+                          ),
+                      ],
+                    ),
                   ),
                 ],
               ),
