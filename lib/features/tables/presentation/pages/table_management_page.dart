@@ -21,7 +21,7 @@ class TableManagementPage extends StatefulWidget {
 
 class _TableManagementPageState extends State<TableManagementPage> {
   TableManagementTab _activeTab = TableManagementTab.gestionMesas;
-  int? _selectedSalonId; // null = "Todos los Salones"
+  int? _selectedSalonId;
   late final TablesBloc _bloc;
   late final ScrollController _diningAreaTabsScrollController;
   late final ScrollController _mesasScrollController;

@@ -31,9 +31,14 @@ class TableManagementView extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final localizations = AppLocalizations.of(context)!;
     final accentColor = diningAreaAccentColor(colorScheme);
+    
+    final activeDiningAreas = diningAreas.where((area) => area.isActive).toList();
+    final activeTotalTables = activeDiningAreas.fold<int>(
+        0, (sum, area) => sum + area.tablesCount);
+    
     final visibleDiningAreas = selectedSalonId == null
-        ? diningAreas
-        : diningAreas.where((area) => area.id == selectedSalonId).toList();
+        ? activeDiningAreas
+        : activeDiningAreas.where((area) => area.id == selectedSalonId).toList();
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 20, 8, 24),
@@ -73,12 +78,12 @@ class TableManagementView extends StatelessWidget {
                     DiningAreaTabChip(
                       label: localizations.table_management_all_salons,
                       iconData: Icons.home,
-                      count: totalTables,
+                      count: activeTotalTables,
                       selected: selectedSalonId == null,
                       onTap: () => onSalonChanged(null),
                     ),
                     const SizedBox(width: 8),
-                    for (final diningArea in diningAreas) ...[
+                    for (final diningArea in activeDiningAreas) ...[
                       DiningAreaTabChip(
                         label: diningArea.name,
                         iconData: Icons.deck,
