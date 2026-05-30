@@ -75,119 +75,98 @@ class _TableCardState extends State<TableCard> {
                 ]
               : [],
         ),
-        child: Stack(
-          children: [
-            Opacity(
-              opacity: widget.isActive ? 1.0 : 0.48,
-              child: Padding(
-                padding: const EdgeInsets.all(18),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Table Name
-                  TooltipText(
-                    message: widget.name,
-                    style: theme.textTheme.headlineMedium?.copyWith(
-                      color: colorScheme.baseWhite,
-                      fontSize: 22,
-                      fontWeight: FontWeight.w900,
+        child: Opacity(
+          opacity: widget.isActive ? 1.0 : 0.48,
+          child: Padding(
+            padding: const EdgeInsets.all(18),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Table Name
+                TooltipText(
+                  message: widget.name,
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    color: colorScheme.baseWhite,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                // Capacity
+                Row(
+                  children: [
+                    Icon(
+                      Icons.people_rounded,
+                      size: 14,
+                      color: colorScheme.textMuted,
                     ),
-                  ),
-                  const SizedBox(height: 6),
-                  // Capacity
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.people_rounded,
-                        size: 14,
+                    const SizedBox(width: 5),
+                    Text(
+                      localizations.table_management_people_count(
+                        widget.capacity,
+                      ),
+                      style: theme.textTheme.bodyMedium?.copyWith(
                         color: colorScheme.textMuted,
+                        fontSize: 13,
                       ),
-                      const SizedBox(width: 5),
-                      Text(
-                        localizations.table_management_people_count(widget.capacity),
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: colorScheme.textMuted,
-                          fontSize: 13,
-                        ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 14),
+                // Status
+                Row(
+                  children: [
+                    Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: widget.isActive
+                            ? statusColor
+                            : colorScheme.textMuted,
+                        shape: BoxShape.circle,
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 14),
-                  // Status
-                  Row(
-                    children: [
-                      Container(
-                        width: 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          color: statusColor,
-                          shape: BoxShape.circle,
-                        ),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      widget.isActive
+                          ? _statusLabel(localizations)
+                          : localizations.product_card_inactive_caps,
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        color: widget.isActive
+                            ? statusColor
+                            : colorScheme.textMuted,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
                       ),
-                      const SizedBox(width: 6),
-                      Text(
-                        _statusLabel(localizations),
-                        style: theme.textTheme.bodyLarge?.copyWith(
-                          color: statusColor,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  // Action Buttons
-                  Row(
-                    children: [
-                      _TableActionButton(
-                        icon: Icons.edit_outlined,
-                        color: colorScheme.textSoft,
-                        background: colorScheme.darkSurface,
-                        onTap: widget.onEdit,
-                      ),
-                      const SizedBox(width: 8),
-                      _TableActionButton(
-                        icon: Icons.delete_outline_rounded,
-                        color: colorScheme.redOrange,
-                        background:
-                            colorScheme.redOrange.withValues(alpha: 0.12),
-                        onTap: widget.onDelete,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                // Action Buttons
+                Row(
+                  children: [
+                    _TableActionButton(
+                      icon: Icons.edit_outlined,
+                      color: colorScheme.textSoft,
+                      background: colorScheme.darkSurface,
+                      onTap: widget.onEdit,
+                    ),
+                    const SizedBox(width: 8),
+                    _TableActionButton(
+                      icon: Icons.delete_outline_rounded,
+                      color: colorScheme.redOrange,
+                      background: colorScheme.redOrange.withValues(alpha: 0.12),
+                      onTap: widget.onDelete,
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-          if (!widget.isActive)
-            Positioned(
-              top: 16,
-              right: 16,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 7,
-                ),
-                decoration: BoxDecoration(
-                  color: colorScheme.darkSurfaceAlt.withValues(alpha: 0.92),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: colorScheme.softBorder),
-                ),
-                child: Text(
-                  localizations.product_card_inactive_caps,
-                  style: theme.textTheme.bodyLarge?.copyWith(
-                    color: colorScheme.textMuted,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 0.5,
-                  ),
-                ),
-              ),
-            ),
-        ],
+        ),
       ),
-    ));
+    );
   }
 }
 
@@ -219,8 +198,8 @@ class _TableActionButtonState extends State<_TableActionButton> {
     final emphasis = _isPressed
         ? 0.26
         : _isHovered
-            ? 0.18
-            : 0.0;
+        ? 0.18
+        : 0.0;
     final backgroundColor = Color.lerp(
       widget.background,
       widget.color,
@@ -232,8 +211,8 @@ class _TableActionButtonState extends State<_TableActionButton> {
       _isPressed
           ? 0.72
           : _isHovered
-              ? 0.55
-              : 0.0,
+          ? 0.55
+          : 0.0,
     )!;
     final iconColor = Color.lerp(
       widget.color,
@@ -241,20 +220,20 @@ class _TableActionButtonState extends State<_TableActionButton> {
       _isPressed
           ? 0.34
           : _isHovered
-              ? 0.2
-              : 0.0,
+          ? 0.2
+          : 0.0,
     )!;
     final scale = _isPressed
         ? 0.96
         : _isHovered
-            ? 1.05
-            : 1.0;
-    final glowColor =
-        widget.color.withValues(alpha: _isHovered ? 0.16 : 0.0);
+        ? 1.05
+        : 1.0;
+    final glowColor = widget.color.withValues(alpha: _isHovered ? 0.16 : 0.0);
 
     return MouseRegion(
-      cursor:
-          isInteractive ? SystemMouseCursors.click : SystemMouseCursors.basic,
+      cursor: isInteractive
+          ? SystemMouseCursors.click
+          : SystemMouseCursors.basic,
       child: AnimatedScale(
         scale: scale,
         duration: const Duration(milliseconds: 140),
