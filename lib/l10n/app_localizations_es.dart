@@ -342,14 +342,14 @@ class AppLocalizationsEs extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       totalTables,
       locale: localeName,
-      other: '# mesas',
-      one: '# mesa',
+      other: '$totalTables mesas',
+      one: '$totalTables mesa',
     );
     String _temp1 = intl.Intl.pluralLogic(
       occupiedTables,
       locale: localeName,
-      other: '# ocupadas',
-      one: '# ocupada',
+      other: '$occupiedTables ocupadas',
+      one: '$occupiedTables ocupada',
     );
     return '$_temp0 · $_temp1';
   }

@@ -704,7 +704,7 @@ abstract class AppLocalizations {
   /// No description provided for @table_management_salon_summary.
   ///
   /// In en, this message translates to:
-  /// **'{totalTables, plural, =1{# table} other{# tables}} · {occupiedTables, plural, =1{# occupied} other{# occupied}}'**
+  /// **'{totalTables, plural, =1{{totalTables} table} other{{totalTables} tables}} · {occupiedTables, plural, =1{{occupiedTables} occupied} other{{occupiedTables} occupied}}'**
   String table_management_salon_summary(int totalTables, int occupiedTables);
 
   /// No description provided for @edit_table.

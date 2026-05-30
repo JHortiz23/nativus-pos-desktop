@@ -132,7 +132,7 @@
       }
     }
   },
-  "table_management_salon_summary": "{totalTables, plural, =1{# table} other{# tables}} · {occupiedTables, plural, =1{# occupied} other{# occupied}}",
+  "table_management_salon_summary": "{totalTables, plural, =1{{totalTables} table} other{{totalTables} tables}} · {occupiedTables, plural, =1{{occupiedTables} occupied} other{{occupiedTables} occupied}}",
   "@table_management_salon_summary": {
     "placeholders": {
       "totalTables": {
