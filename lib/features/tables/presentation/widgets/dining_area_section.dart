@@ -97,6 +97,7 @@ class DiningAreaSection extends StatelessWidget {
                       name: table.name,
                       capacity: table.seats,
                       status: tableStatus(table),
+                      isActive: table.isActive,
                       onEdit: () {
                         showDialog(
                           context: context,
